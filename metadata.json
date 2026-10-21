@@ -1,0 +1,6 @@
+{
+  "name": "MatrixConvert - Free Image & Document Converter",
+  "description": "Universal free client-side image and document converter inspired by Sejda with falling Matrix digital rain. Convert PDF to PNG, PDF to SVG, JPG, WebP, ICO, AVIF and more with zero file uploads and complete privacy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
