@@ -92,3 +92,10 @@ export interface ConversionSettings {
   matrixDensity: number;
   matrixCharSet: 'katakana-binary' | 'ascii' | 'hex';
 }
+
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
