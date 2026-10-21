@@ -3,11 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Compatibility shield: Allow browser extensions to safely intercept window.fetch
+      try {
+        let currentFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          get: function() { return currentFetch; },
+          set: function(val) { currentFetch = val; },
+          configurable: true,
+          enumerable: true
+        });
+      } catch (e) {
+        // Continue if already configurable
+      }
+
+      // Suppress unhandled runtime errors injected by third-party browser extensions
+      window.addEventListener('error', function(event) {
+        if (event && event.filename && event.filename.includes('chrome-extension://')) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+    </script>
     <title>MatrixConvert – Free Online Image & Document Converter</title>
     <meta name="description" content="Free online image and document converter. Convert PDF to PNG, PDF to SVG, JPG, WebP, ICO, AVIF and more with zero server uploads and 100% client-side privacy." />
     <meta name="keywords" content="image converter, pdf to png, pdf to svg, jpg to png, webp converter, convert image free, svg converter, batch image converter, client side converter, netlify image converter" />
     <meta name="author" content="MatrixConvert" />
     <meta name="theme-color" content="#050807" />
+    <meta name="google-site-verification" content="AI5M8f3ekFXNXe6T0f9eKCjkJJY9777CITc5Sn0MQwg" />
     
     <!-- OpenGraph Social Cards -->
     <meta property="og:type" content="website" />
