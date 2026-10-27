@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Terminal, ChevronDown, Video, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
+import { Globe, Terminal, ChevronDown, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { SUPPORTED_LANGUAGES, getTranslation } from '../data/languages';
 
 interface NavbarProps {
@@ -8,7 +8,6 @@ interface NavbarProps {
   onNavigateHome: () => void;
   onNavigateCategory: (categoryId: string) => void;
   onOpenMatrixArt: () => void;
-  onNavigateUgcVideo: () => void;
   onNavigateBlog: () => void;
   onNavigateStudio: () => void;
   onNavigateAbout: () => void;
@@ -20,7 +19,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigateHome,
   onNavigateCategory,
   onOpenMatrixArt,
-  onNavigateUgcVideo,
   onNavigateBlog,
   onNavigateStudio,
   onNavigateAbout
@@ -53,18 +51,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             {t('allTools')}
-          </button>
-
-          {/* UGC Video Promo Button */}
-          <button
-            onClick={onNavigateUgcVideo}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-rose-500/40 bg-rose-950/30 text-rose-300 hover:bg-rose-900/40 hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <Video className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
-            <span className="font-bold">UGC Video Promo</span>
-            <span className="text-[9px] px-1 rounded bg-rose-500 text-white font-extrabold uppercase">
-              NEW
-            </span>
           </button>
 
           {/* Blog Hub Button */}
@@ -105,15 +91,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 3: Language Selector + Primary Action */}
         <div className="flex items-center gap-3 shrink-0 relative">
-          {/* Mobile Quick UGC Link */}
-          <button
-            onClick={onNavigateUgcVideo}
-            className="lg:hidden p-2 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-300 text-xs font-mono font-bold flex items-center gap-1"
-            title="Watch UGC Promo Video"
-          >
-            <Video className="w-3.5 h-3.5 text-rose-400" />
-            <span className="hidden sm:inline">UGC</span>
-          </button>
 
           {/* Language Selector Dropdown */}
           <div className="relative">

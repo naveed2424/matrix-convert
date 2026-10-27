@@ -2,14 +2,13 @@ import React from 'react';
 import { SUPPORTED_LANGUAGES } from '../data/languages';
 import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDefinition } from '../types';
-import { ShieldCheck, FileText, Info, Mail, Map, Video, BookOpen, Sparkles, ExternalLink } from 'lucide-react';
+import { ShieldCheck, FileText, Info, Mail, Map, BookOpen, Sparkles, ExternalLink } from 'lucide-react';
 import { LegalPageType } from './LegalPagesModal';
 
 interface FooterProps {
   onSelectTool: (tool: ToolDefinition) => void;
   onSelectLang: (code: string) => void;
   onOpenLegalPage: (type: LegalPageType) => void;
-  onNavigateUgcVideo?: () => void;
   onNavigateBlog?: () => void;
   onNavigateStudio?: () => void;
   currentLang: string;
@@ -19,7 +18,6 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectTool,
   onSelectLang,
   onOpenLegalPage,
-  onNavigateUgcVideo,
   onNavigateBlog,
   onNavigateStudio,
   currentLang
@@ -75,21 +73,12 @@ export const Footer: React.FC<FooterProps> = ({
           </ul>
         </div>
 
-        {/* Col 3: Research, UGC & Blog */}
+        {/* Col 3: Research & Blog */}
         <div>
           <h4 className="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Content & Video
+            Guides & Articles
           </h4>
           <ul className="space-y-2">
-            <li>
-              <button
-                onClick={() => onNavigateUgcVideo && onNavigateUgcVideo()}
-                className="hover:text-rose-300 text-rose-400 font-bold transition-colors cursor-pointer text-left flex items-center gap-1.5"
-              >
-                <Video className="w-3.5 h-3.5 shrink-0" />
-                <span>UGC Video Showcase</span>
-              </button>
-            </li>
             <li>
               <button
                 onClick={() => onNavigateBlog && onNavigateBlog()}

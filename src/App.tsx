@@ -15,7 +15,6 @@ import { MatrixArtStudio } from './components/MatrixArtStudio';
 import { AutoDetectionModal } from './components/AutoDetectionModal';
 import { LegalPagesModal, LegalPageType } from './components/LegalPagesModal';
 import { CompanyPages, CompanyPageType } from './components/CompanyPages';
-import { UgcPromoVideo } from './components/UgcPromoVideo';
 import { BlogHub } from './components/BlogHub';
 import { BlogPostView } from './components/BlogPostView';
 import { BlogStudio } from './components/BlogStudio';
@@ -27,7 +26,6 @@ import { ToolDefinition } from './types';
 export type AppView =
   | 'home'
   | 'tool'
-  | 'ugc-video'
   | 'blog'
   | 'blog-post'
   | 'blog-studio'
@@ -84,13 +82,6 @@ export default function App() {
         return;
       } else if (hash === '#/blog-studio' || hash === '#/studio' || hash === '#/seo-studio') {
         setActiveView('blog-studio');
-        setActiveTool(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
-        return;
-      } else if (hash === '#/ugc-video' || hash === '#/promo-video' || hash === '#/video') {
-        setActiveView('ugc-video');
         setActiveTool(null);
         setLegalModalType(null);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -210,9 +201,6 @@ export default function App() {
             setTimeout(scrollToTools, 100);
           }}
           onOpenMatrixArt={() => setShowMatrixArtStudio(true)}
-          onNavigateUgcVideo={() => {
-            window.location.hash = '#/ugc-video';
-          }}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
           }}
@@ -235,11 +223,6 @@ export default function App() {
               onBack={handleBackToAllTools}
               onSelectTool={handleSelectTool}
             />
-          )}
-
-          {/* View 2: UGC Promotional Video Studio */}
-          {activeView === 'ugc-video' && (
-            <UgcPromoVideo onBackToApp={handleBackToAllTools} />
           )}
 
           {/* View 3: Blog Hub */}
@@ -333,9 +316,6 @@ export default function App() {
           onSelectTool={handleSelectTool}
           onSelectLang={setCurrentLang}
           onOpenLegalPage={handleOpenLegalPage}
-          onNavigateUgcVideo={() => {
-            window.location.hash = '#/ugc-video';
-          }}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
           }}

@@ -8,13 +8,6 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Dedicated UGC Promotional Video Showcase -->
-  <url>
-    <loc>https://mimage.netlify.app/#/ugc-video</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
 
   <!-- Blog Hub & Daily Trending SEO Studio -->
   <url>

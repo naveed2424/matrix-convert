@@ -46,3 +46,11 @@
 .box-glow-hover:hover {
   box-shadow: 0 0 20px rgba(0, 255, 102, 0.22);
 }
+
+.hardware-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
