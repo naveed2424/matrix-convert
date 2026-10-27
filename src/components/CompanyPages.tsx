@@ -214,7 +214,7 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
 
               <h2 className="text-lg font-bold text-white pt-2">2. Analytics & Cookies</h2>
               <p>
-                We use Google Analytics 4 (Measurement ID: <code>G-HLZBZ86RYL</code>) to collect aggregated, anonymous traffic statistics (such as total pageviews, operating systems, and bounce rates). No file contents or personal identifiers are passed to analytics.
+                We use Google Analytics 4 (Measurement ID: <code>G-ZM8R2JF6WT</code>) to collect aggregated, anonymous traffic statistics (such as total pageviews, operating systems, and bounce rates). No file contents or personal identifiers are passed to analytics.
               </p>
 
               <h2 className="text-lg font-bold text-white pt-2">3. GDPR & CCPA Compliance</h2>

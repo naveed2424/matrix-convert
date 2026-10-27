@@ -121,7 +121,7 @@ export default function App() {
 
   const trackPageView = (path: string) => {
     if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('config', 'G-HLZBZ86RYL', {
+      (window as any).gtag('config', 'G-ZM8R2JF6WT', {
         page_path: path
       });
     }

@@ -1,20 +1,90 @@
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="AI5M8f3ekFXNXe6T0f9eKCjkJJY9777CITc5Sn0MQwg" />
+
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLZBZ86RYL"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZM8R2JF6WT"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-HLZBZ86RYL');
+      gtag('config', 'G-ZM8R2JF6WT');
     </script>
 
-    <meta charset="UTF-8" />
-    <meta name="google-site-verification" content="AI5M8f3ekFXNXe6T0f9eKCjkJJY9777CITc5Sn0MQwg" />
+    <!-- Extension and MetaMask Error Isolation Barrier -->
+    <script>
+      (function() {
+        function isBenignExtensionError(err, msg, filename) {
+          try {
+            var str = [
+              msg || '',
+              filename || '',
+              err && err.message ? err.message : '',
+              err && err.stack ? err.stack : '',
+              err && typeof err.toString === 'function' ? err.toString() : ''
+            ].join(' ').toLowerCase();
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            return (
+              str.indexOf('metamask') !== -1 ||
+              str.indexOf('nkbihfbeogaeaoehlefnkodbefgpgknn') !== -1 ||
+              str.indexOf('chrome-extension://') !== -1 ||
+              str.indexOf('inpage.js') !== -1 ||
+              str.indexOf('failed to connect to metamask') !== -1 ||
+              str.indexOf('ethereum') !== -1 ||
+              str.indexOf('evmprovider') !== -1
+            );
+          } catch (e) {
+            return false;
+          }
+        }
+
+        // Intercept global runtime errors from extensions
+        window.addEventListener('error', function(event) {
+          if (event && isBenignExtensionError(event.error, event.message, event.filename)) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+
+        // Intercept unhandled promise rejections from extensions/MetaMask
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && event.reason;
+          if (isBenignExtensionError(reason, reason && reason.message ? reason.message : '', '')) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+
+        // Backup window.onerror interceptor
+        var prevOnError = window.onerror;
+        window.onerror = function(msg, url, lineNo, colNo, error) {
+          if (isBenignExtensionError(error, msg, url)) {
+            return true;
+          }
+          if (typeof prevOnError === 'function') {
+            return prevOnError.apply(this, arguments);
+          }
+          return false;
+        };
+
+        // Safety fix for extensions overriding fetch
+        try {
+          var currentFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return currentFetch; },
+            set: function(val) { currentFetch = val; },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+      })();
+    </script>
     <title>MatrixConvert – Free Online Image & Document Converter</title>
     <meta name="description" content="Free online image and document converter. Convert PDF to PNG, PDF to SVG, JPG, WebP, ICO, AVIF and more with zero server uploads and 100% client-side privacy." />
     <meta name="keywords" content="image converter, pdf to png, pdf to svg, jpg to png, webp converter, convert image free, svg converter, batch image converter, client side converter, netlify image converter" />
@@ -38,27 +108,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    
-    <!-- Compatibility script for extensions -->
-    <script>
-      try {
-        let currentFetch = window.fetch;
-        Object.defineProperty(window, 'fetch', {
-          get: function() { return currentFetch; },
-          set: function(val) { currentFetch = val; },
-          configurable: true,
-          enumerable: true
-        });
-      } catch (e) {}
-
-      window.addEventListener('error', function(event) {
-        if (event && event.filename && event.filename.includes('chrome-extension://')) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          return true;
-        }
-      }, true);
-    </script>
 
     <!-- Schema.org JSON-LD structured data for EEAT & Rich Snippets -->
     <script type="application/ld+json">
