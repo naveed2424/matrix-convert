@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Terminal, ChevronDown } from 'lucide-react';
+import { Globe, Terminal, ChevronDown, Video, BookOpen, Sparkles, ShieldCheck } from 'lucide-react';
 import { SUPPORTED_LANGUAGES, getTranslation } from '../data/languages';
 
 interface NavbarProps {
@@ -8,6 +8,10 @@ interface NavbarProps {
   onNavigateHome: () => void;
   onNavigateCategory: (categoryId: string) => void;
   onOpenMatrixArt: () => void;
+  onNavigateUgcVideo: () => void;
+  onNavigateBlog: () => void;
+  onNavigateStudio: () => void;
+  onNavigateAbout: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -15,7 +19,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectLang,
   onNavigateHome,
   onNavigateCategory,
-  onOpenMatrixArt
+  onOpenMatrixArt,
+  onNavigateUgcVideo,
+  onNavigateBlog,
+  onNavigateStudio,
+  onNavigateAbout
 }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
@@ -25,8 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 border-b border-sky-400/30 bg-[#050807]/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 sm:px-6 lg:px-8 h-16">
-        {/* Zone 1: Single text element wordmark */}
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8 h-16">
+        {/* Zone 1: Wordmark & Brand */}
         <button
           onClick={onNavigateHome}
           className="flex items-center gap-2 text-left font-mono text-lg font-bold tracking-tight text-white hover:text-sky-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
@@ -35,8 +43,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>MatrixConvert</span>
         </button>
 
-        {/* Zone 2: 4-5 concise single-line text links with dynamic translation */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-sky-100">
+        {/* Zone 2: Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-5 text-xs font-mono font-medium text-sky-100">
           <button
             onClick={() => {
               onNavigateHome();
@@ -46,44 +54,67 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             {t('allTools')}
           </button>
+
+          {/* UGC Video Promo Button */}
           <button
-            onClick={() => {
-              onNavigateHome();
-              onNavigateCategory('convert-pdf');
-            }}
-            className="hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={onNavigateUgcVideo}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-rose-500/40 bg-rose-950/30 text-rose-300 hover:bg-rose-900/40 hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
           >
-            {t('convertPdf')}
+            <Video className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+            <span className="font-bold">UGC Video Promo</span>
+            <span className="text-[9px] px-1 rounded bg-rose-500 text-white font-extrabold uppercase">
+              NEW
+            </span>
           </button>
+
+          {/* Blog Hub Button */}
           <button
-            onClick={() => {
-              onNavigateHome();
-              onNavigateCategory('convert-svg');
-            }}
-            className="hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={onNavigateBlog}
+            className="flex items-center gap-1.5 hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
-            {t('convertSvg')}
+            <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+            <span>Blog & Guides</span>
           </button>
+
+          {/* Daily SEO Studio */}
           <button
-            onClick={() => {
-              onNavigateHome();
-              onNavigateCategory('convert-webp');
-            }}
-            className="hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={onNavigateStudio}
+            className="flex items-center gap-1.5 text-cyan-300 hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
-            {t('convertWebp')}
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>SEO Studio</span>
           </button>
+
+          {/* Matrix Art Studio */}
           <button
             onClick={onOpenMatrixArt}
-            className="flex items-center gap-1.5 text-sky-400 hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer font-mono font-semibold"
+            className="flex items-center gap-1.5 text-sky-400 hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Terminal className="w-3.5 h-3.5" />
             <span>{t('matrixArtStudio')}</span>
+          </button>
+
+          {/* About Us */}
+          <button
+            onClick={onNavigateAbout}
+            className="hover:text-sky-300 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            About
           </button>
         </nav>
 
         {/* Zone 3: Language Selector + Primary Action */}
         <div className="flex items-center gap-3 shrink-0 relative">
+          {/* Mobile Quick UGC Link */}
+          <button
+            onClick={onNavigateUgcVideo}
+            className="lg:hidden p-2 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-300 text-xs font-mono font-bold flex items-center gap-1"
+            title="Watch UGC Promo Video"
+          >
+            <Video className="w-3.5 h-3.5 text-rose-400" />
+            <span className="hidden sm:inline">UGC</span>
+          </button>
+
           {/* Language Selector Dropdown */}
           <div className="relative">
             <button

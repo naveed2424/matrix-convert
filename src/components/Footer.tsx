@@ -2,13 +2,16 @@ import React from 'react';
 import { SUPPORTED_LANGUAGES } from '../data/languages';
 import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDefinition } from '../types';
-import { ShieldCheck, FileText, Info, Mail, Map } from 'lucide-react';
+import { ShieldCheck, FileText, Info, Mail, Map, Video, BookOpen, Sparkles, ExternalLink } from 'lucide-react';
 import { LegalPageType } from './LegalPagesModal';
 
 interface FooterProps {
   onSelectTool: (tool: ToolDefinition) => void;
   onSelectLang: (code: string) => void;
   onOpenLegalPage: (type: LegalPageType) => void;
+  onNavigateUgcVideo?: () => void;
+  onNavigateBlog?: () => void;
+  onNavigateStudio?: () => void;
   currentLang: string;
 }
 
@@ -16,6 +19,9 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectTool,
   onSelectLang,
   onOpenLegalPage,
+  onNavigateUgcVideo,
+  onNavigateBlog,
+  onNavigateStudio,
   currentLang
 }) => {
   const popularTools = TOOLS_DATA.slice(0, 6);
@@ -24,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="border-t border-sky-400/25 bg-[#030908] text-slate-400 pt-14 pb-12 px-4 sm:px-6 lg:px-8 text-xs font-mono">
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
-        {/* Col 1: Brand & Guarantee */}
+        {/* Col 1: Brand, Guarantee & Live Link */}
         <div className="col-span-2 lg:col-span-1 space-y-3">
           <div className="flex items-center gap-2 font-mono text-base font-bold text-white">
             <span className="text-sky-400 text-glow">⚡</span>
@@ -33,9 +39,20 @@ export const Footer: React.FC<FooterProps> = ({
           <p className="text-[11px] text-slate-400 leading-relaxed">
             Free high-performance image & document converter inspired by Sejda with falling Matrix digital code rain.
           </p>
-          <div className="pt-2 flex items-center gap-2 text-sky-400 text-[11px] font-semibold">
+          <div className="pt-1 flex items-center gap-2 text-sky-400 text-[11px] font-semibold">
             <ShieldCheck className="w-4 h-4 shrink-0" />
             <span>100% Client-Side Private</span>
+          </div>
+          <div className="pt-2">
+            <a
+              href="https://mimage.netlify.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-sky-300 font-bold hover:underline"
+            >
+              <span>Production: mimage.netlify.app</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
         </div>
 
@@ -58,13 +75,43 @@ export const Footer: React.FC<FooterProps> = ({
           </ul>
         </div>
 
-        {/* Col 3: More Tools & Sitemaps */}
+        {/* Col 3: Research, UGC & Blog */}
         <div>
           <h4 className="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            More Tools
+            Content & Video
           </h4>
           <ul className="space-y-2">
-            {moreTools.map((t) => (
+            <li>
+              <button
+                onClick={() => onNavigateUgcVideo && onNavigateUgcVideo()}
+                className="hover:text-rose-300 text-rose-400 font-bold transition-colors cursor-pointer text-left flex items-center gap-1.5"
+              >
+                <Video className="w-3.5 h-3.5 shrink-0" />
+                <span>UGC Video Showcase</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => onNavigateBlog && onNavigateBlog()}
+                className="hover:text-sky-300 transition-colors cursor-pointer text-left flex items-center gap-1.5"
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0 text-sky-400" />
+                <span>Blog & Tech Guides</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => onNavigateStudio && onNavigateStudio()}
+                className="hover:text-cyan-300 text-cyan-400 transition-colors cursor-pointer text-left flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                <span>Daily SEO Studio</span>
+              </button>
+            </li>
+            <li className="pt-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              More Tools
+            </li>
+            {moreTools.slice(0, 3).map((t) => (
               <li key={t.id}>
                 <button
                   onClick={() => onSelectTool(t)}
@@ -85,8 +132,16 @@ export const Footer: React.FC<FooterProps> = ({
           <ul className="space-y-2">
             <li>
               <button
+                onClick={() => onOpenLegalPage('about')}
+                className="hover:text-sky-400 transition-colors cursor-pointer text-left font-semibold text-white"
+              >
+                About MatrixConvert
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => onOpenLegalPage('privacy')}
-                className="hover:text-sky-400 transition-colors cursor-pointer text-left font-semibold text-sky-300"
+                className="hover:text-sky-400 transition-colors cursor-pointer text-left text-sky-300 font-semibold"
               >
                 Privacy Policy (GDPR/CCPA)
               </button>
@@ -97,14 +152,6 @@ export const Footer: React.FC<FooterProps> = ({
                 className="hover:text-sky-400 transition-colors cursor-pointer text-left"
               >
                 Terms of Service
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => onOpenLegalPage('about')}
-                className="hover:text-sky-400 transition-colors cursor-pointer text-left"
-              >
-                About MatrixConvert
               </button>
             </li>
             <li>
@@ -171,7 +218,7 @@ export const Footer: React.FC<FooterProps> = ({
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto pt-8 border-t border-sky-400/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
         <div>
-          © {new Date().getFullYear()} MatrixConvert. Google AdSense & SEO compliant.
+          © {new Date().getFullYear()} MatrixConvert. 100% Client-Side In-Browser. Google AdSense & SEO compliant.
         </div>
         <div className="flex items-center gap-4">
           <button
