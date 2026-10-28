@@ -45,6 +45,26 @@ export const HowToGuidesSection: React.FC<HowToGuidesSectionProps> = ({
       ]
     },
     {
+      title: 'How to fill and sign a PDF online free',
+      slug: 'fill-and-sign-pdf',
+      steps: [
+        'Upload your PDF document or contract to the secure sign studio.',
+        'Choose how to create your signature: Type cursive name, Draw with mouse/touchpad, or Upload signature image.',
+        'Drag your signature onto the signature line and add an optional date stamp.',
+        'Download your signed, legally binding PDF with zero server uploads.'
+      ]
+    },
+    {
+      title: 'How to crop PDF margins & auto-trim white borders',
+      slug: 'crop-pdf-margins',
+      steps: [
+        'Drop your multi-page PDF into the browser margin trimmer.',
+        'Click "Auto-Trim White Margins" to automatically detect content boundaries.',
+        'Or adjust Top, Bottom, Left, Right margin sliders to your exact specifications.',
+        'Download your cleanly cropped, reader-friendly PDF with 100% vector retention.'
+      ]
+    },
+    {
       title: 'How to combine multiple images into one PDF',
       slug: 'image-to-pdf',
       steps: [

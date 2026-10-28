@@ -41,14 +41,24 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
         return t('allTools');
       case 'popular':
         return t('popularTools');
+      case 'edit-sign':
+        return 'Edit & Sign';
+      case 'crop-resize':
+        return 'Crop & Resize';
+      case 'merge-split':
+        return 'Merge & Split';
       case 'convert-pdf':
-        return t('convertPdf');
+        return 'Convert from PDF';
+      case 'convert-to-pdf':
+        return 'Convert to PDF';
       case 'convert-svg':
-        return t('convertSvg');
+        return 'Vector & SVG';
       case 'convert-webp':
-        return t('convertWebp');
+        return 'WebP & Next-Gen';
+      case 'icon-tools':
+        return 'Icons & Art';
       case 'optimize-edit':
-        return t('optimizeEdit');
+        return 'Optimize & Edit';
       default:
         return defaultName;
     }
@@ -59,8 +69,16 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
       ? tools
       : activeCategory === 'popular'
       ? tools.filter((t) => t.isPopular)
+      : activeCategory === 'edit-sign'
+      ? tools.filter((t) => t.category === 'edit-sign')
+      : activeCategory === 'crop-resize'
+      ? tools.filter((t) => t.category === 'crop-resize')
+      : activeCategory === 'merge-split'
+      ? tools.filter((t) => t.category === 'merge-split')
       : activeCategory === 'convert-pdf'
-      ? tools.filter((t) => t.categoryName.includes('PDF'))
+      ? tools.filter((t) => t.categoryName === 'Convert from PDF')
+      : activeCategory === 'convert-to-pdf'
+      ? tools.filter((t) => t.toFormat === 'PDF' && t.fromFormat !== 'PDF')
       : activeCategory === 'convert-svg'
       ? tools.filter((t) => t.categoryName.includes('SVG'))
       : activeCategory === 'convert-webp'
@@ -72,6 +90,14 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
       : tools;
 
   const getToolIcon = (tool: ToolDefinition) => {
+    if (tool.id === 'pdf-sign') return <Sparkles className="w-5 h-5 text-sky-400" />;
+    if (tool.id === 'pdf-crop') return <Crop className="w-5 h-5 text-emerald-400" />;
+    if (tool.id === 'pdf-merge') return <Layers className="w-5 h-5 text-blue-400" />;
+    if (tool.id === 'pdf-split') return <Sliders className="w-5 h-5 text-cyan-400" />;
+    if (tool.id === 'pdf-delete-pages') return <Archive className="w-5 h-5 text-red-400" />;
+    if (tool.id === 'pdf-rotate') return <RotateCw className="w-5 h-5 text-amber-400" />;
+    if (tool.id === 'pdf-watermark') return <Sparkles className="w-5 h-5 text-purple-400" />;
+    if (tool.id === 'pdf-to-text') return <FileText className="w-5 h-5 text-teal-400" />;
     if (tool.id === 'image-matrix-art') return <Terminal className="w-5 h-5 text-white" />;
     if (tool.fromFormat === 'PDF' || tool.toFormat === 'PDF') return <FileText className="w-5 h-5 text-white" />;
     if (tool.toFormat === 'SVG' || tool.fromFormat === 'SVG') return <Layers className="w-5 h-5 text-white" />;

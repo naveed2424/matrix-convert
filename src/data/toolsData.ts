@@ -835,15 +835,296 @@ export const TOOLS_DATA: ToolDefinition[] = [
     seoKeywords: { shortTail: ['image to bmp', 'png to bmp', 'jpg to bmp converter'], longTail: ['convert image to 24 bit bmp for arduino e-paper display'] },
     faq: [{ question: 'Why use BMP today?', answer: 'BMP is uncompressed, making it exceptionally easy for simple microcontrollers without JPEG/PNG decoders to render.' }],
     options: { supportsScale: true }
+  },
+
+  // 19. Fill & Sign PDF (Sejda Feature Match)
+  {
+    id: 'pdf-sign',
+    name: 'Fill & Sign PDF',
+    slug: 'fill-and-sign-pdf',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Fill Forms & Sign',
+    isPopular: true,
+    shortDescription: 'Add typed cursive, drawn, or uploaded signature stamps to your PDF documents. 100% private and legally recognized.',
+    longDescription: 'Sign contracts, NDAs, invoices, and legal agreements entirely within your browser sandbox. Type your autograph in elegant calligraphy fonts, draw on your trackpad, or upload a transparent signature image. Drag to position anywhere on the page and download instantly without server uploads.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Business Owners & Freelancers', useCase: 'Sign client proposals, estimates, and invoices on the fly.' },
+      { persona: 'Remote Employees & Job Applicants', useCase: 'Sign offer letters, HR onboarding packs, and W-9 tax forms without printing.' },
+      { persona: 'Legal & Procurement Teams', useCase: 'Stamp date stamps and authorized signatures while guaranteeing document privacy.' }
+    ],
+    whereToUse: [
+      { scenario: 'Real Estate & Rental Contracts', benefit: 'Execute lease agreements and disclosure addendums directly from mobile or desktop.' },
+      { scenario: 'Confidential NDAs', benefit: 'Zero server uploads ensures trade secrets and NDA terms are never exposed to external cloud servers.' },
+      { scenario: 'Medical & Parental Release Forms', benefit: 'Sign school permission slips and medical consent waivers instantly.' }
+    ],
+    steps: [
+      { step: 1, title: 'Upload Your PDF Document', description: 'Select or drop your PDF contract or form.' },
+      { step: 2, title: 'Create Your Autograph', description: 'Type your name with cursive styles, draw using mouse/touchpad, or upload an image.' },
+      { step: 3, title: 'Position & Download', description: 'Drag the signature to the sign line, add an optional date stamp, and download your signed PDF.' }
+    ],
+    formatComparison: [
+      { feature: 'Client-Side Privacy', fromVal: 'Uploaded to cloud servers', toVal: '100% processed locally in browser RAM' },
+      { feature: 'Signature Methods', fromVal: 'Only drawn mouse scribbles', toVal: 'Type cursive, draw touch pad, or image stamp' },
+      { feature: 'Cost & Limits', fromVal: 'Paid tiers / DocuSign subscription', toVal: 'Free forever with zero daily limits' }
+    ],
+    seoKeywords: {
+      shortTail: ['fill and sign pdf', 'sign pdf online free', 'sign pdf without printing', 'electronic signature pdf', 'draw signature on pdf'],
+      longTail: [
+        'how to add signature to pdf online free client side',
+        'free alternative to docusign and sejda sign pdf',
+        'sign pdf on mac and windows without adobe acrobat',
+        'type signature in cursive on pdf document free'
+      ]
+    },
+    faq: [
+      { question: 'Is signing a PDF with MatrixConvert legally binding?', answer: 'Yes, in most jurisdictions including the US (ESIGN Act) and EU (eIDAS), standard electronic signatures (SES) created by indicating consent on a document are recognized for general business agreements.' },
+      { question: 'Do my contracts leave my computer?', answer: 'Never. MatrixConvert processes PDFs using WebAssembly and client-side memory. Your confidential files are never uploaded to any server.' }
+    ],
+    options: {}
+  },
+
+  // 20. Crop PDF Margins (Sejda Feature Match)
+  {
+    id: 'pdf-crop',
+    name: 'Crop PDF Margins',
+    slug: 'crop-pdf-margins',
+    category: 'crop-resize',
+    categoryName: 'Crop & Resize',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Auto-Trim Margins',
+    isPopular: true,
+    shortDescription: 'Trim unwanted PDF white space margins, crop page dimensions, or auto-detect content bounds across whole documents.',
+    longDescription: 'Trim excessive margins, remove printer color bars, or crop multi-page PDF documents for optimal viewing on iPads, Kindles, and mobile screens. Includes smart auto-trim detection for non-white content bounds and precision millimeter margin sliders.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Academic Researchers & Students', useCase: 'Trim bulky journal margins so two-column papers read comfortably on e-readers.' },
+      { persona: 'Architects & Print Technicians', useCase: 'Crop bleed lines, crop marks, and registration guides before client presentations.' },
+      { persona: 'Bookkeepers & Accountants', useCase: 'Trim scanned invoices and receipts to remove scanner glass borders.' }
+    ],
+    whereToUse: [
+      { scenario: 'E-Reader & Tablet Reading', benefit: 'Maximize text size on 10-inch screens by eliminating 2-inch empty paper margins.' },
+      { scenario: 'Mobile PDF Viewing', benefit: 'Ensure smartphone screens display primary document content without manual zooming.' },
+      { scenario: 'Print Preparation', benefit: 'Standardize custom page dimensions without re-exporting original source files.' }
+    ],
+    steps: [
+      { step: 1, title: 'Upload PDF Document', description: 'Select your PDF document with margins to trim.' },
+      { step: 2, title: 'Set Margins or Click Auto-Trim', description: 'Use the ⚡ Auto-Trim button to detect content borders or adjust manual margin sliders.' },
+      { step: 3, title: 'Download Cropped PDF', description: 'Download your trimmed, optimized PDF with preserved vector text.' }
+    ],
+    formatComparison: [
+      { feature: 'Margin Adjustment', fromVal: 'Fixed page bounding boxes', toVal: 'Modified CropBox and MediaBox' },
+      { feature: 'Content Preservation', fromVal: 'Rasterized bitmap downgrade', toVal: '100% original vector and font retention' },
+      { feature: 'Auto Detection', fromVal: 'Manual guess-and-check', toVal: 'Automated pixel content scanner' }
+    ],
+    seoKeywords: {
+      shortTail: ['crop pdf', 'trim pdf margins', 'crop pdf online free', 'auto crop pdf', 'remove white margins pdf'],
+      longTail: [
+        'how to crop pdf margins online free without losing quality',
+        'auto trim white space from multi page pdf document',
+        'crop pdf for kindle and tablet reading free',
+        'free sejda crop pdf alternative no limits'
+      ]
+    },
+    faq: [
+      { question: 'Does cropping reduce PDF resolution or blur text?', answer: 'No! MatrixConvert modifies the PDF MediaBox and CropBox geometry vectors, which preserves 100% of the original vector fonts, curves, and high-res imagery.' },
+      { question: 'Can I crop all pages at once?', answer: 'Yes, you can toggle between applying crop margins to all pages in the document or customizing specific individual pages.' }
+    ],
+    options: {}
+  },
+
+  // 21. Merge PDF Files
+  {
+    id: 'pdf-merge',
+    name: 'Merge PDF Files',
+    slug: 'merge-pdf',
+    category: 'merge-split',
+    categoryName: 'Merge & Split',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Combine Multiple Files',
+    isPopular: true,
+    shortDescription: 'Combine multiple PDF documents into a single organized file with custom page reordering.',
+    longDescription: 'Merge unlimited PDF documents together in any order. Drag and drop to rearrange files, combine reports with attachments, and produce clean unified PDF files with zero watermarks.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Project Managers', useCase: 'Combine executive summaries, timelines, and budgets into one client deliverable.' },
+      { persona: 'Students & Applicants', useCase: 'Merge resume, cover letter, transcripts, and recommendation letters.' },
+      { persona: 'Legal Clerks', useCase: 'Combine exhibits, disclosures, and case pleadings in numbered order.' }
+    ],
+    whereToUse: [
+      { scenario: 'Job & Grant Applications', benefit: 'Upload one comprehensive dossier instead of multiple loose attachments.' },
+      { scenario: 'Financial Auditing', benefit: 'Bundle quarterly receipts, bank statements, and tax worksheets.' }
+    ],
+    steps: [
+      { step: 1, title: 'Upload 2 or More PDFs', description: 'Drop all your documents into the merge zone.' },
+      { step: 2, title: 'Reorder Files', description: 'Use arrows to put files in your preferred sequence.' },
+      { step: 3, title: 'Download Combined PDF', description: 'Download the compiled, unified document instantly.' }
+    ],
+    formatComparison: [
+      { feature: 'File Count Limit', fromVal: 'Limited to 3-5 files on competitors', toVal: 'Unlimited client-side merging' },
+      { feature: 'Server Ingestion', fromVal: 'All files sent to cloud storage', toVal: 'Zero server uploads (100% local)' }
+    ],
+    seoKeywords: {
+      shortTail: ['merge pdf', 'combine pdf', 'merge pdf free', 'combine pdf files online', 'join pdfs'],
+      longTail: ['merge multiple pdf files into one document free online without email']
+    },
+    faq: [
+      { question: 'Is there a limit on how many PDFs I can merge?', answer: 'No! Because processing happens in your browser, you can merge as many files as your device memory can handle.' }
+    ],
+    options: {}
+  },
+
+  // 22. Split & Extract PDF Pages
+  {
+    id: 'pdf-split',
+    name: 'Split & Extract PDF Pages',
+    slug: 'split-pdf',
+    category: 'merge-split',
+    categoryName: 'Merge & Split',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Visual Page Selector',
+    shortDescription: 'Extract specific page numbers or ranges (e.g. 1-3, 5) from any multi-page PDF into a new standalone document.',
+    longDescription: 'Separate chapters, pull out signature pages, or break down large multi-page documents with visual page thumbnails.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Researchers', useCase: 'Extract specific citations or book chapters.' },
+      { persona: 'Office Staff', useCase: 'Separate multi-page scanned batches into individual records.' }
+    ],
+    whereToUse: [
+      { scenario: 'Email Attachment Limits', benefit: 'Extract just the relevant 2 pages from a 100-page document to send via email.' }
+    ],
+    steps: [
+      { step: 1, title: 'Upload Document', description: 'Drop your multi-page PDF.' },
+      { step: 2, title: 'Select Pages', description: 'Click thumbnails or enter custom page ranges.' },
+      { step: 3, title: 'Extract & Download', description: 'Export your tailored PDF.' }
+    ],
+    formatComparison: [{ feature: 'Selection UI', fromVal: 'Manual number guesswork', toVal: 'Interactive thumbnail grid selector' }],
+    seoKeywords: { shortTail: ['split pdf', 'extract pdf pages', 'separate pdf pages'], longTail: ['split pdf by pages online free visual thumbnail preview'] },
+    faq: [{ question: 'Can I extract non-consecutive pages?', answer: 'Yes! You can choose pages like 1, 4, 7-10 easily.' }],
+    options: {}
+  },
+
+  // 23. Delete PDF Pages
+  {
+    id: 'pdf-delete-pages',
+    name: 'Delete PDF Pages',
+    slug: 'delete-pdf-pages',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'One-Click Page Removal',
+    shortDescription: 'Remove blank pages, outdated sections, and unwanted sheets from any PDF with visual one-click deletion.',
+    longDescription: 'Clean up scanned paperwork and documents. Simply click the trash icon on any page thumbnail to delete it and download a clean PDF.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [{ persona: 'Administrators', useCase: 'Remove printer slip sheets and accidental blank scan pages.' }],
+    whereToUse: [{ scenario: 'Doc Cleanups', benefit: 'Eliminate duplicate pages before publishing.' }],
+    steps: [
+      { step: 1, title: 'Upload Document', description: 'Upload your PDF.' },
+      { step: 2, title: 'Click Pages to Delete', description: 'Mark unwanted pages for removal.' },
+      { step: 3, title: 'Download Clean PDF', description: 'Save your streamlined document.' }
+    ],
+    formatComparison: [{ feature: 'Deletion Feedback', fromVal: 'Blind number entry', toVal: 'Visual red card cross-out preview' }],
+    seoKeywords: { shortTail: ['delete pdf pages', 'remove page from pdf', 'delete blank pages pdf'], longTail: ['how to delete pages from pdf free without acrobat'] },
+    faq: [{ question: 'Can I undo a deletion before saving?', answer: 'Yes! Simply click the page again or use the Reset button.' }],
+    options: {}
+  },
+
+  // 24. Rotate PDF Pages
+  {
+    id: 'pdf-rotate',
+    name: 'Rotate PDF Pages',
+    slug: 'rotate-pdf',
+    category: 'crop-resize',
+    categoryName: 'Crop & Resize',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: '90° / 180° / 270° Orientation',
+    shortDescription: 'Permanently rotate upside-down scans and sideways pages clockwise or counter-clockwise without quality loss.',
+    longDescription: 'Fix upside-down scans, landscape spreadsheets inside portrait PDFs, or inverted documents. Rotate all pages or target specific pages.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [{ persona: 'Anyone scanning papers', useCase: 'Straighten papers loaded upside-down into feeder scanners.' }],
+    whereToUse: [{ scenario: 'Official Filings', benefit: 'Ensure all pages are upright for courts and governmental portals.' }],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Select your sideways document.' },
+      { step: 2, title: 'Pick Angle', description: 'Rotate 90°, 180°, or 270°.' },
+      { step: 3, title: 'Download Upright PDF', description: 'Save your corrected document.' }
+    ],
+    formatComparison: [{ feature: 'Rotation Permanence', fromVal: 'Viewer-only temporary rotation', toVal: 'Permanent PDF metadata rotation' }],
+    seoKeywords: { shortTail: ['rotate pdf', 'turn pdf upside down', 'rotate pdf 90 degrees'], longTail: ['rotate pdf pages permanently free online'] },
+    faq: [{ question: 'Does rotating affect the PDF text layer?', answer: 'No, rotating modifies the rotation matrix of the page so all text remains selectable and searchable.' }],
+    options: {}
+  },
+
+  // 25. Watermark PDF
+  {
+    id: 'pdf-watermark',
+    name: 'Watermark PDF',
+    slug: 'watermark-pdf',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Stamp Confidential / Draft',
+    shortDescription: 'Apply customizable text watermarks across PDF pages with angle, opacity, and color controls.',
+    longDescription: 'Protect intellectual property and mark document status with diagonal or horizontal text stamps such as CONFIDENTIAL, DRAFT, or sample notices.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [{ persona: 'Lawyers & Creators', useCase: 'Stamp draft agreements and preview manuscripts.' }],
+    whereToUse: [{ scenario: 'Pre-Release Reviews', benefit: 'Prevent unauthorized redistribution with visible watermark tags.' }],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Select your document.' },
+      { step: 2, title: 'Customize Text & Opacity', description: 'Type your message and pick angle/color.' },
+      { step: 3, title: 'Download Watermarked PDF', description: 'Export your protected file.' }
+    ],
+    formatComparison: [{ feature: 'Watermark Quality', fromVal: 'Flattened blurred image', toVal: 'Crisp vector typography' }],
+    seoKeywords: { shortTail: ['watermark pdf', 'add watermark to pdf', 'confidential stamp pdf'], longTail: ['add confidential watermark to pdf online free'] },
+    faq: [{ question: 'Can I adjust watermark transparency?', answer: 'Yes, choose from 10% subtle transparency to 80% bold stamping.' }],
+    options: {}
+  },
+
+  // 26. PDF to Text
+  {
+    id: 'pdf-to-text',
+    name: 'PDF to Text Extractor',
+    slug: 'pdf-to-text',
+    category: 'convert-pdf',
+    categoryName: 'Convert from PDF',
+    fromFormat: 'PDF',
+    toFormat: 'TXT',
+    badge: 'Instant Text Extract',
+    shortDescription: 'Extract raw text, paragraphs, and data tables from PDF documents into clean, copyable plain text format.',
+    longDescription: 'Quickly extract all text content from multi-page PDFs. Copy directly to your clipboard or download as a .TXT file for LLM prompting, data analysis, or transcription.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [{ persona: 'Data Analysts & AI Builders', useCase: 'Extract text from reports to feed into LLMs, ChatGPT, or Python scripts.' }],
+    whereToUse: [{ scenario: 'Document Scraping', benefit: 'Get plain text out of locked or unselectable PDF layouts.' }],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Select your document.' },
+      { step: 2, title: 'View Extracted Text', description: 'Instant page-by-page rendering in the browser.' },
+      { step: 3, title: 'Copy or Download .TXT', description: 'Save text to file or clipboard.' }
+    ],
+    formatComparison: [{ feature: 'Output Format', fromVal: 'Fixed PDF layout', toVal: 'Clean plain UTF-8 text' }],
+    seoKeywords: { shortTail: ['pdf to text', 'extract text from pdf', 'convert pdf to txt'], longTail: ['extract text from pdf online free without installation'] },
+    faq: [{ question: 'Does it work with multi-page PDFs?', answer: 'Yes! It extracts all pages and separates them with clean page headers.' }],
+    options: {}
   }
 ];
 
 export const TOOL_CATEGORIES = [
   { id: 'all', name: 'All Tools', count: TOOLS_DATA.length },
-  { id: 'popular', name: 'Most Popular', count: TOOLS_DATA.filter(t => t.isPopular).length },
-  { id: 'convert-pdf', name: 'Convert from PDF', count: TOOLS_DATA.filter(t => t.categoryName === 'Convert from PDF').length },
-  { id: 'convert-svg', name: 'Vector & SVG Tools', count: TOOLS_DATA.filter(t => t.categoryName.includes('SVG')).length },
-  { id: 'convert-webp', name: 'Modern WebP & AVIF', count: TOOLS_DATA.filter(t => t.categoryName.includes('WebP')).length },
-  { id: 'icon-tools', name: 'Icons & Creative Cyber', count: TOOLS_DATA.filter(t => t.category === 'icon-tools').length },
-  { id: 'optimize-edit', name: 'Optimize & Edit', count: TOOLS_DATA.filter(t => t.category === 'optimize-edit').length }
+  { id: 'popular', name: 'Most Popular', count: TOOLS_DATA.filter((t) => t.isPopular).length },
+  { id: 'edit-sign', name: 'Edit & Sign', count: TOOLS_DATA.filter((t) => t.category === 'edit-sign').length },
+  { id: 'crop-resize', name: 'Crop & Resize', count: TOOLS_DATA.filter((t) => t.category === 'crop-resize').length },
+  { id: 'merge-split', name: 'Merge & Split', count: TOOLS_DATA.filter((t) => t.category === 'merge-split').length },
+  { id: 'convert-pdf', name: 'Convert from PDF', count: TOOLS_DATA.filter((t) => t.categoryName === 'Convert from PDF').length },
+  { id: 'convert-to-pdf', name: 'Convert to PDF', count: TOOLS_DATA.filter((t) => t.toFormat === 'PDF' && t.fromFormat !== 'PDF').length },
+  { id: 'convert-svg', name: 'Vector & SVG', count: TOOLS_DATA.filter((t) => t.categoryName.includes('SVG')).length },
+  { id: 'convert-webp', name: 'WebP & Next-Gen', count: TOOLS_DATA.filter((t) => t.categoryName.includes('WebP')).length },
+  { id: 'icon-tools', name: 'Icons & Art', count: TOOLS_DATA.filter((t) => t.category === 'icon-tools').length },
+  { id: 'optimize-edit', name: 'Optimize & Edit', count: TOOLS_DATA.filter((t) => t.category === 'optimize-edit').length }
 ];

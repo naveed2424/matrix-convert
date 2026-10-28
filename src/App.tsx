@@ -22,6 +22,14 @@ import { Footer } from './components/Footer';
 import { TOOLS_DATA } from './data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS, BlogPost } from './data/blogData';
 import { ToolDefinition } from './types';
+import { PdfSignTool } from './components/tools/PdfSignTool';
+import { PdfCropTool } from './components/tools/PdfCropTool';
+import { PdfMergeTool } from './components/tools/PdfMergeTool';
+import { PdfSplitTool } from './components/tools/PdfSplitTool';
+import { PdfDeletePagesTool } from './components/tools/PdfDeletePagesTool';
+import { PdfRotateTool } from './components/tools/PdfRotateTool';
+import { PdfWatermarkTool } from './components/tools/PdfWatermarkTool';
+import { PdfToTextTool } from './components/tools/PdfToTextTool';
 
 export type AppView =
   | 'home'
@@ -200,6 +208,7 @@ export default function App() {
             }
             setTimeout(scrollToTools, 100);
           }}
+          onSelectToolBySlug={handleSelectToolBySlug}
           onOpenMatrixArt={() => setShowMatrixArtStudio(true)}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
@@ -214,15 +223,35 @@ export default function App() {
 
         {/* Dynamic Route View */}
         <main className="flex-1">
-          {/* View 1: Dedicated Converter Tool Page */}
+          {/* View 1: Specialized & Dedicated Tool Studios */}
           {activeView === 'tool' && activeTool && (
-            <DedicatedToolPage
-              tool={activeTool}
-              allTools={TOOLS_DATA}
-              currentLang={currentLang}
-              onBack={handleBackToAllTools}
-              onSelectTool={handleSelectTool}
-            />
+            <>
+              {activeTool.id === 'pdf-sign' ? (
+                <PdfSignTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-crop' ? (
+                <PdfCropTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-merge' ? (
+                <PdfMergeTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-split' ? (
+                <PdfSplitTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-delete-pages' ? (
+                <PdfDeletePagesTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-rotate' ? (
+                <PdfRotateTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-watermark' ? (
+                <PdfWatermarkTool onBack={handleBackToAllTools} />
+              ) : activeTool.id === 'pdf-to-text' ? (
+                <PdfToTextTool onBack={handleBackToAllTools} />
+              ) : (
+                <DedicatedToolPage
+                  tool={activeTool}
+                  allTools={TOOLS_DATA}
+                  currentLang={currentLang}
+                  onBack={handleBackToAllTools}
+                  onSelectTool={handleSelectTool}
+                />
+              )}
+            </>
           )}
 
           {/* View 3: Blog Hub */}

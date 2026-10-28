@@ -1,6 +1,12 @@
 export type ToolCategory =
   | 'popular'
+  | 'edit-sign'
+  | 'crop-resize'
+  | 'merge-split'
   | 'convert-pdf'
+  | 'convert-to-pdf'
+  | 'compress'
+  | 'security'
   | 'convert-png'
   | 'convert-svg'
   | 'convert-webp'

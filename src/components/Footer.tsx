@@ -54,62 +54,61 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        {/* Col 2: Popular Converters */}
+        {/* Col 2: PDF & Document Suite */}
         <div>
-          <h4 className="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Popular Tools
+          <h4 className="text-white font-bold mb-3 uppercase tracking-wider text-[11px] text-sky-400">
+            PDF Suite (Sejda-Grade)
           </h4>
           <ul className="space-y-2">
-            {popularTools.map((t) => (
-              <li key={t.id}>
-                <button
-                  onClick={() => onSelectTool(t)}
-                  className="hover:text-sky-400 transition-colors text-left truncate max-w-full block cursor-pointer"
-                >
-                  {t.name}
-                </button>
-              </li>
-            ))}
+            {[
+              { id: 'fill-and-sign-pdf', name: 'Fill & Sign PDF' },
+              { id: 'crop-pdf-margins', name: 'Crop PDF Margins' },
+              { id: 'merge-pdf', name: 'Merge PDF Files' },
+              { id: 'split-pdf', name: 'Split & Extract Pages' },
+              { id: 'delete-pdf-pages', name: 'Delete PDF Pages' },
+              { id: 'rotate-pdf', name: 'Rotate PDF Pages' }
+            ].map((item) => {
+              const found = TOOLS_DATA.find((t) => t.slug === item.id || t.id === item.id);
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={() => found && onSelectTool(found)}
+                    className="hover:text-sky-300 transition-colors text-left truncate max-w-full block cursor-pointer"
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
-        {/* Col 3: Research & Blog */}
+        {/* Col 3: Popular Converters */}
         <div>
           <h4 className="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Guides & Articles
+            Image & Vector Tools
           </h4>
           <ul className="space-y-2">
-            <li>
-              <button
-                onClick={() => onNavigateBlog && onNavigateBlog()}
-                className="hover:text-sky-300 transition-colors cursor-pointer text-left flex items-center gap-1.5"
-              >
-                <BookOpen className="w-3.5 h-3.5 shrink-0 text-sky-400" />
-                <span>Blog & Tech Guides</span>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => onNavigateStudio && onNavigateStudio()}
-                className="hover:text-cyan-300 text-cyan-400 transition-colors cursor-pointer text-left flex items-center gap-1.5"
-              >
-                <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                <span>Daily SEO Studio</span>
-              </button>
-            </li>
-            <li className="pt-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-              More Tools
-            </li>
-            {moreTools.slice(0, 3).map((t) => (
-              <li key={t.id}>
-                <button
-                  onClick={() => onSelectTool(t)}
-                  className="hover:text-sky-400 transition-colors text-left truncate max-w-full block cursor-pointer"
-                >
-                  {t.name}
-                </button>
-              </li>
-            ))}
+            {[
+              { id: 'pdf-to-png', name: 'PDF to PNG Converter' },
+              { id: 'pdf-to-svg', name: 'PDF to SVG Vector' },
+              { id: 'image-to-pdf', name: 'Images to PDF' },
+              { id: 'png-to-webp', name: 'PNG to WebP' },
+              { id: 'png-to-ico', name: 'PNG to ICO Favicon' },
+              { id: 'pdf-to-text', name: 'PDF to Text Extractor' }
+            ].map((item) => {
+              const found = TOOLS_DATA.find((t) => t.slug === item.id || t.id === item.id);
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={() => found && onSelectTool(found)}
+                    className="hover:text-sky-400 transition-colors text-left truncate max-w-full block cursor-pointer"
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
