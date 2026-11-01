@@ -30,6 +30,7 @@ import { PdfDeletePagesTool } from './components/tools/PdfDeletePagesTool';
 import { PdfRotateTool } from './components/tools/PdfRotateTool';
 import { PdfWatermarkTool } from './components/tools/PdfWatermarkTool';
 import { PdfToTextTool } from './components/tools/PdfToTextTool';
+import { initAutoTranslate, applySiteLanguage, getSavedLanguage } from './services/autoTranslation';
 
 export type AppView =
   | 'home'
@@ -40,7 +41,7 @@ export type AppView =
   | 'company-page';
 
 export default function App() {
-  const [currentLang, setCurrentLang] = useState<string>('en');
+  const [currentLang, setCurrentLang] = useState<string>(() => getSavedLanguage());
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeTool, setActiveTool] = useState<ToolDefinition | null>(null);
@@ -48,6 +49,18 @@ export default function App() {
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const [showAutoDetectModal, setShowAutoDetectModal] = useState<boolean>(false);
   const [legalModalType, setLegalModalType] = useState<LegalPageType | null>(null);
+
+  // Initialize automated Google Translate full-page engine on mount
+  useEffect(() => {
+    initAutoTranslate((detected) => {
+      setCurrentLang(detected);
+    });
+  }, []);
+
+  const handleSelectLang = (code: string) => {
+    setCurrentLang(code);
+    applySiteLanguage(code);
+  };
 
   // Dynamic View & Blog state
   const [activeView, setActiveView] = useState<AppView>('home');
@@ -193,13 +206,16 @@ export default function App() {
 
       {/* Main Content Wrap */}
       <div className="relative z-10 flex flex-col min-h-screen">
+        {/* Hidden Anchor for Google Translate Web Element */}
+        <div id="google_translate_element" className="hidden" aria-hidden="true" />
+
         {/* Smart International Banner */}
-        <LanguageBanner currentLang={currentLang} onSelectLang={setCurrentLang} />
+        <LanguageBanner currentLang={currentLang} onSelectLang={handleSelectLang} />
 
         {/* Top Navbar */}
         <Navbar
           currentLang={currentLang}
-          onSelectLang={setCurrentLang}
+          onSelectLang={handleSelectLang}
           onNavigateHome={handleBackToAllTools}
           onNavigateCategory={(catId) => {
             setActiveCategory(catId);
@@ -343,7 +359,7 @@ export default function App() {
         {/* Global Footer */}
         <Footer
           onSelectTool={handleSelectTool}
-          onSelectLang={setCurrentLang}
+          onSelectLang={handleSelectLang}
           onOpenLegalPage={handleOpenLegalPage}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';

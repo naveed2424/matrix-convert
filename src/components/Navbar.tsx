@@ -412,9 +412,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="absolute right-0 mt-2 w-52 rounded-2xl border-2 border-sky-400 bg-[#06141c] py-2 shadow-2xl backdrop-blur-xl z-50 max-h-80 overflow-y-auto"
                 onMouseLeave={() => setLangMenuOpen(false)}
               >
-                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-sky-400 font-bold border-b border-sky-500/20">
-                  Select Language
+                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-sky-400 font-bold border-b border-sky-500/20 flex items-center justify-between">
+                  <span>Auto-Translate Site</span>
+                  <span className="text-[9px] px-1 rounded bg-sky-500/20 text-sky-300">Google AI</span>
                 </div>
+                {currentLang !== 'en' && (
+                  <button
+                    onClick={() => {
+                      onSelectLang('en');
+                      setLangMenuOpen(false);
+                    }}
+                    className="flex items-center justify-between w-full px-3.5 py-2 text-xs text-left bg-sky-950/60 hover:bg-sky-900 text-sky-300 font-semibold border-b border-sky-500/20 transition-colors cursor-pointer"
+                  >
+                    <span>Reset to English (Original)</span>
+                    <span className="text-sm ml-2">🇺🇸</span>
+                  </button>
+                )}
                 {SUPPORTED_LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}

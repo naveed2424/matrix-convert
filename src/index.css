@@ -54,3 +54,69 @@
   will-change: transform;
 }
 
+/* =========================================================================
+   Google Translate Seamless Clean Integration (Matrix Theme)
+   ========================================================================= */
+
+/* Prevent Google Translate top frame from pushing down the header */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  border: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+/* Prevent tooltip popups on translated text */
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Remove default yellow/blue text highlight on translated spans */
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Clean Google Translate Element */
+#google_translate_element {
+  display: inline-block;
+}
+
+#google_translate_element select {
+  background: #030908;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+}
+
+#google_translate_element select:hover {
+  border-color: #38bdf8;
+}
+
+.goog-logo-link,
+.goog-te-gadget span {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+  font-size: 0 !important;
+}
+
