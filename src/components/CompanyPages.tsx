@@ -101,6 +101,49 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                   <li>• <strong>AdSense & Web Standards:</strong> Transparent publisher policies, non-intrusive advertising, and strict user privacy compliance.</li>
                 </ul>
               </div>
+
+              {/* Dedicated Founder Profile */}
+              <div className="my-8 p-6 sm:p-7 rounded-2xl border-2 border-sky-400/40 bg-gradient-to-br from-sky-950/40 via-[#071318] to-slate-900 shadow-xl space-y-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pb-4 border-b border-sky-400/20">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center text-2xl font-black text-slate-950 shadow-lg shadow-sky-400/25 shrink-0">
+                    A
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-extrabold text-white">Afzal</h3>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-400/20 text-sky-300 border border-sky-400/40 font-bold">
+                        Founder & Lead Architect
+                      </span>
+                    </div>
+                    <p className="text-xs font-mono text-sky-400 mt-0.5">Software Engineer, Privacy Advocate & Toolmaker</p>
+                    <a
+                      href="mailto:Afzal460@gmail.com"
+                      className="text-xs font-mono text-slate-300 hover:text-sky-300 transition-colors inline-flex items-center gap-1.5 mt-1"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-sky-400" />
+                      <span>Afzal460@gmail.com</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans pt-1">
+                  <p>
+                    <strong>Hi, I'm Afzal</strong>—the founder and lead engineer behind <strong>MatrixConvert</strong>.
+                  </p>
+                  <p>
+                    As a developer passionate about digital privacy, open-source technology, and web performance, I grew increasingly frustrated with traditional online conversion platforms. For years, popular services like Sejda, CloudConvert, and Smallpdf required users to upload confidential contracts, job applications, resumes, tax documents, and personal images to unknown remote cloud servers—often holding essential features hostage behind costly monthly subscriptions and arbitrary file limits.
+                  </p>
+                  <p>
+                    I built MatrixConvert to prove that modern web browsers—powered by client-side <strong>WebAssembly (Wasm)</strong> and hardware-accelerated <strong>HTML5 Canvas</strong>—have more than enough computing power to render, convert, compress, sign, and edit documents directly inside the user's device memory. 
+                  </p>
+                  <p>
+                    Whether you are an aspiring candidate preparing an ATS-compliant resume, a designer converting vector SVGs and next-gen WebP assets, or an enterprise professional safeguarding corporate documents, MatrixConvert was built to serve you with zero paywalls, zero watermarks, and 100% mathematical privacy.
+                  </p>
+                  <p>
+                    I am constantly improving this platform and adding new conversion suites. If you have feature requests, partnership ideas, or want to say hello, feel free to contact me directly at <a href="mailto:Afzal460@gmail.com" className="text-sky-400 font-bold underline">Afzal460@gmail.com</a>.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -243,13 +286,27 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               {/* Contact Information & Response SLA */}
               <div className="space-y-4 text-xs font-mono">
+                <div className="p-4 rounded-xl border border-sky-400/40 bg-sky-950/30 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sky-300 block uppercase font-bold text-[11px]">Founder & Creator Direct</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">Priority</span>
+                  </div>
+                  <div className="text-white font-bold text-sm">Afzal</div>
+                  <a href="mailto:Afzal460@gmail.com" className="text-sky-300 font-bold hover:underline text-sm block">
+                    Afzal460@gmail.com
+                  </a>
+                  <p className="text-slate-300 text-[11px] font-sans">
+                    Direct line to the founder for developer questions, custom tooling requests, and technical collaboration.
+                  </p>
+                </div>
+
                 <div className="p-4 rounded-xl border border-sky-400/30 bg-[#030908] space-y-2">
                   <span className="text-slate-400 block uppercase">Official Support Email</span>
                   <a href="mailto:support@mimage.netlify.app" className="text-sky-300 font-bold hover:underline text-sm block">
                     support@mimage.netlify.app
                   </a>
                   <p className="text-slate-400 text-[11px] font-sans">
-                    Guaranteed response within 24 business hours for feature requests, bug reports, and partnership inquiries.
+                    Guaranteed response within 24 business hours for feature requests, bug reports, and general feedback.
                   </p>
                 </div>
 

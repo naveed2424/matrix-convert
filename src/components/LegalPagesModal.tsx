@@ -198,6 +198,27 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                 </p>
               </div>
 
+              {/* Founder Profile Card */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-sky-50 to-cyan-50 border-2 border-sky-300">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-sky-500 text-white font-extrabold flex items-center justify-center text-lg shadow">
+                    A
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-slate-900 flex items-center gap-2">
+                      <span>Afzal</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-800 font-semibold">Founder & Lead Engineer</span>
+                    </div>
+                    <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
+                      Afzal460@gmail.com
+                    </a>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  "I created MatrixConvert with a single core commitment: empowering users around the globe with high-speed, 100% private in-browser document manipulation without forced subscriptions, watermarks, or cloud data harvesting. Your files never leave your computer." — Afzal
+                </p>
+              </div>
+
               <div className="p-4 rounded-xl bg-sky-100 border border-sky-300">
                 <h4 className="font-bold text-sky-900 mb-1">
                   Why In-Browser Processing Matters:
@@ -228,16 +249,24 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-                <div className="p-4 rounded-xl bg-white border border-sky-300 shadow-sm">
-                  <div className="font-bold text-slate-900 mb-1">Direct Support:</div>
-                  <div className="text-xs text-sky-700 font-mono">support@matrixconvert.com</div>
-                  <p className="text-xs text-slate-500 mt-1">Average response time: &lt; 24 hours</p>
+                <div className="p-4 rounded-xl bg-sky-50 border-2 border-sky-400 shadow-sm">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="font-bold text-slate-900">Founder Direct:</div>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-200 text-sky-800 font-mono font-bold">Priority</span>
+                  </div>
+                  <div className="text-xs text-sky-800 font-bold">Afzal (Founder & Lead Architect)</div>
+                  <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 font-mono hover:underline block mt-1 font-semibold">
+                    Afzal460@gmail.com
+                  </a>
+                  <p className="text-xs text-slate-500 mt-1">Direct inquiries, custom tooling & partnerships</p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-white border border-sky-300 shadow-sm">
-                  <div className="font-bold text-slate-900 mb-1">Partnership & Inquiries:</div>
-                  <div className="text-xs text-sky-700 font-mono">partners@matrixconvert.com</div>
-                  <p className="text-xs text-slate-500 mt-1">For API and integration questions</p>
+                  <div className="font-bold text-slate-900 mb-1">General Support:</div>
+                  <a href="mailto:support@mimage.netlify.app" className="text-xs text-sky-700 font-mono hover:underline block">
+                    support@mimage.netlify.app
+                  </a>
+                  <p className="text-xs text-slate-500 mt-1">Average response time: &lt; 24 hours</p>
                 </div>
               </div>
 
