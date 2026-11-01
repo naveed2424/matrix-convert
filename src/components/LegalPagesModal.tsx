@@ -201,21 +201,26 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
               {/* Founder Profile Card */}
               <div className="p-4 rounded-xl bg-gradient-to-r from-sky-50 to-cyan-50 border-2 border-sky-300">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-sky-500 text-white font-extrabold flex items-center justify-center text-lg shadow">
-                    A
+                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-sky-400 bg-slate-900 shrink-0 shadow">
+                    <img
+                      src="/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png"
+                      alt="Naveed Afzal"
+                      className="w-full h-full object-cover object-top scale-110"
+                    />
                   </div>
                   <div>
                     <div className="font-extrabold text-slate-900 flex items-center gap-2">
-                      <span>Afzal</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-800 font-semibold">Founder & Lead Engineer</span>
+                      <span>Naveed Afzal</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-800 font-semibold">Founder • 20+ Yrs Exp</span>
                     </div>
+                    <div className="text-[11px] text-slate-600 font-sans">Technologist, Full-Stack Developer & SEO Specialist (Ex-Codra, Webdia)</div>
                     <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
                       Afzal460@gmail.com
                     </a>
                   </div>
                 </div>
-                <p className="text-xs text-slate-700 leading-relaxed">
-                  "I created MatrixConvert with a single core commitment: empowering users around the globe with high-speed, 100% private in-browser document manipulation without forced subscriptions, watermarks, or cloud data harvesting. Your files never leave your computer." — Afzal
+                <p className="text-xs text-slate-700 leading-relaxed font-sans">
+                  "With over 20 years of hands-on web engineering and SEO experience, I designed MatrixConvert to provide high-performance in-browser tools with 100% client-side privacy. Exactly zero bytes of user data are ever uploaded to cloud servers." — Naveed Afzal
                 </p>
               </div>
 
@@ -254,7 +259,7 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                     <div className="font-bold text-slate-900">Founder Direct:</div>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-200 text-sky-800 font-mono font-bold">Priority</span>
                   </div>
-                  <div className="text-xs text-sky-800 font-bold">Afzal (Founder & Lead Architect)</div>
+                  <div className="text-xs text-sky-800 font-bold">Naveed Afzal (Founder & Systems Architect)</div>
                   <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 font-mono hover:underline block mt-1 font-semibold">
                     Afzal460@gmail.com
                   </a>

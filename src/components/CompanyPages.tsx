@@ -1,5 +1,25 @@
 import React, { useState } from 'react';
-import { ShieldCheck, FileText, Info, Mail, Map, ArrowLeft, Send, CheckCircle2, AlertCircle, ExternalLink } from 'lucide-react';
+import { 
+  ShieldCheck, 
+  FileText, 
+  Info, 
+  Mail, 
+  Map, 
+  ArrowLeft, 
+  Send, 
+  CheckCircle2, 
+  AlertCircle, 
+  ExternalLink,
+  Code,
+  Cpu,
+  Globe,
+  Award,
+  Terminal,
+  Briefcase,
+  Layers,
+  Lock,
+  Sparkles
+} from 'lucide-react';
 import { TOOLS_DATA } from '../data/toolsData';
 
 export type CompanyPageType = 'about' | 'terms' | 'disclaimer' | 'privacy' | 'contact' | 'sitemap';
@@ -102,46 +122,212 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                 </ul>
               </div>
 
-              {/* Dedicated Founder Profile */}
-              <div className="my-8 p-6 sm:p-7 rounded-2xl border-2 border-sky-400/40 bg-gradient-to-br from-sky-950/40 via-[#071318] to-slate-900 shadow-xl space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pb-4 border-b border-sky-400/20">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center text-2xl font-black text-slate-950 shadow-lg shadow-sky-400/25 shrink-0">
-                    A
+              {/* Dedicated Technical Founder Profile - Naveed Afzal */}
+              <div className="my-10 p-6 sm:p-8 rounded-3xl border-2 border-sky-400/40 bg-gradient-to-br from-sky-950/50 via-[#06141c] to-[#030908] shadow-2xl space-y-8">
+                {/* Profile Header */}
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-6 pb-6 border-b border-sky-400/20">
+                  <div className="relative group shrink-0">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-sky-400 shadow-xl shadow-sky-400/20 bg-slate-900">
+                      <img
+                        src="/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png"
+                        alt="Naveed Afzal - Technologist, Full-Stack Developer & SEO Specialist"
+                        className="w-full h-full object-cover object-top scale-110"
+                      />
+                    </div>
+                    <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-mono font-bold border border-emerald-400 flex items-center gap-1 shadow">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      Verified
+                    </span>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-xl font-extrabold text-white">Afzal</h3>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-400/20 text-sky-300 border border-sky-400/40 font-bold">
-                        Founder & Lead Architect
+
+                  <div className="space-y-2 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Naveed Afzal</h2>
+                      <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-sky-400/20 text-sky-300 border border-sky-400/40 font-bold">
+                        Founder & Lead Systems Architect
                       </span>
                     </div>
-                    <p className="text-xs font-mono text-sky-400 mt-0.5">Software Engineer, Privacy Advocate & Toolmaker</p>
-                    <a
-                      href="mailto:Afzal460@gmail.com"
-                      className="text-xs font-mono text-slate-300 hover:text-sky-300 transition-colors inline-flex items-center gap-1.5 mt-1"
-                    >
-                      <Mail className="w-3.5 h-3.5 text-sky-400" />
-                      <span>Afzal460@gmail.com</span>
-                    </a>
+
+                    <p className="text-xs sm:text-sm font-mono text-sky-400 font-medium">
+                      Technologist • Full-Stack Web Developer • SEO Specialist • Systems Architect
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-1 font-mono">
+                      <span className="inline-flex items-center gap-1 text-slate-300">
+                        <Map className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Based in France (Orig. Wah Cantt, PK)</span>
+                      </span>
+                      <span>•</span>
+                      <span className="inline-flex items-center gap-1 text-slate-300">
+                        <Award className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Master's in English</span>
+                      </span>
+                      <span>•</span>
+                      <a
+                        href="mailto:Afzal460@gmail.com"
+                        className="inline-flex items-center gap-1 text-sky-300 hover:underline font-semibold"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Afzal460@gmail.com</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans pt-1">
+                {/* Key Technical Metric Badges */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="p-4 rounded-xl border border-sky-400/30 bg-[#071720] text-center">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-sky-400 font-mono">20+</div>
+                    <div className="text-[11px] font-mono text-slate-300 uppercase tracking-wider mt-1">Years Tech Exp</div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-sky-400/30 bg-[#071720] text-center">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">15+</div>
+                    <div className="text-[11px] font-mono text-slate-300 uppercase tracking-wider mt-1">Yrs Enterprise (Codra, Webdia)</div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-sky-400/30 bg-[#071720] text-center">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-mono">100+</div>
+                    <div className="text-[11px] font-mono text-slate-300 uppercase tracking-wider mt-1">Free Digital Tools</div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-sky-400/30 bg-[#071720] text-center">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-indigo-400 font-mono">100%</div>
+                    <div className="text-[11px] font-mono text-slate-300 uppercase tracking-wider mt-1">Client-Side Privacy</div>
+                  </div>
+                </div>
+
+                {/* Technical Biography */}
+                <div className="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <Terminal className="w-5 h-5 text-sky-400" />
+                    <span>Technical Background & Career Path</span>
+                  </h3>
                   <p>
-                    <strong>Hi, I'm Afzal</strong>—the founder and lead engineer behind <strong>MatrixConvert</strong>.
+                    <strong>Naveed Afzal</strong> is a veteran Web Developer, WordPress Architect, and Technical SEO Specialist with over <strong>two decades (20+ years) of hands-on software and web engineering experience</strong> creating high-performance digital platforms.
                   </p>
                   <p>
-                    As a developer passionate about digital privacy, open-source technology, and web performance, I grew increasingly frustrated with traditional online conversion platforms. For years, popular services like Sejda, CloudConvert, and Smallpdf required users to upload confidential contracts, job applications, resumes, tax documents, and personal images to unknown remote cloud servers—often holding essential features hostage behind costly monthly subscriptions and arbitrary file limits.
+                    Throughout his 15+ years collaborating with premier European technology and digital media enterprises—including <strong>Codra</strong> and <strong>Webdia</strong>—Naveed honed his mastery of scalable frontend architectures, complex database performance tuning, programmatic content pipelines, and search engine technical audits.
                   </p>
                   <p>
-                    I built MatrixConvert to prove that modern web browsers—powered by client-side <strong>WebAssembly (Wasm)</strong> and hardware-accelerated <strong>HTML5 Canvas</strong>—have more than enough computing power to render, convert, compress, sign, and edit documents directly inside the user's device memory. 
+                    In 2026, observing that mainstream document SaaS utilities (such as Sejda, CloudConvert, and Smallpdf) force users to surrender their confidential documents, resumes, tax filings, and graphics to external cloud storage servers, Naveed designed <strong>MatrixConvert</strong>. By compiling cutting-edge graphics and PDF parsers into client-side <strong>WebAssembly (Wasm)</strong> and leveraging hardware-accelerated HTML5 Canvas, Naveed proved that modern browsers can execute heavy vectorization, 600 DPI rasterization, and next-gen compression locally on client devices—with <strong>zero bytes transferred to cloud servers</strong>.
                   </p>
-                  <p>
-                    Whether you are an aspiring candidate preparing an ATS-compliant resume, a designer converting vector SVGs and next-gen WebP assets, or an enterprise professional safeguarding corporate documents, MatrixConvert was built to serve you with zero paywalls, zero watermarks, and 100% mathematical privacy.
-                  </p>
-                  <p>
-                    I am constantly improving this platform and adding new conversion suites. If you have feature requests, partnership ideas, or want to say hello, feel free to contact me directly at <a href="mailto:Afzal460@gmail.com" className="text-sky-400 font-bold underline">Afzal460@gmail.com</a>.
-                  </p>
+                </div>
+
+                {/* Technical Domains & Expertise Matrix */}
+                <div className="space-y-4">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <Cpu className="w-5 h-5 text-sky-400" />
+                    <span>Core Technical Stack & Certified Competencies</span>
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-sky-300 font-bold font-mono">
+                        <Code className="w-4 h-4 text-sky-400" />
+                        <span>Web Development</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        HTML5, CSS3, modern JavaScript (ES6+), TypeScript, React, PHP, WebAssembly (Wasm), responsive UI design, cross-browser compatibility.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-emerald-300 font-bold font-mono">
+                        <Award className="w-4 h-4 text-emerald-400" />
+                        <span>SEO & Search Analytics</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        Rank Math SEO Specialist, Google Core Web Vitals optimization, schema markup (JSON-LD), crawl budget optimization, technical audits.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-cyan-300 font-bold font-mono">
+                        <Globe className="w-4 h-4 text-cyan-400" />
+                        <span>WordPress Architecture</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        20+ years custom WordPress engineering, bespoke theme/plugin development, headless CMS integrations, speed & caching optimization.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-indigo-300 font-bold font-mono">
+                        <Sparkles className="w-4 h-4 text-indigo-400" />
+                        <span>AI Tools & Automation</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        Automated document manipulation pipelines, in-browser batch processing, script automation, and AI-assisted workflow integration.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-amber-300 font-bold font-mono">
+                        <Lock className="w-4 h-4 text-amber-400" />
+                        <span>Cybersecurity & Data Privacy</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        Client-side cryptographic isolation, zero-knowledge processing, secure header configurations, GDPR & CCPA privacy compliance.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-sky-400/20 bg-[#030908] space-y-2">
+                      <div className="flex items-center gap-2 text-fuchsia-300 font-bold font-mono">
+                        <Layers className="w-4 h-4 text-fuchsia-400" />
+                        <span>E-Commerce & Digital Apps</span>
+                      </div>
+                      <p className="text-slate-400 text-[11px] leading-relaxed">
+                        High-conversion checkout architecture, fast catalog indexing, conversion rate optimization (CRO), and payment gateway integrations.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Featured Projects by Naveed Afzal */}
+                <div className="space-y-4">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-sky-400" />
+                    <span>Featured Platforms & Technical Projects</span>
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+                    <div className="p-3.5 rounded-xl border border-sky-400/30 bg-[#030908] space-y-1.5">
+                      <div className="text-sky-300 font-bold text-sm">MatrixConvert / Sejda.store</div>
+                      <p className="text-[11px] text-slate-400 font-sans">
+                        Collection of 30+ 100% in-browser, zero-server-upload document & image conversion utilities.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl border border-sky-400/30 bg-[#030908] space-y-1.5">
+                      <div className="text-emerald-300 font-bold text-sm">FreeQRcode.fr</div>
+                      <p className="text-[11px] text-slate-400 font-sans">
+                        High-speed, lightweight QR code generation platform built for simplicity, speed, and clean output.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl border border-sky-400/30 bg-[#030908] space-y-1.5">
+                      <div className="text-cyan-300 font-bold text-sm">CVGratuit.shop</div>
+                      <p className="text-[11px] text-slate-400 font-sans">
+                        Bilingual CV and resume engineering platform helping job seekers craft ATS-friendly professional resumes.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl border border-sky-400/30 bg-[#030908] space-y-1.5">
+                      <div className="text-amber-300 font-bold text-sm">GiftyNest & Jié Paris</div>
+                      <p className="text-[11px] text-slate-400 font-sans">
+                        High-performance e-commerce platforms engineered for speed, mobile responsiveness, and conversion.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Technical Philosophy Quote */}
+                <div className="p-5 rounded-2xl border border-sky-400/30 bg-sky-950/20 space-y-2">
+                  <div className="text-[10px] font-mono text-sky-400 uppercase tracking-widest font-bold">Engineering Philosophy</div>
+                  <blockquote className="text-xs sm:text-sm text-slate-200 italic font-sans leading-relaxed">
+                    "Success in technology is not merely about building websites or ranking on Google. It is about architecting robust, privacy-respecting digital systems, creating authentic value, sharing knowledge, and engineering user-first tools that make a real difference."
+                  </blockquote>
+                  <div className="text-xs font-mono text-sky-300 font-bold text-right pt-1">
+                    — Naveed Afzal, Founder
+                  </div>
                 </div>
               </div>
             </div>
@@ -291,12 +477,13 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                     <span className="text-sky-300 block uppercase font-bold text-[11px]">Founder & Creator Direct</span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">Priority</span>
                   </div>
-                  <div className="text-white font-bold text-sm">Afzal</div>
+                  <div className="text-white font-bold text-sm">Naveed Afzal</div>
+                  <div className="text-[11px] text-sky-400 font-mono">Technologist & Lead Systems Architect</div>
                   <a href="mailto:Afzal460@gmail.com" className="text-sky-300 font-bold hover:underline text-sm block">
                     Afzal460@gmail.com
                   </a>
                   <p className="text-slate-300 text-[11px] font-sans">
-                    Direct line to the founder for developer questions, custom tooling requests, and technical collaboration.
+                    Direct line for technical architecture consultations, developer queries, and custom tool collaborations.
                   </p>
                 </div>
 
