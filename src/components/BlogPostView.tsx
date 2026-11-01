@@ -249,9 +249,18 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               key={idx}
               href={link.url}
               onClick={(e) => {
-                e.preventDefault();
-                const toolSlug = link.url.replace('#/tool/', '');
-                onSelectTool(toolSlug);
+                if (link.url.startsWith('#/tool/')) {
+                  e.preventDefault();
+                  const toolSlug = link.url.replace('#/tool/', '');
+                  onSelectTool(toolSlug);
+                } else if (link.url.startsWith('#/blog/')) {
+                  e.preventDefault();
+                  const postSlug = link.url.replace('#/blog/', '');
+                  onSelectPost(postSlug);
+                } else if (link.url.startsWith('#/')) {
+                  e.preventDefault();
+                  window.location.hash = link.url;
+                }
               }}
               className="p-3.5 rounded-xl border border-sky-400/20 bg-[#030908] hover:border-sky-400 hover:bg-sky-950/40 transition-all cursor-pointer group flex flex-col justify-between"
             >
@@ -264,11 +273,27 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                 </p>
               </div>
               <span className="text-[10px] font-mono text-sky-400 mt-2 inline-flex items-center gap-1">
-                <span>Launch Tool</span>
+                <span>{link.url.startsWith('#/tool/') ? 'Launch Tool' : link.url.startsWith('#/blog/') ? 'Read Guide' : 'View Page'}</span>
                 <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
               </span>
             </a>
           ))}
+        </div>
+
+        {/* Quick Legal & Company Navigation Bar */}
+        <div className="mt-6 pt-4 border-t border-sky-400/15 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
+          <span className="text-slate-500">Essential Site Pages:</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <a href="#/about" onClick={(e) => { e.preventDefault(); window.location.hash = '#/about'; }} className="hover:text-sky-300 underline cursor-pointer">About Us</a>
+            <span>•</span>
+            <a href="#/terms" onClick={(e) => { e.preventDefault(); window.location.hash = '#/terms'; }} className="hover:text-sky-300 underline cursor-pointer">Terms & Conditions</a>
+            <span>•</span>
+            <a href="#/disclaimer" onClick={(e) => { e.preventDefault(); window.location.hash = '#/disclaimer'; }} className="hover:text-sky-300 underline cursor-pointer">Disclaimer</a>
+            <span>•</span>
+            <a href="#/privacy" onClick={(e) => { e.preventDefault(); window.location.hash = '#/privacy'; }} className="hover:text-sky-300 underline cursor-pointer">Privacy Policy</a>
+            <span>•</span>
+            <a href="#/contact" onClick={(e) => { e.preventDefault(); window.location.hash = '#/contact'; }} className="hover:text-sky-300 underline cursor-pointer">Contact Us</a>
+          </div>
         </div>
       </div>
 
