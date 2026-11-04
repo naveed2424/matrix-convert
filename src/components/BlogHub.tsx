@@ -5,14 +5,12 @@ import { Sparkles, Search, Calendar, Clock, ArrowRight, ShieldCheck, BookOpen, L
 interface BlogHubProps {
   posts: BlogPost[];
   onSelectPost: (slug: string) => void;
-  onOpenStudio: () => void;
   onSelectTool: (slug: string) => void;
 }
 
 export const BlogHub: React.FC<BlogHubProps> = ({
   posts,
   onSelectPost,
-  onOpenStudio,
   onSelectTool
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -35,24 +33,24 @@ export const BlogHub: React.FC<BlogHubProps> = ({
       <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sky-400/40 bg-sky-950/40 text-sky-300 text-xs font-mono font-semibold">
           <BookOpen className="w-3.5 h-3.5" />
-          <span>MatrixConvert Engineering & SEO Research Lab</span>
+          <span>MatrixConvert Editorial & Engineering Lab</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
           Modern Document Architecture, Vector Formats & Privacy
         </h1>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
-          In-depth technical guides, empirical compression benchmarks, and client-side WebAssembly workflows. Updated daily for web developers, graphic designers, and security engineers.
+          In-depth technical guides, empirical compression benchmarks, and client-side WebAssembly workflows published by Naveed Afzal and the MatrixConvert engineering team.
         </p>
 
-        {/* Daily Trending Blog Studio Callout Button */}
+        {/* Action Buttons */}
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={onOpenStudio}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-mono text-xs font-bold uppercase tracking-wider hover:from-sky-400 hover:to-cyan-400 transition-all shadow-lg shadow-sky-500/25 flex items-center gap-2 cursor-pointer"
+          <a
+            href="#/"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider hover:from-sky-400 hover:to-cyan-400 transition-all shadow-lg shadow-sky-500/25 flex items-center gap-2"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>Daily Trending SEO Blog Studio</span>
-          </button>
+            <span>Explore All 46+ Free In-Browser Tools</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
           <a
             href="https://mimage.netlify.app/"
             target="_blank"

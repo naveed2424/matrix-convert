@@ -24,7 +24,13 @@ import {
   applyImageFilter,
   generateMatrixAsciiArt,
   mergeImagesToPdf,
-  createZipBundle
+  createZipBundle,
+  editPdfMetadata,
+  numberPdfPages,
+  flattenPdf,
+  reorderPdfPages,
+  convertPdfMonochrome,
+  applyAdvancedImageFilter
 } from '../services/converterEngine';
 import { getTranslation, getLocalizedTool } from '../data/languages';
 
@@ -104,7 +110,62 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         const mergedPdf = await mergeImagesToPdf(files);
         allResults.push(mergedPdf);
       }
-      // Special Case 2: Convert PDF to PNG / SVG / JPG
+      // Special Case 2A: PDF Metadata Editor & Sanitizer
+      else if (tool.id === 'pdf-metadata-editor') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Sanitizing metadata for ${files[i].name}...`);
+          const res = await editPdfMetadata(files[i], {
+            title: files[i].name.replace(/\.[^/.]+$/, ''),
+            author: 'MatrixConvert Verified',
+            subject: 'Optimized Document',
+            keywords: 'pdf, optimized, secure, private'
+          });
+          allResults.push(res);
+        }
+      }
+      // Special Case 2B: PDF Page Numberer
+      else if (tool.id === 'pdf-page-numberer') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Applying Bates page numbers to ${files[i].name}...`);
+          const res = await numberPdfPages(files[i], 'bottom-center');
+          allResults.push(res);
+        }
+      }
+      // Special Case 2C: PDF Form & Annotation Flattening
+      else if (tool.id === 'pdf-flatten') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Flattening form fields & annotations for ${files[i].name}...`);
+          const res = await flattenPdf(files[i]);
+          allResults.push(res);
+        }
+      }
+      // Special Case 2D: PDF Page Reorder / Reverse
+      else if (tool.id === 'pdf-page-reorder') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Inverting & reorganizing pages for ${files[i].name}...`);
+          const res = await reorderPdfPages(files[i], 'reverse');
+          allResults.push(res);
+        }
+      }
+      // Special Case 2E: PDF Grayscale & Invert
+      else if (tool.id === 'pdf-grayscale') {
+        for (let i = 0; i < files.length; i++) {
+          setProgressMsg(`Converting ${files[i].name} to monochrome grayscale...`);
+          const res = await convertPdfMonochrome(files[i], 'grayscale', (pct) => setProgress(pct));
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-invert-colors') {
+        for (let i = 0; i < files.length; i++) {
+          setProgressMsg(`Generating dark-mode inverted PDF for ${files[i].name}...`);
+          const res = await convertPdfMonochrome(files[i], 'invert', (pct) => setProgress(pct));
+          allResults.push(res);
+        }
+      }
+      // Special Case 2F: Convert PDF to PNG / SVG / JPG
       else if (tool.fromFormat === 'PDF') {
         const targetFmt =
           tool.toFormat.toLowerCase() === 'svg'
@@ -147,7 +208,37 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           allResults.push(cropped);
         }
       }
-      // Special Case 5: Standard Raster & Vector Converters (PNG, JPG, WebP, SVG, AVIF, BMP, ICO, Compress)
+      // Special Case 5: 20 Advanced Image Tools
+      else if (
+        [
+          'image-exif-stripper',
+          'image-aspect-ratio-padder',
+          'image-color-inverter',
+          'image-sepia-vintage',
+          'image-brightness-contrast',
+          'image-threshold-binary',
+          'image-blur-redact',
+          'image-sharpen-unsharp',
+          'image-dpi-density-changer',
+          'image-border-polaroid',
+          'image-watermark-overlay',
+          'image-flip-mirror',
+          'image-color-tint-duotone',
+          'image-transparent-png-maker'
+        ].includes(tool.id)
+      ) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          setProgress(Math.round(20 + (i / files.length) * 70));
+          setProgressMsg(`Processing ${file.name} with ${tool.name}...`);
+          const converted = await applyAdvancedImageFilter(file, tool.id, {
+            ratio: '1:1',
+            threshold: settings.colorThreshold || 128
+          });
+          allResults.push(converted);
+        }
+      }
+      // Special Case 6: Standard Raster & Vector Converters (PNG, JPG, WebP, SVG, AVIF, BMP, ICO, Compress)
       else {
         for (let i = 0; i < files.length; i++) {
           const file = files[i];

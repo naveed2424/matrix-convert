@@ -28,7 +28,6 @@ interface NavbarProps {
   onSelectToolBySlug: (slug: string) => void;
   onOpenMatrixArt: () => void;
   onNavigateBlog: () => void;
-  onNavigateStudio: () => void;
   onNavigateAbout: () => void;
 }
 
@@ -40,7 +39,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectToolBySlug,
   onOpenMatrixArt,
   onNavigateBlog,
-  onNavigateStudio,
   onNavigateAbout
 }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
@@ -99,13 +97,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-sky-400/20">
                   <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold">
-                    All 26+ Client-Side Tools by Category
+                    All 46+ Client-Side Tools by Category
                   </span>
                   <button
                     onClick={() => handleCategoryClick('all')}
                     className="text-[11px] text-sky-300 hover:underline cursor-pointer"
                   >
-                    View All Grid →
+                    View All 46+ Grid →
                   </button>
                 </div>
 
@@ -114,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="space-y-4">
                     <div>
                       <span className="text-[10px] uppercase font-bold text-sky-400 tracking-wider block mb-2">
-                        Edit & Sign
+                        Edit, Sign & Security
                       </span>
                       <ul className="space-y-1.5 text-slate-300">
                         <li>
@@ -124,6 +122,33 @@ export const Navbar: React.FC<NavbarProps> = ({
                           >
                             <PenTool className="w-3 h-3 text-sky-400" />
                             <span>Fill & Sign PDF</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('pdf-metadata-editor')}
+                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-emerald-300"
+                          >
+                            <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                            <span>PDF Metadata Editor</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('pdf-page-numberer')}
+                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-sky-300"
+                          >
+                            <FileText className="w-3 h-3 text-sky-400" />
+                            <span>PDF Page Numberer</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('pdf-flatten')}
+                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
+                          >
+                            <Layers className="w-3 h-3 text-indigo-400" />
+                            <span>PDF Form Flattener</span>
                           </button>
                         </li>
                         <li>
@@ -226,9 +251,33 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <li>
                           <button
                             onClick={() => handleToolClick('image-compress')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
+                            className="hover:text-sky-400 text-left w-full cursor-pointer font-bold text-white"
                           >
                             Smart Image Compressor
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('image-exif-stripper')}
+                            className="hover:text-sky-400 text-left w-full cursor-pointer font-bold text-emerald-300"
+                          >
+                            EXIF Privacy Stripper
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('image-aspect-ratio-padder')}
+                            className="hover:text-sky-400 text-left w-full cursor-pointer"
+                          >
+                            Aspect Ratio Padder
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleToolClick('image-transparent-png-maker')}
+                            className="hover:text-sky-400 text-left w-full cursor-pointer text-cyan-300"
+                          >
+                            Transparent PNG Maker
                           </button>
                         </li>
                         <li>
@@ -367,19 +416,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Blog & Guides */}
           <button
             onClick={onNavigateBlog}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:text-sky-300 transition-colors whitespace-nowrap cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:text-sky-300 transition-colors whitespace-nowrap cursor-pointer font-bold text-sky-400"
           >
             <BookOpen className="w-3 h-3 text-sky-400" />
             <span>Blog</span>
-          </button>
-
-          {/* Daily SEO Studio */}
-          <button
-            onClick={onNavigateStudio}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-cyan-300 hover:text-white transition-colors whitespace-nowrap cursor-pointer"
-          >
-            <Sparkles className="w-3 h-3 text-cyan-400" />
-            <span>SEO Studio</span>
           </button>
 
           {/* Matrix Art */}
@@ -502,32 +542,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="block w-full py-2 text-left text-white font-bold"
             >
-              Browse All 26+ Tools →
+              Browse All 46+ Tools →
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onNavigateBlog();
               }}
-              className="block w-full py-2 text-left text-slate-300"
+              className="block w-full py-2 text-left text-sky-400 font-bold"
             >
               Blog & Conversion Guides
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onNavigateStudio();
-              }}
-              className="block w-full py-2 text-left text-cyan-300"
-            >
-              Daily SEO Trending Studio
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
                 onOpenMatrixArt();
               }}
-              className="block w-full py-2 text-left text-sky-400"
+              className="block w-full py-2 text-left text-slate-300"
             >
               Matrix Art Studio
             </button>

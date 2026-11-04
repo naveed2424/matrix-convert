@@ -1112,6 +1112,553 @@ export const TOOLS_DATA: ToolDefinition[] = [
     seoKeywords: { shortTail: ['pdf to text', 'extract text from pdf', 'convert pdf to txt'], longTail: ['extract text from pdf online free without installation'] },
     faq: [{ question: 'Does it work with multi-page PDFs?', answer: 'Yes! It extracts all pages and separates them with clean page headers.' }],
     options: {}
+  },
+
+  // 27. PDF Metadata & Title Editor
+  {
+    id: 'pdf-metadata-editor',
+    name: 'PDF Metadata & Author Editor',
+    slug: 'pdf-metadata-editor',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign PDF',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Security & SEO Scrub',
+    isPopular: true,
+    shortDescription: 'View, edit, or sanitize PDF document metadata including Title, Author, Subject, Keywords, and Creator tags.',
+    longDescription: 'Sanitize or enrich PDF metadata directly in your browser. Remove private author names, internal company server paths, and software signatures before sending proposals, or optimize tags for search engines.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Legal & Compliance Officers', useCase: 'Scrub internal metadata, user IDs, and revision dates before court discovery.' },
+      { persona: 'Academic Authors & Marketers', useCase: 'Set authoritative paper titles, abstract subjects, and SEO keyword tags for Google Scholar.' }
+    ],
+    whereToUse: [
+      { scenario: 'Pre-flight Client Delivery', benefit: 'Never expose confidential internal filenames or author workstations.' }
+    ],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Drop your document into MatrixConvert.' },
+      { step: 2, title: 'Edit or Purge Metadata', description: 'Customize Title, Author, Subject, and Keywords.' },
+      { step: 3, title: 'Download Clean PDF', description: 'Save your sanitized PDF file.' }
+    ],
+    formatComparison: [{ feature: 'Metadata Sanitization', fromVal: 'Leaked author & printer traces', toVal: '100% scrubbed & custom tags' }],
+    seoKeywords: { shortTail: ['edit pdf metadata', 'pdf author editor', 'remove metadata from pdf'], longTail: ['how to edit pdf author and title online free'] },
+    faq: [{ question: 'Does this recompress or degrade my PDF pages?', answer: 'No! Only the metadata catalog dictionary is updated; all vector curves, fonts, and images remain byte-for-byte identical.' }],
+    options: {}
+  },
+
+  // 28. PDF Page Numbering & Bates Stamping
+  {
+    id: 'pdf-page-numberer',
+    name: 'PDF Page Numbering & Bates Stamp',
+    slug: 'pdf-page-numberer',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign PDF',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Header / Footer Stamp',
+    isPopular: true,
+    shortDescription: 'Add custom page numbers (Page 1 of N), legal Bates stamps, or custom headers/footers to all PDF pages.',
+    longDescription: 'Stamp legal case numbers, document control codes, or clean "Page X of Y" pagination in your choice of font size, position (bottom center, top right, bottom right), and margin offsets.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Paralegals & Litigation Teams', useCase: 'Apply sequential Bates stamps and page counts across hundreds of evidentiary exhibits.' },
+      { persona: 'Students & Thesis Authors', useCase: 'Add formal academic pagination conforming to APA, MLA, and university submission standards.' }
+    ],
+    whereToUse: [{ scenario: 'Document Archiving', benefit: 'Keep physical printouts perfectly ordered even if unstapled.' }],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Select your unnumbered document.' },
+      { step: 2, title: 'Select Stamp Position', description: 'Choose Bottom Center, Bottom Right, or Top Right.' },
+      { step: 3, title: 'Download Numbered PDF', description: 'Instant vector typographic page stamping.' }
+    ],
+    formatComparison: [{ feature: 'Typography Fidelity', fromVal: 'Manual unaligned text', toVal: 'Sub-pixel vector Helvetica numbering' }],
+    seoKeywords: { shortTail: ['number pdf pages', 'bates stamp pdf', 'add page numbers to pdf'], longTail: ['add page 1 of n to pdf online free unlimited'] },
+    faq: [{ question: 'Can I choose where the numbers appear?', answer: 'Yes! Choose between bottom center, bottom right, or top right margin positions.' }],
+    options: {}
+  },
+
+  // 29. PDF Form & Annotation Flattener
+  {
+    id: 'pdf-flatten',
+    name: 'PDF Form & Annotation Flattener',
+    slug: 'pdf-flatten',
+    category: 'edit-sign',
+    categoryName: 'Edit & Sign PDF',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Lock Forms & Signs',
+    shortDescription: 'Flatten interactive form fields, checkmarks, signatures, and highlight annotations into permanent, uneditable page geometry.',
+    longDescription: 'Prevent tampering and ensure universal cross-platform rendering by locking form values, electronic signatures, and notes directly into the base PDF layer.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Finance & Real Estate Brokers', useCase: 'Lock signed lease contracts and loan applications so clients cannot modify input fields.' }
+    ],
+    whereToUse: [{ scenario: 'Archival & Legal Submissions', benefit: 'Ensures forms look identical across iPhone, Android, Mac Preview, and Chrome.' }],
+    steps: [
+      { step: 1, title: 'Upload Interactive PDF', description: 'Select your fillable form.' },
+      { step: 2, title: 'Flatten Form Layer', description: 'MatrixConvert merges AcroForms into static vector geometry.' },
+      { step: 3, title: 'Download Locked PDF', description: 'Save your read-only, tamper-proof file.' }
+    ],
+    formatComparison: [{ feature: 'Form State', fromVal: 'Interactive editable inputs', toVal: 'Immutable permanent vector curves' }],
+    seoKeywords: { shortTail: ['flatten pdf', 'lock fillable pdf', 'flatten pdf form fields'], longTail: ['how to flatten pdf form fields online free'] },
+    faq: [{ question: 'Will flattening erase my filled data?', answer: 'No! It bakes the filled values permanently into the document so they can no longer be edited or removed.' }],
+    options: {}
+  },
+
+  // 30. Monochrome Black & White PDF Converter
+  {
+    id: 'pdf-grayscale',
+    name: 'Monochrome Black & White PDF Converter',
+    slug: 'pdf-grayscale',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Compress',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Eco Toner Saver',
+    isPopular: true,
+    shortDescription: 'Convert colorful multi-page PDFs to crisp grayscale / monochrome documents for ink-saving printing and court submissions.',
+    longDescription: 'Eliminate color toner consumption and reduce document complexity by converting all images, vector charts, and headings into uniform high-contrast grayscale gradients.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Office Managers & Students', useCase: 'Cut laser printer color toner costs by 80% on high-volume print jobs.' }
+    ],
+    whereToUse: [{ scenario: 'Court & Official Filing', benefit: 'Comply with government agencies requiring black-and-white submitted briefs.' }],
+    steps: [
+      { step: 1, title: 'Upload Color PDF', description: 'Select your document.' },
+      { step: 2, title: 'Process Grayscale Conversion', description: 'Real-time in-browser luminance mapping.' },
+      { step: 3, title: 'Download Monochrome PDF', description: 'Ready for high-speed monochrome printing.' }
+    ],
+    formatComparison: [{ feature: 'Color Palette', fromVal: '24-bit RGB / CMYK colors', toVal: '8-bit uniform monochrome grayscale' }],
+    seoKeywords: { shortTail: ['black and white pdf', 'convert pdf to grayscale', 'monochrome pdf online'], longTail: ['convert color pdf to black and white online free'] },
+    faq: [{ question: 'Does this reduce file size?', answer: 'Yes! Removing multi-channel color data often yields a significantly smaller, faster-loading PDF.' }],
+    options: {}
+  },
+
+  // 31. Dark Mode & Color Inverted PDF
+  {
+    id: 'pdf-invert-colors',
+    name: 'Dark Mode & Color Inverted PDF',
+    slug: 'pdf-invert-colors',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Compress',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Night Reading & CAD',
+    shortDescription: 'Invert PDF page colors to white text on dark background for night-time reading, reduced eye strain, and high-contrast CAD blueprints.',
+    longDescription: 'Transform glaring white PDF pages into eye-friendly dark mode documents. Ideal for reading dense academic whitepapers at night or analyzing negative schematic drawings.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Night Readers & Researchers', useCase: 'Read 500-page textbooks in dark environments without harsh white screen glare.' }
+    ],
+    whereToUse: [{ scenario: 'CAD & Architectural Plans', benefit: 'Inspect inverted line drawings with ultra-high contrast.' }],
+    steps: [
+      { step: 1, title: 'Upload PDF', description: 'Select any white-background document.' },
+      { step: 2, title: 'Invert RGB Channels', description: 'Instant hardware-accelerated dark mode transformation.' },
+      { step: 3, title: 'Download Dark Mode PDF', description: 'Enjoy eye-comfortable night reading.' }
+    ],
+    formatComparison: [{ feature: 'Visual Theme', fromVal: 'Bright white background', toVal: 'Sleek dark-mode inverted contrast' }],
+    seoKeywords: { shortTail: ['invert pdf colors', 'dark mode pdf', 'pdf negative colors'], longTail: ['how to make pdf dark mode online free'] },
+    faq: [{ question: 'Are images also inverted?', answer: 'Yes, full RGB color inversion is applied across the entire document canvas for maximum contrast.' }],
+    options: {}
+  },
+
+  // 32. PDF Page Organizer & Reverse Order
+  {
+    id: 'pdf-page-reorder',
+    name: 'PDF Page Organizer & Reverse Order',
+    slug: 'pdf-page-reorder',
+    category: 'merge-split',
+    categoryName: 'Merge & Split PDF',
+    fromFormat: 'PDF',
+    toFormat: 'PDF',
+    badge: 'Reverse & Organize',
+    shortDescription: 'Reverse page sequence or organize multi-page PDF documents effortlessly in seconds.',
+    longDescription: 'Fix backwards scans from automatic document feeders (ADFs), invert page ordering, or arrange pages for booklet printing with 100% private browser processing.',
+    acceptedFileTypes: ['.pdf', 'application/pdf'],
+    whoCanUse: [
+      { persona: 'Office Clerks & Scanning Staff', useCase: 'Quickly invert documents scanned upside-down or in reverse order.' }
+    ],
+    whereToUse: [{ scenario: 'Booklet & Double-Sided Printing', benefit: 'Align duplex print runs in correct sequence.' }],
+    steps: [
+      { step: 1, title: 'Upload Backward PDF', description: 'Select your scanned document.' },
+      { step: 2, title: 'Invert Page Sequence', description: 'Instantly flips page N to 1.' },
+      { step: 3, title: 'Download Corrected PDF', description: 'Proper forward sequential order.' }
+    ],
+    formatComparison: [{ feature: 'Page Ordering', fromVal: 'Backwards scan (Page 10 to 1)', toVal: 'Correct forward flow (Page 1 to 10)' }],
+    seoKeywords: { shortTail: ['reverse pdf pages', 'reorder pdf', 'flip pdf page order'], longTail: ['how to reverse pdf pages online free'] },
+    faq: [{ question: 'Does this support large 100+ page PDFs?', answer: 'Yes! Because it works in local memory without uploading, it reverses 100+ pages in less than a second.' }],
+    options: {}
+  },
+
+  // 33. EXIF Metadata & Privacy Stripper
+  {
+    id: 'image-exif-stripper',
+    name: 'EXIF Metadata & Privacy Stripper',
+    slug: 'image-exif-stripper',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: '100% Privacy Scrub',
+    isPopular: true,
+    shortDescription: 'Scrub GPS location coordinates, camera serial numbers, lens metadata, and device fingerprints from photos before sharing online.',
+    longDescription: 'Protect your real-world location and privacy. MatrixConvert re-draws images through a sanitized canvas pipeline that strips 100% of sensitive EXIF, TIFF, GPS, and XMP tags.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', '.heic', 'image/*'],
+    whoCanUse: [
+      { persona: 'Journalists & Whistleblowers', useCase: 'Publish on-the-ground photos without exposing geographic GPS coordinates.' },
+      { persona: 'Online Sellers & Marketplaces', useCase: 'Strip home location and camera metadata before uploading to Craigslist or eBay.' }
+    ],
+    whereToUse: [{ scenario: 'Social Media Sharing', benefit: 'Prevent stalkers or data brokers from extracting your exact residential address.' }],
+    steps: [
+      { step: 1, title: 'Upload Photo', description: 'Select any camera or smartphone photo.' },
+      { step: 2, title: 'Sanitize Metadata', description: 'Zero bytes of EXIF or GPS coordinates retained.' },
+      { step: 3, title: 'Download Scrubbed Image', description: '100% private and safe to post.' }
+    ],
+    formatComparison: [{ feature: 'EXIF / GPS Tags', fromVal: 'Exact home GPS, camera serial, date', toVal: '100% stripped and sanitized' }],
+    seoKeywords: { shortTail: ['remove exif data', 'strip gps from photo', 'exif remover online'], longTail: ['remove exif metadata from photo online free privacy'] },
+    faq: [{ question: 'Can anyone recover the GPS coordinates after scrubbing?', answer: 'No. The image is rendered onto a fresh bitmap canvas; the EXIF header is completely non-existent in the output.' }],
+    options: {}
+  },
+
+  // 34. Social Media Aspect Ratio Padder
+  {
+    id: 'image-aspect-ratio-padder',
+    name: 'Social Media Aspect Ratio Padder',
+    slug: 'image-aspect-ratio-padder',
+    category: 'crop-resize',
+    categoryName: 'Crop & Resize',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: '1:1 • 4:5 • 16:9 • 9:16',
+    isPopular: true,
+    shortDescription: 'Add letterbox or pillarbox canvas padding to fit Instagram, LinkedIn, YouTube, or TikTok without cropping out any part of your photo.',
+    longDescription: 'Never lose heads, text, or products to harsh social media cropping. Pad photos with clean white, black, or custom color bars to achieve perfect standard ratios.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [
+      { persona: 'Social Media Managers', useCase: 'Fit landscape client designs into square 1:1 or 4:5 Instagram feeds without losing content.' }
+    ],
+    whereToUse: [{ scenario: 'Instagram & Carousel Posts', benefit: 'Consistent grid alignment across heterogeneous photo orientations.' }],
+    steps: [
+      { step: 1, title: 'Upload Photo', description: 'Drop your landscape or portrait picture.' },
+      { step: 2, title: 'Choose Aspect Ratio', description: '1:1 Square, 4:5 Portrait, or 16:9 Landscape.' },
+      { step: 3, title: 'Download Padded Photo', description: 'Ready to post with zero cropping.' }
+    ],
+    formatComparison: [{ feature: 'Image Framing', fromVal: 'Cropped edges and cut text', toVal: '100% of original photo preserved with padding' }],
+    seoKeywords: { shortTail: ['fit image to instagram', 'add white border to photo', 'aspect ratio padder'], longTail: ['make photo square without cropping online free'] },
+    faq: [{ question: 'What background colors can I use?', answer: 'You can choose clean white, sleek dark matrix black, or transparent canvas padding.' }],
+    options: {}
+  },
+
+  // 35. Negative & Color Invert Tool
+  {
+    id: 'image-color-inverter',
+    name: 'Negative & Color Invert Tool',
+    slug: 'image-color-inverter',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Photo Negative Filter',
+    shortDescription: 'Invert image RGB values to produce instant photographic negatives, high-contrast X-ray effects, or dark-mode graphics.',
+    longDescription: 'Generate inverted color palettes in real-time. Popular for analyzing film negatives, micro-circuit blueprints, and creating striking avant-garde poster visuals.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Film Photographers & Engineers', useCase: 'Preview scanned 35mm film negatives and inspect inverted schematic linework.' }],
+    whereToUse: [{ scenario: 'Artistic Visual Design', benefit: 'Create high-contrast album covers and promotional graphics.' }],
+    steps: [
+      { step: 1, title: 'Upload Image', description: 'Select your photo or diagram.' },
+      { step: 2, title: 'Invert RGB Channels', description: 'Instant pixel mathematical inversion.' },
+      { step: 3, title: 'Download Negative', description: 'Export your high-contrast graphic.' }
+    ],
+    formatComparison: [{ feature: 'Luminance & Hue', fromVal: 'Standard positive colors', toVal: 'Mathematically exact photographic negative' }],
+    seoKeywords: { shortTail: ['invert image colors', 'photo negative online', 'invert colors tool'], longTail: ['how to invert image colors online free'] },
+    faq: [{ question: 'Does this affect image resolution?', answer: 'No, every pixel maintains its exact spatial coordinate with inverted 8-bit RGB color depth.' }],
+    options: {}
+  },
+
+  // 36. Sepia Tone & Vintage Film Studio
+  {
+    id: 'image-sepia-vintage',
+    name: 'Sepia Tone & Vintage Film Studio',
+    slug: 'image-sepia-vintage',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Retro Aesthetics',
+    shortDescription: 'Transform modern digital photographs into nostalgic, warm antique sepia prints with balanced silver-bromide emulation.',
+    longDescription: 'Apply professional warmth and tonal gradations reminiscent of 19th-century photography with mathematical precision in your browser.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Photographers & Storytellers', useCase: 'Give historic family portraits or travel memories an authentic timeless feel.' }],
+    whereToUse: [{ scenario: 'Editorial Book Covers', benefit: 'Infuse classic literature and retrospective articles with antique flair.' }],
+    steps: [
+      { step: 1, title: 'Upload Modern Photo', description: 'Select any color picture.' },
+      { step: 2, title: 'Apply Sepia Matrix', description: 'Converts color channels to warm silver-bromide hues.' },
+      { step: 3, title: 'Download Vintage Print', description: 'Export your antique portrait.' }
+    ],
+    formatComparison: [{ feature: 'Tonal Atmosphere', fromVal: 'Cold harsh digital colors', toVal: 'Warm, timeless sepia monochrome' }],
+    seoKeywords: { shortTail: ['sepia filter online', 'vintage photo converter', 'make photo sepia'], longTail: ['convert color photo to antique sepia online free'] },
+    faq: [{ question: 'Does sepia look good on portraits?', answer: 'Yes! Sepia naturally flatters skin tones by balancing harsh highlights with rich warm shadows.' }],
+    options: {}
+  },
+
+  // 37. Exposure, Brightness & Contrast Enhancer
+  {
+    id: 'image-brightness-contrast',
+    name: 'Exposure, Brightness & Contrast Enhancer',
+    slug: 'image-brightness-contrast',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Dynamic Range Boost',
+    shortDescription: 'Lighten underexposed pictures, deepen rich shadows, and enhance visual punch with dynamic range curve adjustments.',
+    longDescription: 'Restore dark or washed-out photographs. Fine-tune brightness and contrast without installing heavy software like Photoshop or Lightroom.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Real Estate Agents & Creators', useCase: 'Brighten dim interior photos and give product shots striking clarity.' }],
+    whereToUse: [{ scenario: 'E-Commerce Catalogs', benefit: 'Make products stand out with vibrant contrast and clean highlights.' }],
+    steps: [
+      { step: 1, title: 'Upload Dark Photo', description: 'Select any underexposed image.' },
+      { step: 2, title: 'Boost Exposure & Contrast', description: 'Dynamic luminance curve recalculation.' },
+      { step: 3, title: 'Download Vibrant Photo', description: 'Clear, punchy, and beautifully lit.' }
+    ],
+    formatComparison: [{ feature: 'Exposure Profile', fromVal: 'Muddy underexposed shadows', toVal: 'Crisp dynamic range with enhanced clarity' }],
+    seoKeywords: { shortTail: ['brighten photo online', 'increase contrast image', 'photo enhancer free'], longTail: ['how to lighten dark picture online free'] },
+    faq: [{ question: 'Does brightening cause pixel grain?', answer: 'Our non-linear contrast curve prevents blown-out clipping while preserving shadow detail.' }],
+    options: {}
+  },
+
+  // 38. 1-Bit Binary Silhouette & Stencil Maker
+  {
+    id: 'image-threshold-binary',
+    name: '1-Bit Binary Silhouette & Stencil Maker',
+    slug: 'image-threshold-binary',
+    category: 'icon-tools',
+    categoryName: 'Icons & Art',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Laser & Stamp Stencils',
+    shortDescription: 'Convert photos into pure 1-bit high-contrast black-and-white silhouettes, stamp art, laser engraving templates, and vinyl decals.',
+    longDescription: 'Perfect for CNC laser cutters, Cricut vinyl plotters, rubber stamp makers, and screen-printing separations.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Makers & Vinyl Crafters', useCase: 'Generate high-contrast vector-ready bitmap stencils for laser cutting.' }],
+    whereToUse: [{ scenario: 'Screen Printing & Decals', benefit: 'Clean 1-bit black and white threshold with zero gray fringe.' }],
+    steps: [
+      { step: 1, title: 'Upload Artwork', description: 'Drop your sketch, logo, or portrait.' },
+      { step: 2, title: 'Threshold Pixel Data', description: 'Separates shapes into pure black (#000) and white (#FFF).' },
+      { step: 3, title: 'Download Stencil Bitmap', description: 'Export crisp stencil artwork.' }
+    ],
+    formatComparison: [{ feature: 'Pixel Bit Depth', fromVal: 'Continuous 256-level gray', toVal: 'Pure 1-bit binary black/white' }],
+    seoKeywords: { shortTail: ['photo to stencil', '1 bit image converter', 'silhouette maker online'], longTail: ['convert photo to black and white stencil for laser cutter'] },
+    faq: [{ question: 'Can I trace this stencil to SVG?', answer: 'Yes! After creating your binary stencil, run it through our Image to SVG Vectorizer for infinite scalability.' }],
+    options: {}
+  },
+
+  // 39. Privacy Blur & Face Redactor
+  {
+    id: 'image-blur-redact',
+    name: 'Privacy Blur & Face Redactor',
+    slug: 'image-blur-redact',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Blur Sensitive Data',
+    shortDescription: 'Apply adjustable privacy blur across images to obscure confidential addresses, credit card numbers, license plates, or faces.',
+    longDescription: 'Censor confidential information in screenshots and photos before sharing on Slack, GitHub, or public social media feeds.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'IT Administrators & Devs', useCase: 'Redact API tokens, private IPs, and customer credentials in documentation screenshots.' }],
+    whereToUse: [{ scenario: 'Bug Reporting & Ticket Submissions', benefit: 'Prevent accidental security and credential leaks.' }],
+    steps: [
+      { step: 1, title: 'Upload Screenshot', description: 'Select image with sensitive data.' },
+      { step: 2, title: 'Apply Privacy Blur', description: 'Pixelation filter destroys decipherable character geometry.' },
+      { step: 3, title: 'Download Safe Screenshot', description: 'Safe to share publicly.' }
+    ],
+    formatComparison: [{ feature: 'Confidential Visibility', fromVal: 'Legible plaintext credentials', toVal: 'Irreversible censored pixelation' }],
+    seoKeywords: { shortTail: ['blur sensitive image', 'redact screenshot', 'censor photo online'], longTail: ['how to blur confidential info in image online free'] },
+    faq: [{ question: 'Can AI unblur the redacted text?', answer: 'No. Pixelation removes the high-frequency pixel data entirely, making optical recovery impossible.' }],
+    options: {}
+  },
+
+  // 40. Smart Image Sharpening & Detail Enhancer
+  {
+    id: 'image-sharpen-unsharp',
+    name: 'Smart Image Sharpening & Detail Enhancer',
+    slug: 'image-sharpen-unsharp',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Micro-Contrast Boost',
+    shortDescription: 'Convolve image pixels with a high-pass sharpening kernel to bring out crisp text, fine hair textures, and defined object edges.',
+    longDescription: 'Restore subtle edge contrast in blurry or soft camera captures without introducing heavy chromatic ringing.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Archivists & Portrait Editors', useCase: 'Restore soft focus on camera captures and historical scans.' }],
+    whereToUse: [{ scenario: 'Product Mockups', benefit: 'Enhance micro-textures and metallic edges.' }],
+    steps: [
+      { step: 1, title: 'Upload Soft Photo', description: 'Drop your image.' },
+      { step: 2, title: 'Execute Sharpen Kernel', description: 'Applies 3x3 high-pass edge convolution.' },
+      { step: 3, title: 'Download Sharp Photo', description: 'Crisp details and defined contours.' }
+    ],
+    formatComparison: [{ feature: 'Edge Definition', fromVal: 'Soft diffused boundaries', toVal: 'High-contrast micro-sharpened edges' }],
+    seoKeywords: { shortTail: ['sharpen image online', 'unblur photo', 'make image clearer'], longTail: ['sharpen blurry photo online free without watermark'] },
+    faq: [{ question: 'Does this create halo artifacts?', answer: 'Our balanced convolution matrix is tuned to boost fine texture without harsh edge halos.' }],
+    options: {}
+  },
+
+  // 41. Print DPI Density Changer (72 to 600 DPI)
+  {
+    id: 'image-dpi-density-changer',
+    name: 'Print DPI Density Changer (72 to 600 DPI)',
+    slug: 'image-dpi-density-changer',
+    category: 'crop-resize',
+    categoryName: 'Crop & Resize',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Print-Ready 300 DPI',
+    shortDescription: 'Re-tag and scale image pixel densities from standard 72 DPI web resolution to commercial 300 DPI or 600 DPI print standards.',
+    longDescription: 'Ensure your digital artwork, resumes, and book covers pass strict print-on-demand pre-flight checks on Amazon KDP, IngramSpark, and print portals.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Self-Publishers & Print-on-Demand Sellers', useCase: 'Pass Amazon KDP and Printful 300 DPI pre-flight quality checks.' }],
+    whereToUse: [{ scenario: 'Commercial Print Submissions', benefit: 'Eliminate "Image resolution too low (< 300 DPI)" upload errors.' }],
+    steps: [
+      { step: 1, title: 'Upload 72 DPI Graphic', description: 'Select your web graphic.' },
+      { step: 2, title: 'Set Target Density', description: 'Choose 300 DPI (standard) or 600 DPI (fine art).' },
+      { step: 3, title: 'Download Print-Ready PNG', description: 'High-resolution output conforming to press standards.' }
+    ],
+    formatComparison: [{ feature: 'Physical Print Quality', fromVal: '72 DPI (grainy print output)', toVal: '300 DPI (commercial offset press standard)' }],
+    seoKeywords: { shortTail: ['change image dpi', '72 to 300 dpi', 'make image 300 dpi'], longTail: ['convert 72 dpi image to 300 dpi online free for print'] },
+    faq: [{ question: 'Why does printing require 300 DPI?', answer: 'Commercial print machines place hundreds of ink dots per inch. 72 DPI looks jagged on paper, while 300 DPI ensures crisp text and smooth photo reproduction.' }],
+    options: {}
+  },
+
+  // 42. Custom Border & Instant Frame Studio
+  {
+    id: 'image-border-polaroid',
+    name: 'Custom Border & Instant Frame Studio',
+    slug: 'image-border-polaroid',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Passe-partout & Frames',
+    shortDescription: 'Add elegant solid borders, museum-style passe-partout matting, or classic vintage Polaroid instant photo frames.',
+    longDescription: 'Give your digital pictures a gallery finish with customizable border widths, background tones, and retro instant camera styling.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Visual Artists & Photographers', useCase: 'Mount photography with clean gallery borders for portfolio presentations.' }],
+    whereToUse: [{ scenario: 'Social Media Feed Aesthetic', benefit: 'Unify eclectic photo sizes with consistent white border framing.' }],
+    steps: [
+      { step: 1, title: 'Upload Photo', description: 'Select your picture.' },
+      { step: 2, title: 'Apply Instant Frame', description: 'Adds retro Polaroid chin and white matting.' },
+      { step: 3, title: 'Download Framed Photo', description: 'Charming vintage aesthetic ready to share.' }
+    ],
+    formatComparison: [{ feature: 'Presentation Frame', fromVal: 'Raw borderless photo edge', toVal: 'Gallery matted frame with vintage Polaroid styling' }],
+    seoKeywords: { shortTail: ['add border to photo', 'polaroid frame online', 'photo frame maker'], longTail: ['make polaroid picture frame online free'] },
+    faq: [{ question: 'Can I write text in the Polaroid bottom chin?', answer: 'Yes, after downloading, the generous bottom margin is ideal for handwritten notes or digital captions.' }],
+    options: {}
+  },
+
+  // 43. Batch Image Watermark & Copyright Stamp
+  {
+    id: 'image-watermark-overlay',
+    name: 'Batch Image Watermark & Stamp',
+    slug: 'image-watermark-overlay',
+    category: 'optimize-edit',
+    categoryName: 'Optimize & Edit',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Copyright Protection',
+    shortDescription: 'Stamp custom copyright text, brand names, or "CONFIDENTIAL" watermarks across images with customizable opacity and angle.',
+    longDescription: 'Protect client review proofs, real estate listings, and design drafts from unauthorized distribution with discrete or bold watermarks.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Freelance Designers & Photographers', useCase: 'Watermark client proofs before final invoice payment.' }],
+    whereToUse: [{ scenario: 'Client Design Review', benefit: 'Prevent unlicensed screenshot theft and image scraping.' }],
+    steps: [
+      { step: 1, title: 'Upload Proofs', description: 'Select your images.' },
+      { step: 2, title: 'Stamp Watermark', description: 'Diagonal semi-transparent copyright overlay.' },
+      { step: 3, title: 'Download Watermarked Images', description: 'Protected against unauthorized publication.' }
+    ],
+    formatComparison: [{ feature: 'Copyright Protection', fromVal: 'Unprotected vulnerable proof', toVal: 'Defensively stamped watermark' }],
+    seoKeywords: { shortTail: ['watermark image online', 'add watermark to photo', 'photo copyright stamp'], longTail: ['how to watermark photos online free batch'] },
+    faq: [{ question: 'Can clients easily crop out the watermark?', answer: 'Because our watermark is drawn diagonally across the center of the image, cropping cannot remove it without destroying the visual composition.' }],
+    options: {}
+  },
+
+  // 44. Horizontal & Vertical Mirror Tool
+  {
+    id: 'image-flip-mirror',
+    name: 'Horizontal & Vertical Mirror Tool',
+    slug: 'image-flip-mirror',
+    category: 'crop-resize',
+    categoryName: 'Crop & Resize',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Lossless Flip',
+    shortDescription: 'Instantly flip images horizontally (mirror selfie correction) or vertically with mathematical bitmap fidelity.',
+    longDescription: 'Correct inverted camera mirrors, create symmetrical kaleidoscope designs, or flip product orientations in one click.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Content Creators & Selfie Shooters', useCase: 'Fix backward shirts, inverted text, and flipped front-facing camera selfies.' }],
+    whereToUse: [{ scenario: 'Profile Picture Optimization', benefit: 'Flip gazing direction towards landing page conversion elements.' }],
+    steps: [
+      { step: 1, title: 'Upload Image', description: 'Select your photo.' },
+      { step: 2, title: 'Flip Horizontal Matrix', description: 'Instant lossless canvas reflection.' },
+      { step: 3, title: 'Download Corrected Image', description: 'Natural, proper left-to-right orientation.' }
+    ],
+    formatComparison: [{ feature: 'Mirror Axis', fromVal: 'Inverted selfie view', toVal: 'True natural mirror reflection' }],
+    seoKeywords: { shortTail: ['flip image horizontally', 'mirror photo online', 'flip image free'], longTail: ['how to flip image mirror selfie online free'] },
+    faq: [{ question: 'Does flipping degrade image quality?', answer: 'No! The pixel array is simply transposed along the horizontal axis with zero recompression artifacting.' }],
+    options: {}
+  },
+
+  // 45. Duotone & Matrix Green Tint Studio
+  {
+    id: 'image-color-tint-duotone',
+    name: 'Duotone & Matrix Green Tint Studio',
+    slug: 'image-color-tint-duotone',
+    category: 'icon-tools',
+    categoryName: 'Icons & Art',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Matrix Cyberpunk Tones',
+    shortDescription: 'Map image luminance into iconic Matrix digital green, synthwave neon cyan/magenta, or custom duotone editorial color grades.',
+    longDescription: 'Create dramatic Spotify-style duotone promotional art and movie poster aesthetics directly from any photograph.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Graphic Designers & DJs', useCase: 'Produce eye-catching event flyers, podcast covers, and cyberpunk album art.' }],
+    whereToUse: [{ scenario: 'Brand Identity Artwork', benefit: 'Harmonize multi-source photos into a cohesive duotone brand palette.' }],
+    steps: [
+      { step: 1, title: 'Upload Photo', description: 'Select any color or B&W image.' },
+      { step: 2, title: 'Apply Duotone Gradient', description: 'Maps shadows to dark slate and highlights to neon Matrix green.' },
+      { step: 3, title: 'Download Duotone Artwork', description: 'Futuristic, high-impact aesthetic.' }
+    ],
+    formatComparison: [{ feature: 'Color Harmony', fromVal: 'Clashing random background colors', toVal: 'Unified dual-channel cyberpunk color grade' }],
+    seoKeywords: { shortTail: ['duotone effect online', 'matrix green photo', 'two tone photo filter'], longTail: ['convert photo to matrix cyberpunk green online free'] },
+    faq: [{ question: 'What makes Matrix green duotone so distinctive?', answer: 'It mimics the phosphorescent cathode-ray green monitors from early computing and cyberpunk cinema, creating an instantly recognizable tech vibe.' }],
+    options: {}
+  },
+
+  // 46. Color Key to Transparent PNG Maker
+  {
+    id: 'image-transparent-png-maker',
+    name: 'Color Key to Transparent PNG Maker',
+    slug: 'image-transparent-png-maker',
+    category: 'convert-webp',
+    categoryName: 'Vector & Transparency',
+    fromFormat: 'IMG',
+    toFormat: 'PNG',
+    badge: 'Alpha Transparency Key',
+    isPopular: true,
+    shortDescription: 'Eliminate solid white backdrops or green-screen backgrounds and convert matching pixels into true 8-bit alpha transparency.',
+    longDescription: 'Turn isolated logos, product photos, and vector icons into transparent PNGs ready to overlay on colored websites and merchandise.',
+    acceptedFileTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/*'],
+    whoCanUse: [{ persona: 'Web Developers & Apparel Designers', useCase: 'Remove white square backgrounds from company logos to place on dark navbars.' }],
+    whereToUse: [{ scenario: 'T-Shirt & Merch Printing', benefit: 'Prevent unsightly white boxes around printed t-shirt graphics.' }],
+    steps: [
+      { step: 1, title: 'Upload Image with Solid Backdrop', description: 'Drop your logo or product capture.' },
+      { step: 2, title: 'Key Out Backdrop', description: 'Converts matching background pixels into 0% opacity alpha channel.' },
+      { step: 3, title: 'Download Transparent PNG', description: 'Overlay anywhere seamlessly.' }
+    ],
+    formatComparison: [{ feature: 'Background Alpha', fromVal: 'Opaque white box boundary', toVal: '100% transparent alpha channel' }],
+    seoKeywords: { shortTail: ['make background transparent', 'remove white background', 'white to transparent png'], longTail: ['how to make white background transparent online free'] },
+    faq: [{ question: 'Does this leave a white halo around my logo?', answer: 'Our color-keying algorithm applies subtle alpha edge feathering to ensure clean transitions against dark backdrops.' }],
+    options: {}
   }
 ];
 
@@ -1124,7 +1671,7 @@ export const TOOL_CATEGORIES = [
   { id: 'convert-pdf', name: 'Convert from PDF', count: TOOLS_DATA.filter((t) => t.categoryName === 'Convert from PDF').length },
   { id: 'convert-to-pdf', name: 'Convert to PDF', count: TOOLS_DATA.filter((t) => t.toFormat === 'PDF' && t.fromFormat !== 'PDF').length },
   { id: 'convert-svg', name: 'Vector & SVG', count: TOOLS_DATA.filter((t) => t.categoryName.includes('SVG')).length },
-  { id: 'convert-webp', name: 'WebP & Next-Gen', count: TOOLS_DATA.filter((t) => t.categoryName.includes('WebP')).length },
+  { id: 'convert-webp', name: 'WebP & Transparency', count: TOOLS_DATA.filter((t) => t.categoryName.includes('WebP') || t.categoryName.includes('Transparency')).length },
   { id: 'icon-tools', name: 'Icons & Art', count: TOOLS_DATA.filter((t) => t.category === 'icon-tools').length },
   { id: 'optimize-edit', name: 'Optimize & Edit', count: TOOLS_DATA.filter((t) => t.category === 'optimize-edit').length }
 ];

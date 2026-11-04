@@ -10,7 +10,6 @@ interface FooterProps {
   onSelectLang: (code: string) => void;
   onOpenLegalPage: (type: LegalPageType) => void;
   onNavigateBlog?: () => void;
-  onNavigateStudio?: () => void;
   currentLang: string;
 }
 
@@ -19,7 +18,6 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectLang,
   onOpenLegalPage,
   onNavigateBlog,
-  onNavigateStudio,
   currentLang
 }) => {
   const popularTools = TOOLS_DATA.slice(0, 6);
@@ -159,6 +157,18 @@ export const Footer: React.FC<FooterProps> = ({
               </button>
             </li>
             <li className="pt-1">
+              <a
+                href="/downloads/LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                download="LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"
+              >
+                <FileText className="w-3.5 h-3.5 shrink-0" />
+                <span>LinkedIn Article (PDF)</span>
+              </a>
+            </li>
+            <li className="pt-0.5">
               <a
                 href="/sitemap.xml"
                 target="_blank"

@@ -213,10 +213,21 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                       <span>Naveed Afzal</span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-800 font-semibold">Founder • 20+ Yrs Exp</span>
                     </div>
-                    <div className="text-[11px] text-slate-600 font-sans">Technologist, Full-Stack Developer & SEO Specialist (Ex-Codra, Webdia)</div>
-                    <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
-                      Afzal460@gmail.com
-                    </a>
+                    <div className="flex items-center gap-2 mt-1">
+                      <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
+                        Afzal460@gmail.com
+                      </a>
+                      <span className="text-slate-400">•</span>
+                      <a
+                        href="/downloads/LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                        download="LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-emerald-700 hover:underline font-bold"
+                      >
+                        LinkedIn Article (PDF)
+                      </a>
+                    </div>
                   </div>
                 </div>
                 <p className="text-xs text-slate-700 leading-relaxed font-sans">

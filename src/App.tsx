@@ -17,7 +17,6 @@ import { LegalPagesModal, LegalPageType } from './components/LegalPagesModal';
 import { CompanyPages, CompanyPageType } from './components/CompanyPages';
 import { BlogHub } from './components/BlogHub';
 import { BlogPostView } from './components/BlogPostView';
-import { BlogStudio } from './components/BlogStudio';
 import { Footer } from './components/Footer';
 import { TOOLS_DATA } from './data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS, BlogPost } from './data/blogData';
@@ -37,7 +36,6 @@ export type AppView =
   | 'tool'
   | 'blog'
   | 'blog-post'
-  | 'blog-studio'
   | 'company-page';
 
 export default function App() {
@@ -102,11 +100,8 @@ export default function App() {
         trackPageView(hash);
         return;
       } else if (hash === '#/blog-studio' || hash === '#/studio' || hash === '#/seo-studio') {
-        setActiveView('blog-studio');
-        setActiveTool(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
+        // Third-party blog generation is disabled; redirect to editorial blog hub
+        window.location.hash = '#/blog';
         return;
       } else if (
         hash === '#/about' ||
@@ -229,9 +224,6 @@ export default function App() {
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
           }}
-          onNavigateStudio={() => {
-            window.location.hash = '#/blog-studio';
-          }}
           onNavigateAbout={() => {
             window.location.hash = '#/about';
           }}
@@ -277,9 +269,6 @@ export default function App() {
               onSelectPost={(slug) => {
                 window.location.hash = `#/blog/${slug}`;
               }}
-              onOpenStudio={() => {
-                window.location.hash = '#/blog-studio';
-              }}
               onSelectTool={handleSelectToolBySlug}
             />
           )}
@@ -296,26 +285,10 @@ export default function App() {
                 window.location.hash = `#/blog/${slug}`;
               }}
               onSelectTool={handleSelectToolBySlug}
-              onOpenStudio={() => {
-                window.location.hash = '#/blog-studio';
-              }}
             />
           )}
 
-          {/* View 5: Daily Trending SEO Blog Studio */}
-          {activeView === 'blog-studio' && (
-            <BlogStudio
-              onPublishArticle={handlePublishNewArticle}
-              onNavigateToPost={(slug) => {
-                window.location.hash = `#/blog/${slug}`;
-              }}
-              onBackToBlog={() => {
-                window.location.hash = '#/blog';
-              }}
-            />
-          )}
-
-          {/* View 6: Dedicated Company & Legal Pages (About, Terms, Privacy, Disclaimer, Contact, Sitemap) */}
+          {/* View 5: Dedicated Company & Legal Pages (About, Terms, Privacy, Disclaimer, Contact, Sitemap) */}
           {activeView === 'company-page' && (
             <CompanyPages
               pageType={companyPageType}
@@ -363,9 +336,6 @@ export default function App() {
           onOpenLegalPage={handleOpenLegalPage}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
-          }}
-          onNavigateStudio={() => {
-            window.location.hash = '#/blog-studio';
           }}
           currentLang={currentLang}
         />

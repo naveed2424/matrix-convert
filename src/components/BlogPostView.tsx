@@ -8,7 +8,6 @@ interface BlogPostViewProps {
   onBackToBlog: () => void;
   onSelectPost: (slug: string) => void;
   onSelectTool: (slug: string) => void;
-  onOpenStudio: () => void;
 }
 
 export const BlogPostView: React.FC<BlogPostViewProps> = ({
@@ -16,8 +15,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
   allPosts,
   onBackToBlog,
   onSelectPost,
-  onSelectTool,
-  onOpenStudio
+  onSelectTool
 }) => {
   const categoryInfo = BLOG_CATEGORIES.find((c) => c.key === post.category) || BLOG_CATEGORIES[0];
   const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
@@ -116,13 +114,6 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
         </button>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={onOpenStudio}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-sky-400/40 bg-sky-950/30 text-sky-300 hover:bg-sky-900/40 transition-colors cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Generate Today's Post</span>
-          </button>
           <button
             onClick={handleShare}
             className="p-1.5 rounded-lg border border-sky-400/30 bg-[#030908] hover:text-white transition-colors cursor-pointer"

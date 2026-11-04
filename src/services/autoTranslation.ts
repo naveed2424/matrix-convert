@@ -26,6 +26,7 @@ export const AUTO_TRANSLATE_LANGUAGES: SupportedLang[] = [
   { code: 'zh-CN', name: 'Chinese', nativeName: '简体中文', flag: '🇨🇳' },
   { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
   { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇧🇩' },
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷' },
   { code: 'pl', name: 'Polish', nativeName: 'Polski', flag: '🇵🇱' }
 ];

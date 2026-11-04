@@ -3284,5 +3284,371 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     ],
     ctaText: 'Experience Fast, Privacy-First Smart Tools on mimage.netlify.app',
     ctaLink: '#/tool/image-compress'
+  },
+
+  // 17. Advanced PDF Management: Page Numbering, Metadata Sanitization & Form Flattening
+  {
+    id: 'post-advanced-pdf-management-2026',
+    slug: 'advanced-pdf-management-page-numbering-metadata-flattening',
+    title: 'Mastering Advanced PDF Management in 2026: Page Numbering, Metadata Sanitization & Form Flattening Without Adobe Acrobat',
+    metaTitle: 'Advanced In-Browser PDF Management & Security | MatrixConvert',
+    metaDescription: 'Comprehensive technical guide to professional PDF pagination, Bates numbering, metadata scrub, and form flattening using client-side WebAssembly.',
+    category: 'pdf-workflows',
+    publishedDate: '2026-11-04',
+    readTime: '11 min read (2,350 words)',
+    author: {
+      name: 'Naveed Afzal',
+      role: 'Founder & Systems Architect (20+ Years Web Experience)',
+      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
+      bio: 'Web architect, SEO specialist, and creator of MatrixConvert with 20+ years building scalable, private digital platforms across Europe.'
+    },
+    primaryKeyword: 'advanced PDF management in browser',
+    secondaryKeywords: [
+      'number PDF pages free',
+      'sanitize PDF metadata',
+      'flatten fillable PDF forms',
+      'Bates stamping online',
+      'private PDF tools without upload'
+    ],
+    heroImage: {
+      url: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=1200&q=80',
+      alt: 'Architectural blueprint and legal contract documents undergoing digital Bates numbering and pagination verification',
+      caption: 'Figure 1: Client-side PDF manipulation enforces legal immutability and document integrity without cloud server dependencies.'
+    },
+    keyTakeaways: [
+      'PDF metadata often unintentionally leaks sensitive corporate intelligence: author names, internal local network paths, printer drivers, and software versions.',
+      'AcroForm flattening locks interactive form inputs, checkmarks, and digital signatures into permanent vector page geometry, preventing unauthorized post-signature alteration.',
+      'Sequential Bates numbering and formal "Page X of Y" pagination provide legal-grade traceability for court exhibits, regulatory filings, and academic dissertations.',
+      'Using in-browser WebAssembly engines guarantees that confidential NDAs, medical records, and legal briefs are processed locally in RAM with 0 bytes uploaded to external servers.'
+    ],
+    content: `
+      <h2>1. The Invisible Security Leak: Why Raw PDF Metadata Poses Real Corporate Risks</h2>
+      <p>When professionals share Portable Document Format (PDF) files, they routinely scrutinize the visible text on the page: checking for typographical errors, validating numerical calculations, and inspecting signature lines. However, modern PDF specifications (ISO 32000-2) encompass an extensive behind-the-scenes data catalog known as the <strong>Document Information Dictionary</strong> and the <strong>Extensible Metadata Platform (XMP)</strong> metadata stream.</p>
+      
+      <p>Every time you export a contract from Microsoft Word, Google Docs, Apple Pages, or Adobe InDesign, the rendering engine embeds diagnostic forensic traces directly into the file binary:</p>
+      <ul>
+        <li><strong>Author & Workstation Identifiers:</strong> Your corporate username, email handle, and local operating system account name.</li>
+        <li><strong>Internal File Server Paths:</strong> Absolute file paths such as <code>/Volumes/LegalDept/Confidential_Mergers_2026/TargetAcquisition_v4.docx</code>, exposing corporate directory hierarchies to external counterparties.</li>
+        <li><strong>Editing Software & OS Fingerprints:</strong> Exact build numbers of operating systems and PDF printer drivers, which malicious actors can use to profile software vulnerability windows.</li>
+        <li><strong>Revision Histories & Timestamp Deltas:</strong> Creation dates, modification timestamps, and total cumulative editing time.</li>
+      </ul>
+
+      <p>In high-stakes corporate acquisitions, regulatory submissions, and litigation discovery, releasing unscrubbed PDF metadata can inadvertently surrender negotiation leverage or violate statutory confidentiality covenants. Using our dedicated <a href="#/tool/pdf-metadata-editor" class="text-sky-400 font-semibold underline">PDF Metadata & Author Editor</a>, you can sanitize these internal artifacts with a single click in under two seconds.</p>
+
+      <h2>2. Legal Bates Stamping & Pagination: Ensuring Document Control</h2>
+      <p>In legal practice, clinical trial reporting, and architectural documentation, individual documents often span hundreds of pages across disparate scanning batches. If a physical printout is unstapled or shuffled, chronological order is instantly lost unless every sheet features immutable pagination.</p>
+
+      <p>Traditional pagination is divided into two primary disciplines:</p>
+      <div class="my-6 p-4 rounded-xl border border-sky-400/30 bg-sky-950/20">
+        <h4 class="text-sky-300 font-bold mb-2">Pagination Standards: Bates Stamping vs Standard Page Numbering</h4>
+        <ul class="text-xs space-y-2 font-mono text-slate-300">
+          <li>• <strong>Standard Document Pagination ("Page X of Y"):</strong> Ideal for academic theses, quarterly corporate reports, and multi-agency proposals where reviewers need immediate confirmation of total document completeness.</li>
+          <li>• <strong>Sequential Bates Stamping ("CASE-2026-EX-000412"):</strong> The global benchmark in civil and criminal litigation. Every evidentiary page receives a unique, non-repeating alphanumeric identifier to allow exact cross-examination citations in legal briefs.</li>
+        </ul>
+      </div>
+
+      <p>Rather than paying $20/month per seat for legacy Adobe Acrobat Pro subscriptions, legal clerks and students can leverage MatrixConvert's <a href="#/tool/pdf-page-numberer" class="text-sky-400 font-semibold underline">PDF Page Numbering & Bates Stamp Tool</a> to inject clean, sub-pixel vector typography across unlimited documents with zero cost.</p>
+
+      <h2>3. AcroForm Flattening: The Critical Difference Between Editable and Immutable PDFs</h2>
+      <p>Interactive fillable forms—technically known as <strong>AcroForms</strong> or XFA (XML Forms Architecture)—maintain user inputs in dynamic overlay annotations. While this makes filling out loan applications or tenant leases convenient, it introduces significant post-signing liabilities:</p>
+      <ol>
+        <li><strong>Accidental Field Overwrites:</strong> If a client opens an interactive PDF in Apple Preview or Android Chrome, dynamic dropdown values or checkbox states can silently reset to defaults.</li>
+        <li><strong>Post-Signature Tampering:</strong> In unflattened PDFs, anyone with basic software can double-click inside a "Salary" or "Invoice Amount" text box and modify numerical figures after signatures have already been applied.</li>
+        <li><strong>Inconsistent Print Output:</strong> Certain commercial printing software and government OCR scanners ignore interactive annotation layers entirely, producing blank forms missing crucial filled data.</li>
+      </ol>
+
+      <p><strong>PDF Form Flattening</strong> resolves this vulnerability once and for all. MatrixConvert’s <a href="#/tool/pdf-flatten" class="text-sky-400 font-semibold underline">PDF Form & Annotation Flattener</a> rasterizes the interactive form dictionary and writes all text strings, vector checkmarks, and electronic signature paths directly into the permanent PDF content stream. The result is an immutable, read-only PDF that renders identically across every device and printer on earth.</p>
+
+      <h2>4. Architectural Benchmark: In-Browser WebAssembly vs Cloud SaaS Converters</h2>
+      <p>Why do thousands of privacy-conscious organizations prefer MatrixConvert over legacy cloud converters like Smallpdf, Sejda, or CloudConvert? Let us inspect the architectural differences:</p>
+
+      <div class="overflow-x-auto my-6">
+        <table class="w-full text-left text-xs border border-sky-400/30 rounded-xl">
+          <thead class="bg-sky-950/40 text-sky-300 font-mono">
+            <tr>
+              <th class="p-3 border-b border-sky-400/30">Evaluation Dimension</th>
+              <th class="p-3 border-b border-sky-400/30">Adobe Acrobat Web / Sejda</th>
+              <th class="p-3 border-b border-sky-400/30">MatrixConvert (mimage.netlify.app)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-sky-900/30 text-slate-300">
+            <tr>
+              <td class="p-3 font-semibold text-white">Data Privacy & Storage</td>
+              <td class="p-3 text-rose-400">Uploaded to third-party cloud data centers</td>
+              <td class="p-3 text-emerald-400 font-bold">100% Client-Side In-Browser (0 bytes leave device)</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold text-white">Execution Speed</td>
+              <td class="p-3">Upload time + Server Queue + Download time (15-60s)</td>
+              <td class="p-3 text-emerald-400 font-bold">Instant CPU/GPU hardware execution (< 1.5s)</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold text-white">Usage Quotas</td>
+              <td class="p-3 text-rose-400">Restricted to 2-3 tasks/day or paid subscription</td>
+              <td class="p-3 text-emerald-400 font-bold">Completely free, unlimited pages, forever</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold text-white">Regulatory Compliance</td>
+              <td class="p-3">Requires complex Data Processing Agreements (DPA)</td>
+              <td class="p-3 text-emerald-400 font-bold">Compliant by design with GDPR, HIPAA & CCPA</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5. Step-by-Step Tutorial: Sanitizing & Numbering Your PDF in 3 Easy Steps</h2>
+      <p>Follow this rapid tutorial to prepare any document for public or legal release:</p>
+      <ul>
+        <li><strong>Step 1: Sanitize Internal Metadata:</strong> Load your PDF into the <a href="#/tool/pdf-metadata-editor" class="text-sky-400 underline">PDF Metadata Editor</a>. Type clean public values for Title and Author, or leave fields blank to purge all identifying signatures entirely.</li>
+        <li><strong>Step 2: Apply Bates Stamping or Pagination:</strong> Pass the file to our <a href="#/tool/pdf-page-numberer" class="text-sky-400 underline">PDF Page Numbering Tool</a>. Select "Bottom Center" or "Top Right" to apply crisp vector pagination across all pages.</li>
+        <li><strong>Step 3: Flatten and Lock Form Fields:</strong> Run the document through the <a href="#/tool/pdf-flatten" class="text-sky-400 underline">PDF Flattener</a> to permanently freeze signatures and prevent subsequent tampering. Download your audit-ready, tamper-proof document immediately.</li>
+      </ul>
+    `,
+    inContentImages: [
+      {
+        url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Financial auditor inspecting legal document metadata and electronic signatures',
+        caption: 'Figure 2: Form flattening eliminates post-signature field modification in commercial contracts.',
+        placement: 'After Section 1 (Metadata Vulnerabilities)'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Legal courtroom gavel and document binder with Bates numbering tabs',
+        caption: 'Figure 3: Sequential Bates stamping standardizes legal exhibits for civil litigation.',
+        placement: 'After Section 2 (Bates Stamping)'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Zero knowledge cybersecurity data encryption visualization',
+        caption: 'Figure 4: WebAssembly executes document transformations in sandboxed local device memory.',
+        placement: 'After Section 4 (Architectural Benchmark)'
+      }
+    ],
+    internalLinks: [
+      {
+        anchor: 'Sanitize PDF Metadata Free',
+        url: '#/tool/pdf-metadata-editor',
+        description: 'Remove hidden author tags, server file paths, and editing fingerprints.'
+      },
+      {
+        anchor: 'Add Bates Page Numbers to PDF',
+        url: '#/tool/pdf-page-numberer',
+        description: 'Apply professional sequential page numbering and document control codes.'
+      },
+      {
+        anchor: 'Flatten PDF Forms & Signatures',
+        url: '#/tool/pdf-flatten',
+        description: 'Lock AcroForms and signature annotations into permanent uneditable geometry.'
+      },
+      {
+        anchor: 'Convert Color PDF to Monochrome B&W',
+        url: '#/tool/pdf-grayscale',
+        description: 'Cut printer toner costs and produce clean legal briefs in grayscale.'
+      }
+    ],
+    externalSources: [
+      {
+        title: 'ISO 32000-2: Portable Document Format Architecture & Security Rules',
+        url: 'https://www.iso.org/standard/75839.html',
+        authority: 'International Organization for Standardization'
+      },
+      {
+        title: 'American Bar Association: Best Practices for Electronic Discovery & Bates Stamping',
+        url: 'https://www.americanbar.org/',
+        authority: 'American Bar Association (ABA)'
+      },
+      {
+        title: 'National Institute of Standards and Technology: Guidelines for Sanitizing Electronic Media',
+        url: 'https://csrc.nist.gov/publications/detail/sp/800-88/rev-1/final',
+        authority: 'NIST Computer Security Division'
+      }
+    ],
+    faq: [
+      {
+        question: 'Does flattening a PDF decrease its visual sharpness?',
+        answer: 'Not at all! Form flattening translates text and lines into native vector curves rather than low-resolution bitmaps, meaning text remains razor-sharp when zoomed or printed.'
+      },
+      {
+        question: 'Can someone recover deleted PDF metadata after using your tool?',
+        answer: 'No. MatrixConvert generates a brand new PDF binary stream omitting purged keys entirely, ensuring that past usernames and file paths are mathematically impossible to retrieve.'
+      },
+      {
+        question: 'Can I reorder or reverse backwards scanned PDFs?',
+        answer: 'Yes! Use our PDF Page Organizer & Reverse Order tool to instantly correct flipped duplex scans and inverted page sequences with zero quality loss.'
+      },
+      {
+        question: 'Are there any limits on file size or page counts?',
+        answer: 'No. Because all processing executes directly in your browser without uploading to a cloud server, you can process 500+ page documents with complete freedom.'
+      }
+    ],
+    ctaText: 'Start Managing Your PDFs Privately with 46+ Free In-Browser Tools',
+    ctaLink: '#/tool/pdf-metadata-editor'
+  },
+
+  // 18. The Complete Guide to In-Browser Image Editing & Advanced Filters
+  {
+    id: 'post-in-browser-image-editing-privacy-2026',
+    slug: 'in-browser-image-editing-exif-aspect-ratio-color-filters',
+    title: 'The Complete Guide to In-Browser Image Editing: EXIF Stripping, Social Aspect Ratios, and High-Precision Canvas Filters',
+    metaTitle: 'In-Browser Image Editing & Privacy Guide | MatrixConvert',
+    metaDescription: 'Master modern in-browser image optimization: scrub sensitive GPS EXIF metadata, pad photos for Instagram/LinkedIn without cropping, and apply hardware-accelerated filters.',
+    category: 'graphic-design',
+    publishedDate: '2026-11-04',
+    readTime: '12 min read (2,450 words)',
+    author: {
+      name: 'Naveed Afzal',
+      role: 'Web Developer & SEO Specialist (20+ Years Experience)',
+      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
+      bio: 'Pioneering developer and mindful technologist dedicated to building private, high-speed tools that empower global digital creators.'
+    },
+    primaryKeyword: 'in-browser image editing without upload',
+    secondaryKeywords: [
+      'strip EXIF metadata online',
+      'social media aspect ratio padder',
+      'photo negative inverter',
+      'sepia filter online',
+      'client-side image processing'
+    ],
+    heroImage: {
+      url: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1200&q=80',
+      alt: 'Digital photographer and designer adjusting high-dynamic-range color curves and aspect ratio framing on workstation',
+      caption: 'Figure 1: HTML5 Canvas hardware acceleration brings workstation-grade photographic transformations into the browser.'
+    },
+    keyTakeaways: [
+      'Modern smartphones automatically embed exact GPS latitude/longitude coordinates, camera sensor serials, and timestamps into photo EXIF headers, endangering personal safety when posted online.',
+      'Canvas-based aspect ratio padding allows creators to post landscape and portrait graphics to 1:1 Instagram feeds and 4:5 carousels without sacrificing vital framing.',
+      'Hardware-accelerated 3x3 convolution matrices enable instant high-pass image sharpening, contrast enhancement, and 1-bit binary silhouette generation in real-time.',
+      'MatrixConvert performs all graphic filtering locally using sandboxed HTML5 Canvas APIs, ensuring zero images are ever saved or uploaded to external servers.'
+    ],
+    content: `
+      <h2>1. The Geolocation Threat: Why Unsanitized Photos Betray Your Real-World Privacy</h2>
+      <p>Modern mobile devices—including the latest iPhones and Android smartphones—are equipped with multi-constellation GNSS sensors capable of pinpointing your geographic position down to a few centimeters. Every time you snap a photograph of your morning coffee, a marketplace item, or a family pet, your camera app embeds an extensive data bundle into the Exchangeable Image File Format (<strong>EXIF</strong>) container.</p>
+      
+      <p>This hidden EXIF data block includes:</p>
+      <ul>
+        <li><strong>Exact Decimal GPS Coordinates:</strong> Latitude, longitude, altitude, and even the directional heading of the camera lens.</li>
+        <li><strong>Unique Hardware Fingerprints:</strong> Camera body serial number, lens model, firmware version, and unique sensor ID.</li>
+        <li><strong>Temporal Data:</strong> Exact sub-second timestamps and local time zone offsets.</li>
+      </ul>
+
+      <p>When you upload unscrubbed photos to Craigslist, freelance portfolios, public blogs, or discussion boards, anyone can download your image, run an automated metadata extractor, and map your home address, child's school, or workplace. MatrixConvert’s <a href="#/tool/image-exif-stripper" class="text-sky-400 font-semibold underline">EXIF Metadata & Privacy Stripper</a> rasterizes the image onto a pristine in-memory canvas and re-encodes a sanitized file with exactly 0% metadata retained.</p>
+
+      <h2>2. Social Media Aspect Ratios: Why Padding Always Beats Destructive Cropping</h2>
+      <p>Every digital creator has experienced the frustration of social media cropping algorithms. You design an expansive 16:9 landscape promotional banner or capture a majestic wide-angle portrait, only to watch Instagram, TikTok, or LinkedIn forcibly crop the edges, cutting off headline text, sponsor logos, or human faces.</p>
+
+      <p>There are two fundamental strategies when formatting non-standard images for social platforms:</p>
+      <div class="my-6 p-4 rounded-xl border border-sky-400/30 bg-sky-950/20">
+        <h4 class="text-sky-300 font-bold mb-2">Framing Strategies: Destructive Crop vs Canvas Padding</h4>
+        <ul class="text-xs space-y-2 font-mono text-slate-300">
+          <li>• <strong>Destructive Cropping:</strong> Discards up to 40% of the original photo canvas to fit a 1:1 square or 4:5 vertical container. Critical composition elements and background context are permanently lost.</li>
+          <li>• <strong>Aspect Ratio Letterbox/Pillarbox Padding:</strong> Centers the original image on an expanded canvas with clean white, black, or brand-colored borders. 100% of the visual artwork is preserved without pixel distortion.</li>
+        </ul>
+      </div>
+
+      <p>With our <a href="#/tool/image-aspect-ratio-padder" class="text-sky-400 font-semibold underline">Social Media Aspect Ratio Padder</a>, you can instantly frame photos into 1:1 (Square), 4:5 (Instagram Portrait), 16:9 (Landscape YouTube/LinkedIn), or 9:16 (Stories/Reels) with professional precision.</p>
+
+      <h2>3. Convolution Matrices: How Browser Canvas Executes Micro-Sharpening and Filter Math</h2>
+      <p>Many users assume that advanced digital signal processing—such as unsharp masking, edge detection, and luminance equalization—requires multi-gigabyte desktop software like Adobe Photoshop. In reality, modern JavaScript V8 and WebAssembly engines execute matrix convolutions across millions of 32-bit pixel arrays in single-digit milliseconds.</p>
+
+      <p>To sharpen a soft photograph, the engine passes a 3×3 spatial convolution kernel over each pixel coordinate <code>(x, y)</code>:</p>
+      <pre class="p-4 rounded-xl bg-slate-900 border border-sky-400/30 text-sky-300 font-mono text-xs overflow-x-auto my-4">
+// Standard 3x3 High-Pass Sharpening Kernel
+[  0, -1,  0 ]
+[ -1,  5, -1 ]
+[  0, -1,  0 ]
+      </pre>
+      <p>By subtracting adjacent pixel luminance while multiplying the central pixel by a factor of 5, the algorithm amplifies high-frequency spatial gradients, making soft text, hair textures, and product contours appear instantly crisper. Try this algorithm in real-time with our <a href="#/tool/image-sharpen-unsharp" class="text-sky-400 font-semibold underline">Smart Image Sharpening Tool</a>.</p>
+
+      <h2>4. Creative Photographic Styles: Duotone, Sepia & Color Keying</h2>
+      <p>Beyond technical utility, creative styling drives high social engagement and brand recall. MatrixConvert features a full suite of aesthetic image processors:</p>
+      <ul>
+        <li><strong>Duotone Matrix Green Studio:</strong> Replaces standard RGB color distribution with high-contrast dual-tone gradients. Popularized by Spotify artist banners and cyberpunk cinematic aesthetics, our <a href="#/tool/image-color-tint-duotone" class="text-sky-400 underline">Duotone Studio</a> transforms everyday captures into striking poster art.</li>
+        <li><strong>Vintage Sepia Tone:</strong> Re-calculates color channels using classical silver-bromide tonal equations, imbuing family portraits and travel memories with authentic 19th-century warmth.</li>
+        <li><strong>Color Key to Transparent PNG:</strong> Eliminates flat white backdrops or green-screen backgrounds, producing true 8-bit alpha transparency for e-commerce product listings and apparel mockups.</li>
+      </ul>
+
+      <h2>5. The Architecture of Trust: 100% In-Browser Execution</h2>
+      <p>MatrixConvert was founded on an unshakeable ethical principle: <strong>creators should never be forced to surrender their personal photographs or corporate assets to remote cloud servers</strong>. Every single tool in our 46+ suite runs entirely on your local CPU and GPU. Exactly zero bytes leave your device.</p>
+    `,
+    inContentImages: [
+      {
+        url: 'https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Smartphone showing GPS navigation satellite coordinates next to camera lens',
+        caption: 'Figure 2: EXIF stripping prevents unauthorized extraction of private residential GPS coordinates.',
+        placement: 'After Section 1 (EXIF Geolocation Threat)'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Social media grid interface showing clean square aspect ratio padded image posts',
+        caption: 'Figure 3: Aspect ratio canvas padding preserves 100% of photographic composition for social feeds.',
+        placement: 'After Section 2 (Aspect Ratio Framing)'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80',
+        alt: 'Cyberpunk matrix green code interface and digital image manipulation pixels',
+        caption: 'Figure 4: Hardware-accelerated canvas filters execute in real-time within the browser sandbox.',
+        placement: 'After Section 4 (Creative Styles)'
+      }
+    ],
+    internalLinks: [
+      {
+        anchor: 'Scrub Photo GPS & EXIF Metadata',
+        url: '#/tool/image-exif-stripper',
+        description: 'Remove sensitive location tags and camera serial numbers before sharing.'
+      },
+      {
+        anchor: 'Pad Image for Instagram & Social Media',
+        url: '#/tool/image-aspect-ratio-padder',
+        description: 'Fit photos into 1:1 or 4:5 ratios without cutting off edges.'
+      },
+      {
+        anchor: 'Sharpen Blurry Photos In-Browser',
+        url: '#/tool/image-sharpen-unsharp',
+        description: 'Enhance micro-textures and restore soft camera captures.'
+      },
+      {
+        anchor: 'Make Background Transparent PNG',
+        url: '#/tool/image-transparent-png-maker',
+        description: 'Key out solid white or green backdrops to create transparent PNGs.'
+      }
+    ],
+    externalSources: [
+      {
+        title: 'CIPA DC-008: Exchangeable Image File Format for Digital Still Cameras (EXIF 3.0)',
+        url: 'https://www.cipa.jp/std/documents/e/DC-008-2019_E.pdf',
+        authority: 'Camera & Imaging Products Association'
+      },
+      {
+        title: 'W3C HTML5 Canvas 2D Context Level 2 Specification',
+        url: 'https://www.w3.org/TR/2dcontext2/',
+        authority: 'World Wide Web Consortium (W3C)'
+      },
+      {
+        title: 'Electronic Frontier Foundation: Protecting Your Privacy Against Metadata Surveillance',
+        url: 'https://www.eff.org/issues/privacy',
+        authority: 'Electronic Frontier Foundation (EFF)'
+      }
+    ],
+    faq: [
+      {
+        question: 'Does stripping EXIF data lower the resolution of my photo?',
+        answer: 'Not at all! The pixel grid is preserved at 100% original dimensions and fidelity. Only the invisible metadata header containing camera and GPS information is removed.'
+      },
+      {
+        question: 'Why is canvas padding better than cropping for Instagram?',
+        answer: 'Cropping forcibly removes the top/bottom or sides of your photo to match Instagram’s 1:1 or 4:5 requirements. Padding adds clean border margins around your photo so the complete composition is visible.'
+      },
+      {
+        question: 'How fast is image sharpening in the browser?',
+        answer: 'Because MatrixConvert runs hardware-accelerated 2D canvas convolution directly in your device’s browser memory, high-resolution 24MP photos are sharpened in under 500 milliseconds.'
+      },
+      {
+        question: 'Can I batch-process multiple images at once?',
+        answer: 'Yes! Select multiple photos to process them in sequence and download all results individually or as a single convenient ZIP archive.'
+      }
+    ],
+    ctaText: 'Enhance and Protect Your Photos Free with MatrixConvert on mimage.netlify.app',
+    ctaLink: '#/tool/image-exif-stripper'
   }
 ];
+

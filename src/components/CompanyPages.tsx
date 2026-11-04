@@ -170,6 +170,17 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                         <Mail className="w-3.5 h-3.5 text-sky-400" />
                         <span>Afzal460@gmail.com</span>
                       </a>
+                      <span>•</span>
+                      <a
+                        href="/downloads/LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                        download="LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-emerald-400 hover:underline font-semibold"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>LinkedIn Article (PDF)</span>
+                      </a>
                     </div>
                   </div>
                 </div>
