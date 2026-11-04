@@ -15,7 +15,8 @@ import {
   Archive,
   Trash2,
   RotateCw,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Star
 } from 'lucide-react';
 import { SUPPORTED_LANGUAGES, getTranslation } from '../data/languages';
 import { ToolDefinition } from '../types';
@@ -29,6 +30,7 @@ interface NavbarProps {
   onOpenMatrixArt: () => void;
   onNavigateBlog: () => void;
   onNavigateAbout: () => void;
+  onNavigateReviews?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -39,7 +41,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectToolBySlug,
   onOpenMatrixArt,
   onNavigateBlog,
-  onNavigateAbout
+  onNavigateAbout,
+  onNavigateReviews
 }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [allToolsDropdownOpen, setAllToolsDropdownOpen] = useState(false);
@@ -422,6 +425,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>Blog</span>
           </button>
 
+          {/* Client Reviews & Ratings */}
+          <button
+            onClick={onNavigateReviews}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-amber-300 hover:text-white hover:bg-amber-500/10 transition-colors whitespace-nowrap cursor-pointer font-bold border border-amber-500/30 bg-amber-950/20 shadow-xs"
+            title="Avis Clients & Satisfaction 4.8★"
+          >
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+            <span>Avis (4.8 ★)</span>
+          </button>
+
           {/* Matrix Art */}
           <button
             onClick={onOpenMatrixArt}
@@ -552,6 +565,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="block w-full py-2 text-left text-sky-400 font-bold"
             >
               Blog & Conversion Guides
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onNavigateReviews) onNavigateReviews();
+              }}
+              className="flex items-center gap-2 w-full py-2 text-left text-amber-300 font-bold"
+            >
+              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <span>Avis Clients & Ratings (4.8 ★)</span>
             </button>
             <button
               onClick={() => {

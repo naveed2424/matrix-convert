@@ -17,6 +17,7 @@ import { LegalPagesModal, LegalPageType } from './components/LegalPagesModal';
 import { CompanyPages, CompanyPageType } from './components/CompanyPages';
 import { BlogHub } from './components/BlogHub';
 import { BlogPostView } from './components/BlogPostView';
+import { ClientReviewsPage } from './components/ClientReviewsPage';
 import { Footer } from './components/Footer';
 import { TOOLS_DATA } from './data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS, BlogPost } from './data/blogData';
@@ -36,7 +37,8 @@ export type AppView =
   | 'tool'
   | 'blog'
   | 'blog-post'
-  | 'company-page';
+  | 'company-page'
+  | 'reviews';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<string>(() => getSavedLanguage());
@@ -93,6 +95,20 @@ export default function App() {
         return;
       } else if (hash === '#/blog' || hash === '#/articles') {
         setActiveView('blog');
+        setActiveTool(null);
+        setActivePostSlug(null);
+        setLegalModalType(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        trackPageView(hash);
+        return;
+      } else if (
+        hash === '#/reviews' ||
+        hash === '#/avis' ||
+        hash === '#/testimonials' ||
+        hash === '#/ratings' ||
+        hash === '#reviews'
+      ) {
+        setActiveView('reviews');
         setActiveTool(null);
         setActivePostSlug(null);
         setLegalModalType(null);
@@ -227,6 +243,9 @@ export default function App() {
           onNavigateAbout={() => {
             window.location.hash = '#/about';
           }}
+          onNavigateReviews={() => {
+            window.location.hash = '#/reviews';
+          }}
         />
 
         {/* Dynamic Route View */}
@@ -297,6 +316,14 @@ export default function App() {
             />
           )}
 
+          {/* View 6: Client Reviews & Star Ratings Graph (4.8★ Satisfaction) */}
+          {activeView === 'reviews' && (
+            <ClientReviewsPage
+              onBackToHome={handleBackToAllTools}
+              onSelectTool={handleSelectToolBySlug}
+            />
+          )}
+
           {/* View 7: Home View (Hero + Tools Grid + How-To Guides) */}
           {activeView === 'home' && (
             <>
@@ -336,6 +363,9 @@ export default function App() {
           onOpenLegalPage={handleOpenLegalPage}
           onNavigateBlog={() => {
             window.location.hash = '#/blog';
+          }}
+          onNavigateReviews={() => {
+            window.location.hash = '#/reviews';
           }}
           currentLang={currentLang}
         />

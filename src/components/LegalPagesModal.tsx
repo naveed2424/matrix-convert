@@ -217,16 +217,6 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                       <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
                         Afzal460@gmail.com
                       </a>
-                      <span className="text-slate-400">•</span>
-                      <a
-                        href="/downloads/LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
-                        download="LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-emerald-700 hover:underline font-bold"
-                      >
-                        LinkedIn Article (PDF)
-                      </a>
                     </div>
                   </div>
                 </div>

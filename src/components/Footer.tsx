@@ -2,7 +2,7 @@ import React from 'react';
 import { SUPPORTED_LANGUAGES } from '../data/languages';
 import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDefinition } from '../types';
-import { ShieldCheck, FileText, Info, Mail, Map, BookOpen, Sparkles, ExternalLink } from 'lucide-react';
+import { ShieldCheck, FileText, Info, Mail, Map, BookOpen, Sparkles, ExternalLink, Star } from 'lucide-react';
 import { LegalPageType } from './LegalPagesModal';
 
 interface FooterProps {
@@ -10,6 +10,7 @@ interface FooterProps {
   onSelectLang: (code: string) => void;
   onOpenLegalPage: (type: LegalPageType) => void;
   onNavigateBlog?: () => void;
+  onNavigateReviews?: () => void;
   currentLang: string;
 }
 
@@ -18,6 +19,7 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectLang,
   onOpenLegalPage,
   onNavigateBlog,
+  onNavigateReviews,
   currentLang
 }) => {
   const popularTools = TOOLS_DATA.slice(0, 6);
@@ -157,16 +159,13 @@ export const Footer: React.FC<FooterProps> = ({
               </button>
             </li>
             <li className="pt-1">
-              <a
-                href="/downloads/LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
-                download="LinkedIn_Article_MatrixConvert_Naveed_Afzal.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"
+              <button
+                onClick={onNavigateReviews}
+                className="hover:text-amber-400 text-amber-300 font-bold transition-colors cursor-pointer text-left flex items-center gap-1.5"
               >
-                <FileText className="w-3.5 h-3.5 shrink-0" />
-                <span>LinkedIn Article (PDF)</span>
-              </a>
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span>Avis Clients & Ratings (4.8 ★)</span>
+              </button>
             </li>
             <li className="pt-0.5">
               <a
