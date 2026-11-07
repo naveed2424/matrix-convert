@@ -1,3 +1,2 @@
 # Google AdSense ads.txt for MatrixConvert
-# Replace pub-0000000000000000 with your Google AdSense Publisher ID
-google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+google.com, pub-8358033803354457, DIRECT, f08c47fec0942fa0

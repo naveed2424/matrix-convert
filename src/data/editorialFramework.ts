@@ -126,7 +126,7 @@ export const REGISTERED_EDITORIAL_FRAMEWORK: EditorialMasterFramework = {
         'Transparent ownership by Naveed Afzal with public contact and editorial pages',
         'No deceptive UI elements or fake download buttons mimicking advertisements',
         'Visible cookie consent and GDPR compliance banner',
-        'Valid ads.txt configured at root /ads.txt'
+        'Valid ads.txt configured at root /ads.txt with publisher ID pub-8358033803354457 (ca-pub-8358033803354457)'
       ]
     },
     {
