@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BlogPost, BlogCategoryKey, BLOG_CATEGORIES } from '../data/blogData';
-import { Sparkles, Search, Calendar, Clock, ArrowRight, ShieldCheck, BookOpen, Layers } from 'lucide-react';
+import { REGISTERED_EDITORIAL_FRAMEWORK } from '../data/editorialFramework';
+import { Sparkles, Search, Calendar, Clock, ArrowRight, ShieldCheck, BookOpen, Layers, X, CheckCircle2, Award, FileCode } from 'lucide-react';
 
 interface BlogHubProps {
   posts: BlogPost[];
@@ -15,6 +16,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [showFrameworkModal, setShowFrameworkModal] = useState<boolean>(false);
 
   const filteredPosts = posts.filter((post) => {
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
@@ -60,6 +62,14 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <span>Live Site: mimage.netlify.app</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </a>
+          <button
+            onClick={() => setShowFrameworkModal(true)}
+            className="px-5 py-3 rounded-xl border border-emerald-400/40 bg-emerald-950/30 text-emerald-300 font-mono text-xs font-bold hover:bg-emerald-900/40 transition-colors inline-flex items-center gap-2 cursor-pointer shadow-xs"
+            title="Inspect Google AdSense & E-E-A-T Master Framework"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>AdSense & E-E-A-T Master Framework</span>
+          </button>
         </div>
       </div>
 
@@ -269,6 +279,93 @@ export const BlogHub: React.FC<BlogHubProps> = ({
           >
             Reset Filters
           </button>
+        </div>
+      )}
+
+      {/* Master Editorial & AdSense Compliance Modal */}
+      {showFrameworkModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#071318] border border-emerald-400/50 rounded-2xl p-6 sm:p-8 overflow-y-auto text-slate-200 shadow-2xl">
+            <button
+              onClick={() => setShowFrameworkModal(false)}
+              className="absolute top-5 right-5 p-2 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Registered Master Editorial & AdSense Framework • v{REGISTERED_EDITORIAL_FRAMEWORK.version}</span>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-black text-white">Editorial Standards & Monetization Compliance</h2>
+                <p className="text-xs text-slate-400 mt-1 font-mono">
+                  All technical guides and conversion benchmarks published on MatrixConvert adhere strictly to these registered rules.
+                </p>
+              </div>
+
+              {/* 4 E-E-A-T Pillars */}
+              <div>
+                <h3 className="text-sm font-mono uppercase text-sky-400 font-bold mb-3 flex items-center gap-1.5">
+                  <Award className="w-4 h-4 text-sky-400" />
+                  <span>Google E-E-A-T Quality Implementation</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {REGISTERED_EDITORIAL_FRAMEWORK.eeatPrinciples.map((principle) => (
+                    <div key={principle.pillar} className="p-3.5 rounded-xl border border-sky-400/20 bg-sky-950/20">
+                      <span className="font-bold text-white text-xs block mb-1">
+                        {principle.pillar}
+                      </span>
+                      <p className="text-[11px] text-slate-300 leading-relaxed mb-2">
+                        {principle.description}
+                      </p>
+                      <span className="text-[10px] font-mono text-emerald-400 block border-t border-sky-400/10 pt-1.5">
+                        ✓ {principle.implementation}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* AdSense Compliance Rules */}
+              <div>
+                <h3 className="text-sm font-mono uppercase text-emerald-400 font-bold mb-3 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Google AdSense Review Readiness Checklist</span>
+                </h3>
+                <div className="space-y-2">
+                  {REGISTERED_EDITORIAL_FRAMEWORK.monetizationReadiness[0].complianceRules.map((rule, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-300 bg-[#030908] p-2.5 rounded-lg border border-emerald-400/20">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>{rule}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Raw Master Prompt Viewer */}
+              <div>
+                <h3 className="text-sm font-mono uppercase text-purple-400 font-bold mb-2 flex items-center gap-1.5">
+                  <FileCode className="w-4 h-4 text-purple-400" />
+                  <span>Full Master Prompt Codified in Application</span>
+                </h3>
+                <div className="bg-[#030908] border border-purple-400/20 rounded-xl p-4 max-h-48 overflow-y-auto text-xs font-mono text-slate-400 leading-relaxed">
+                  <pre className="whitespace-pre-wrap">{REGISTERED_EDITORIAL_FRAMEWORK.rawPromptText}</pre>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-800 flex justify-end">
+                <button
+                  onClick={() => setShowFrameworkModal(false)}
+                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono text-xs font-bold transition-colors cursor-pointer"
+                >
+                  Close Framework Viewer
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

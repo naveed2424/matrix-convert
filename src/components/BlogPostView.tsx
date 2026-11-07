@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BlogPost, BLOG_CATEGORIES } from '../data/blogData';
-import { Calendar, Clock, ArrowLeft, Share2, CheckCircle2, ChevronRight, HelpCircle, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
+import { generateSocialDistributionPack } from '../data/editorialFramework';
+import { Calendar, Clock, ArrowLeft, Share2, CheckCircle2, ChevronRight, HelpCircle, ExternalLink, ShieldCheck, Sparkles, X, Copy, Check } from 'lucide-react';
 
 interface BlogPostViewProps {
   post: BlogPost;
@@ -17,8 +18,12 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
   onSelectPost,
   onSelectTool
 }) => {
+  const [showDistributionModal, setShowDistributionModal] = useState<boolean>(false);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
   const categoryInfo = BLOG_CATEGORIES.find((c) => c.key === post.category) || BLOG_CATEGORIES[0];
   const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const distributionPack = generateSocialDistributionPack(post);
 
   // Inject dynamic JSON-LD structured data for BlogPosting and FAQPage for Google SEO & rich snippets
   useEffect(() => {
@@ -115,9 +120,17 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setShowDistributionModal(true)}
+            className="px-3 py-1.5 rounded-lg border border-purple-400/40 bg-purple-950/30 text-purple-300 hover:text-white transition-colors cursor-pointer text-xs font-mono flex items-center gap-1.5"
+            title="View Multi-Channel Social & Newsletter Distribution Pack"
+          >
+            <Share2 className="w-3.5 h-3.5 text-purple-400" />
+            <span className="hidden sm:inline">Distribution Pack</span>
+          </button>
+          <button
             onClick={handleShare}
             className="p-1.5 rounded-lg border border-sky-400/30 bg-[#030908] hover:text-white transition-colors cursor-pointer"
-            title="Share Article"
+            title="Share Article Link"
           >
             <Share2 className="w-3.5 h-3.5" />
           </button>
@@ -387,6 +400,100 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Social & Content Distribution Modal (Master Prompt Part 14) */}
+      {showDistributionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#071318] border border-purple-400/50 rounded-2xl p-6 overflow-y-auto text-slate-200 shadow-2xl">
+            <button
+              onClick={() => setShowDistributionModal(false)}
+              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-5">
+              <div className="flex items-center gap-2 text-purple-400 font-mono text-xs font-bold uppercase tracking-wider">
+                <Share2 className="w-4 h-4" />
+                <span>Part 14 Content Distribution Pack • SEO & Social</span>
+              </div>
+
+              <h3 className="text-xl font-bold text-white">Promotional Assets for This Article</h3>
+
+              {/* Pinterest */}
+              <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-950/15 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-rose-300">📌 Pinterest Pin Concept</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${distributionPack.pinterest.title}\n\n${distributionPack.pinterest.description}`);
+                      setCopiedKey('pin');
+                      setTimeout(() => setCopiedKey(null), 2000);
+                    }}
+                    className="text-[11px] font-mono text-rose-400 hover:text-rose-200 inline-flex items-center gap-1"
+                  >
+                    {copiedKey === 'pin' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedKey === 'pin' ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+                <p className="text-xs font-bold text-white">{distributionPack.pinterest.title}</p>
+                <p className="text-xs text-slate-300">{distributionPack.pinterest.description}</p>
+                <div className="pt-2 border-t border-rose-500/20 text-[11px] text-slate-400 font-mono">
+                  Visual concepts: {distributionPack.pinterest.visualConcepts.join(' • ')}
+                </div>
+              </div>
+
+              {/* LinkedIn */}
+              <div className="p-4 rounded-xl border border-sky-500/30 bg-sky-950/15 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-sky-300">💼 LinkedIn Professional Post</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(distributionPack.linkedIn.post);
+                      setCopiedKey('linkedin');
+                      setTimeout(() => setCopiedKey(null), 2000);
+                    }}
+                    className="text-[11px] font-mono text-sky-400 hover:text-sky-200 inline-flex items-center gap-1"
+                  >
+                    {copiedKey === 'linkedin' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedKey === 'linkedin' ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+                <pre className="text-xs text-slate-300 font-sans whitespace-pre-wrap leading-relaxed">{distributionPack.linkedIn.post}</pre>
+              </div>
+
+              {/* Newsletter */}
+              <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/15 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-emerald-300">✉️ Email Newsletter Blurb</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${distributionPack.newsletter.subject}\n\n${distributionPack.newsletter.blurb}`);
+                      setCopiedKey('newsletter');
+                      setTimeout(() => setCopiedKey(null), 2000);
+                    }}
+                    className="text-[11px] font-mono text-emerald-400 hover:text-emerald-200 inline-flex items-center gap-1"
+                  >
+                    {copiedKey === 'newsletter' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedKey === 'newsletter' ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+                <p className="text-xs font-bold text-white">{distributionPack.newsletter.subject}</p>
+                <p className="text-xs text-slate-300">{distributionPack.newsletter.blurb}</p>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  onClick={() => setShowDistributionModal(false)}
+                  className="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-mono text-xs font-bold"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   );
 };

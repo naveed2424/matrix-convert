@@ -16,8 +16,10 @@ import {
   Trash2,
   RotateCw,
   Image as ImageIcon,
-  Star
+  Star,
+  Palette
 } from 'lucide-react';
+import { MATRIX_THEMES, MatrixColorTheme } from './MatrixBackground';
 import { SUPPORTED_LANGUAGES, getTranslation } from '../data/languages';
 import { ToolDefinition } from '../types';
 
@@ -47,6 +49,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [allToolsDropdownOpen, setAllToolsDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
+
+  const handleSwitchMatrixTheme = (themeId: MatrixColorTheme) => {
+    localStorage.setItem('matrix_rain_theme', themeId);
+    window.dispatchEvent(new CustomEvent('matrix-theme-switch', { detail: { theme: themeId } }));
+    setThemeDropdownOpen(false);
+  };
 
   const t = (k: string) => getTranslation(currentLang, k);
   const activeLanguage =
@@ -443,6 +452,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Terminal className="w-3 h-3" />
             <span>Matrix Art</span>
           </button>
+
+          {/* Matrix Theme Color Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-sky-400/30 bg-sky-950/30 text-sky-300 hover:text-white hover:border-sky-300 transition-colors whitespace-nowrap cursor-pointer text-xs font-mono"
+              title="Change Matrix Rain Color Theme"
+            >
+              <Palette className="w-3.5 h-3.5 text-sky-400" />
+              <span>Theme</span>
+            </button>
+
+            {themeDropdownOpen && (
+              <div className="absolute top-full right-0 mt-2 w-48 rounded-xl border border-sky-400/40 bg-[#071318]/95 backdrop-blur-xl p-2.5 shadow-2xl z-50">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2 px-1 font-bold">
+                  Matrix Rain Colors:
+                </span>
+                <div className="space-y-1">
+                  {MATRIX_THEMES.map((theme) => (
+                    <button
+                      key={theme.id}
+                      onClick={() => handleSwitchMatrixTheme(theme.id)}
+                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-sky-950/60 text-left text-xs font-mono text-slate-200 transition-colors cursor-pointer"
+                    >
+                      <span className={`w-3 h-3 rounded-full ${theme.badgeBg} shrink-0`} />
+                      <span className="truncate">{theme.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Right Zone: Language + Mobile Toggle */}
@@ -585,6 +626,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Matrix Art Studio
             </button>
+
+            {/* Mobile Matrix Colors */}
+            <div className="pt-2 border-t border-slate-800">
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block mb-2 font-bold">
+                Matrix Rain Color Theme:
+              </span>
+              <div className="grid grid-cols-4 gap-2">
+                {MATRIX_THEMES.map((theme) => (
+                  <button
+                    key={theme.id}
+                    onClick={() => {
+                      handleSwitchMatrixTheme(theme.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`h-8 rounded-lg ${theme.badgeBg} border border-white/20 flex items-center justify-center`}
+                    title={theme.name}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}

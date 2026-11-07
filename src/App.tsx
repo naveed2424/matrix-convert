@@ -213,7 +213,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050807] text-[#e0e6e3] relative selection:bg-sky-500/30 selection:text-sky-300">
       {/* Falling Matrix Digital Rain Background */}
-      <MatrixBackground opacity={0.25} speedMultiplier={1.0} />
+      <MatrixBackground opacity={0.42} speedMultiplier={1.0} />
 
       {/* Main Content Wrap */}
       <div className="relative z-10 flex flex-col min-h-screen">

@@ -107,7 +107,10 @@ export const BLOG_CATEGORIES: BlogCategoryInfo[] = [
   }
 ];
 
+import { FOUR_NEW_MASTER_BLOG_POSTS } from './newBlogPosts';
+
 export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
+  ...FOUR_NEW_MASTER_BLOG_POSTS,
   {
     id: 'post-pdf-to-png-300dpi-guide',
     slug: 'ultimate-guide-pdf-to-png-300-dpi',
