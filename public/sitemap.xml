@@ -1,175 +1,353 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Primary Production Homepage (https://mimage.netlify.app/) -->
   <url>
     <loc>https://mimage.netlify.app/</loc>
-    <lastmod>2026-10-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-
-  <!-- Blog Hub & Daily Trending SEO Studio -->
   <url>
-    <loc>https://mimage.netlify.app/#/blog</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/tools</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/blog-studio</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
+    <loc>https://mimage.netlify.app/smart-assistant</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
   </url>
-
-  <!-- Deep 2,000+ Word Pre-Published SEO Articles -->
   <url>
-    <loc>https://mimage.netlify.app/#/blog/ultimate-guide-pdf-to-png-300-dpi</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/optimization-studio</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/website-image-audit</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/compress-image-to-100kb</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/blog/avif-vs-webp-vs-png-2026-benchmark</loc>
-    <lastmod>2026-10-23</lastmod>
+    <loc>https://mimage.netlify.app/resize-image-for-instagram</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/blog/client-side-zero-knowledge-document-processing</loc>
-    <lastmod>2026-10-22</lastmod>
+    <loc>https://mimage.netlify.app/remove-image-metadata</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/blog/convert-pdf-to-svg-vector-perfection</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <!-- Core Converters (High Intent for Google Search & AdSense) -->
-  <url>
-    <loc>https://mimage.netlify.app/#/tool/pdf-to-png</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/heic-to-jpg</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/pdf-to-svg</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/bulk-image-converter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/png-to-webp</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/pdf-to-jpg</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/jpg-to-png</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/merge-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-compress</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/svg-to-png</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/tool/pdf-organizer</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/png-to-ico</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/tool/ocr-extract-text</loc>
     <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/qr-code-generator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/favicon-generator</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/svg-optimizer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-markdown</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-webp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-word-rtf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-csv</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/markdown-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/html-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/txt-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/csv-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/json-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/webp-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/svg-to-pdf</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-base64</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-to-bmp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-2-up-handout</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/webp-to-jpg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/png-to-avif</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/jpg-to-avif</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/avif-to-png</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/avif-to-jpg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/heic-to-png</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/bmp-to-png</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/bmp-to-jpg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/ico-to-png</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/svg-to-webp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/svg-to-jpg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/json-to-csv</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/csv-to-json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/html-to-markdown</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/qr-code-standards-versions-error-correction-quiet-zone</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/image-to-pdf</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/static-direct-qr-codes-vs-tracked-redirect-generators</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/webp-to-png</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/svg-vector-vs-png-qr-codes-print-contrast-guide</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/png-to-jpg</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/wifi-and-vcard-qr-codes-offline-syntax-guide</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/pdf-to-jpg</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/optimizing-qr-code-landing-pages-print-packaging-seo</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/jpg-to-webp</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/qr-code-security-quishing-defense-payload-inspection</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/compress-image</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://mimage.netlify.app/blog/svg-to-png-converter-email-signatures-opengraph-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/jpg-to-png-stop-generation-loss-editing-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/pdf-to-markdown-rag-llm-local-document-prep-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/pdf-to-word-editable-rtf-privacy-local-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/webp-to-jpg-compatibility-transparency-flattening-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/html-to-markdown-clean-llm-ingestion-documentation-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/json-to-csv-excel-data-flattening-privacy-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/compress-image-to-100kb-200kb-500kb-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/privacy-center</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/resize-image</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <loc>https://mimage.netlify.app/methodology</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/tool/crop-image</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <!-- Legal & AdSense Compliance Trust Pages -->
-  <url>
-    <loc>https://mimage.netlify.app/#/about</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/privacy</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/terms</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/disclaimer</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/cookies</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mimage.netlify.app/#/contact</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://mimage.netlify.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://mimage.netlify.app/#/sitemap</loc>
-    <lastmod>2026-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.65</priority>
   </url>
 </urlset>

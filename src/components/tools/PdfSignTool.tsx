@@ -52,6 +52,7 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
   const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isExporting, setIsExporting] = useState(false);
   const [exportCompleteUrl, setExportCompleteUrl] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Drawing canvas refs
   const drawCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -73,13 +74,15 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
     setIsLoading(true);
     setPlacedStamp(null);
     setExportCompleteUrl(null);
+    setErrorMsg(null);
     try {
       const rendered = await renderPdfThumbnails(selectedFile, 30, 1.2);
       setPages(rendered);
       setCurrentPage(1);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('Could not render PDF. Please ensure file is a valid PDF document.');
+      setErrorMsg(e?.message || 'Could not render PDF. Please ensure the file is a valid, unencrypted PDF document.');
+      setFile(null);
     } finally {
       setIsLoading(false);
     }
@@ -270,7 +273,7 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
       document.body.removeChild(link);
     } catch (err: any) {
       console.error('Signing failed:', err);
-      alert(`Could not sign PDF: ${err.message || 'Unknown error'}`);
+      setErrorMsg(`Could not sign PDF: ${err.message || 'Unknown error'}`);
     } finally {
       setIsExporting(false);
     }
@@ -296,18 +299,25 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
       </div>
 
       {/* Main Card */}
-      <div className="rounded-2xl border border-sky-400/30 bg-[#06141c]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 flex items-center justify-center gap-2">
+      <div className="rounded-2xl border border-slate-200 dark:border-sky-400/30 bg-white dark:bg-[#06141c]/95 backdrop-blur-xl p-6 sm:p-8 shadow-sm dark:shadow-2xl">
+        <div className="text-center max-w-2xl mx-auto mb-6">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2 flex items-center justify-center gap-2">
             <span>Fill & Sign PDF</span>
-            <span className="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">
-              Free & Secure
+            <span className="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-blue-50 dark:bg-sky-500/20 text-blue-700 dark:text-sky-300 border border-blue-200 dark:border-sky-400/30">
+              Visual Placement
             </span>
           </h1>
-          <p className="text-sm text-slate-300">
-            Add a legally formatted cursive, drawn, or uploaded signature directly onto any PDF page. No account, no
-            cloud uploads, 100% browser-based.
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            Place a typed, drawn, or uploaded signature image directly onto any PDF page locally in your browser.
           </p>
+          <div className="mt-3 rounded-xl border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-950/30 px-4 py-2.5 text-xs text-amber-800 dark:text-amber-200 text-left">
+            <strong>Important legal notice:</strong> Drawing or placing a signature embeds a visual graphic stamp into the PDF locally—it is <strong>not</strong> a cryptographic certificate and is not a legal guarantee of an electronic signature&apos;s legal validity in all jurisdictions.
+          </div>
+          {errorMsg && (
+            <div className="mt-3 rounded-xl border border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-950/30 px-4 py-2.5 text-xs text-rose-700 dark:text-rose-200 text-left">
+              {errorMsg}
+            </div>
+          )}
         </div>
 
         {/* Step 1: Upload file if none */}
@@ -318,7 +328,7 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
               e.preventDefault();
               if (e.dataTransfer.files?.[0]) handleFile(e.dataTransfer.files[0]);
             }}
-            className="border-2 border-dashed border-sky-400/40 hover:border-sky-300 rounded-2xl p-12 text-center bg-sky-950/20 transition-all cursor-pointer group"
+            className="border-2 border-dashed border-blue-300 dark:border-sky-400/40 hover:border-blue-500 dark:hover:border-sky-300 rounded-2xl p-12 text-center bg-slate-50 dark:bg-sky-950/20 transition-all cursor-pointer group"
             onClick={() => {
               const input = document.createElement('input');
               input.type = 'file';
@@ -330,12 +340,12 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
               input.click();
             }}
           >
-            <div className="w-16 h-16 rounded-2xl bg-sky-500/10 border border-sky-400/30 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <UploadCloud className="w-8 h-8 text-sky-400" />
+            <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-sky-500/10 border border-blue-200 dark:border-sky-400/30 flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+              <UploadCloud className="w-8 h-8 text-blue-600 dark:text-sky-400" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">Choose PDF file to sign</h3>
-            <p className="text-xs text-slate-400 font-mono mb-4">or drag and drop your PDF here</p>
-            <button className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 font-mono text-sm font-bold text-white transition-all shadow-lg cursor-pointer">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Choose PDF file to sign</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mb-4">or drag and drop your PDF here</p>
+            <button className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-sky-500 dark:hover:bg-sky-400 font-mono text-sm font-bold text-white transition-all shadow-sm cursor-pointer">
               Select PDF Document
             </button>
           </div>
@@ -344,8 +354,8 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
         {/* Loading indicator */}
         {isLoading && (
           <div className="py-16 text-center">
-            <RefreshCw className="w-8 h-8 text-sky-400 animate-spin mx-auto mb-3" />
-            <p className="text-sm font-mono text-sky-300">Rendering PDF pages in browser sandbox...</p>
+            <RefreshCw className="w-8 h-8 text-blue-600 dark:text-sky-400 animate-spin mx-auto mb-3" />
+            <p className="text-sm font-mono text-slate-600 dark:text-sky-300">Rendering PDF pages in browser sandbox...</p>
           </div>
         )}
 
@@ -353,45 +363,45 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
         {file && !isLoading && pages.length > 0 && (
           <div className="space-y-6">
             {/* Top Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/30">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-sky-400/30">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsSignatureModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-sky-500 dark:hover:bg-sky-400 text-white font-mono text-xs font-bold transition-all shadow-sm cursor-pointer"
                 >
                   <PenTool className="w-3.5 h-3.5" />
                   <span>{placedStamp ? 'Change / Add Signature' : '+ Create Signature'}</span>
                 </button>
 
-                <label className="flex items-center gap-2 px-3 py-2 rounded-xl border border-sky-400/30 bg-sky-950/40 text-xs font-mono text-sky-200 cursor-pointer">
+                <label className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-sky-400/30 bg-white dark:bg-sky-950/40 text-xs font-mono text-slate-700 dark:text-sky-200 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={includeDateStamp}
                     onChange={(e) => setIncludeDateStamp(e.target.checked)}
-                    className="accent-sky-400"
+                    className="accent-blue-600 dark:accent-sky-400"
                   />
-                  <Calendar className="w-3 h-3 text-sky-400" />
+                  <Calendar className="w-3 h-3 text-blue-600 dark:text-sky-400" />
                   <span>Include Date ({dateStamp})</span>
                 </label>
               </div>
 
               {/* Page Selector & Navigation */}
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-300">
+              <div className="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-300">
                 <span>Page</span>
                 <button
                   disabled={currentPage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="p-1.5 rounded-lg border border-sky-400/30 disabled:opacity-40 hover:bg-sky-500/20 cursor-pointer"
+                  className="p-1.5 rounded-lg border border-slate-200 dark:border-sky-400/30 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-sky-500/20 cursor-pointer"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
-                <span className="font-bold text-white px-1">
+                <span className="font-bold text-slate-900 dark:text-white px-1 tabular-nums">
                   {currentPage} of {pages.length}
                 </span>
                 <button
                   disabled={currentPage >= pages.length}
                   onClick={() => setCurrentPage((p) => Math.min(pages.length, p + 1))}
-                  className="p-1.5 rounded-lg border border-sky-400/30 disabled:opacity-40 hover:bg-sky-500/20 cursor-pointer"
+                  className="p-1.5 rounded-lg border border-slate-200 dark:border-sky-400/30 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-sky-500/20 cursor-pointer"
                 >
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
@@ -401,14 +411,14 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setFile(null)}
-                  className="px-3 py-2 text-xs font-mono text-slate-400 hover:text-white cursor-pointer"
+                  className="px-3 py-2 text-xs font-mono text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                 >
                   Change File
                 </button>
                 <button
                   disabled={!placedStamp || isExporting}
                   onClick={handleExportSignedPdf}
-                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold transition-all shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   {isExporting ? (
                     <>
@@ -428,10 +438,10 @@ export const PdfSignTool: React.FC<PdfSignToolProps> = ({ onBack }) => {
             {/* Document Canvas Preview Area */}
             <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
               {/* Main Active Page View */}
-              <div className="w-full flex justify-center overflow-x-auto p-4 rounded-xl bg-slate-950/70 border border-slate-800">
+              <div className="w-full flex justify-center overflow-x-auto p-4 rounded-xl bg-slate-100 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800">
                 <div
                   ref={pageContainerRef}
-                  className="relative select-none shadow-2xl border border-slate-700 bg-white"
+                  className="relative select-none shadow-lg border border-slate-300 dark:border-slate-700 bg-white"
                   style={{
                     maxWidth: '100%',
                     width: activePageData ? `${activePageData.width}px` : '600px'

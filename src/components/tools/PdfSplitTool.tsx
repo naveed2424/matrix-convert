@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   CheckSquare,
   Square,
-  Sparkles
+  AlertCircle
 } from 'lucide-react';
 import { extractPdfPages, renderPdfThumbnails } from '../../services/pdfAdvancedEngine';
 
@@ -23,18 +23,20 @@ export const PdfSplitTool: React.FC<PdfSplitToolProps> = ({ onBack }) => {
   const [selectedPages, setSelectedPages] = useState<number[]>([]);
   const [rangeInput, setRangeInput] = useState<string>('1-2');
   const [isExtracting, setIsExtracting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleFile = async (selectedFile: File) => {
     setFile(selectedFile);
     setIsLoading(true);
+    setErrorMsg(null);
     try {
       const rendered = await renderPdfThumbnails(selectedFile, 40, 0.7);
       setPages(rendered);
       setSelectedPages([1]);
       setRangeInput('1');
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('Could not render PDF document.');
+      setErrorMsg(e?.message || 'Could not render PDF document.');
     } finally {
       setIsLoading(false);
     }
@@ -81,10 +83,11 @@ export const PdfSplitTool: React.FC<PdfSplitToolProps> = ({ onBack }) => {
 
   const handleExecuteExtract = async () => {
     if (!file || selectedPages.length === 0) {
-      alert('Please select at least one page to extract.');
+      setErrorMsg('Please select at least one page to extract.');
       return;
     }
     setIsExtracting(true);
+    setErrorMsg(null);
     try {
       const extractedBlob = await extractPdfPages(file, selectedPages);
       const url = URL.createObjectURL(extractedBlob);
@@ -98,7 +101,7 @@ export const PdfSplitTool: React.FC<PdfSplitToolProps> = ({ onBack }) => {
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     } catch (err: any) {
       console.error('Extract failed:', err);
-      alert(`Could not extract pages: ${err.message || 'Unknown error'}`);
+      setErrorMsg(`Could not extract pages: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsExtracting(false);
     }
@@ -109,30 +112,33 @@ export const PdfSplitTool: React.FC<PdfSplitToolProps> = ({ onBack }) => {
       <div className="flex items-center justify-between gap-4 mb-6">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm font-mono text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to All Tools</span>
         </button>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-sky-500/10 border border-sky-400/30 text-sky-300">
-          <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-          <span>Client-Side PDF Splitter & Page Extractor</span>
+        <span className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>Browser-Local PDF Splitter</span>
         </span>
       </div>
 
-      <div className="rounded-2xl border border-sky-400/30 bg-[#06141c]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
         <div className="text-center max-w-xl mx-auto mb-8">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 flex items-center justify-center gap-2">
-            <span>Split & Extract PDF Pages</span>
-            <span className="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">
-              Visual Selector
-            </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+            Split & Extract PDF Pages
           </h1>
-          <p className="text-sm text-slate-300">
-            Extract individual pages, extract custom ranges, or separate multi-page documents entirely inside your
-            browser.
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            Extract individual pages or custom page ranges entirely inside your browser.
           </p>
         </div>
+
+        {errorMsg && (
+          <div className="mb-4 p-3.5 rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
         {!file && (
           <div

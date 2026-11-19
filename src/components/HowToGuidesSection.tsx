@@ -20,48 +20,48 @@ export const HowToGuidesSection: React.FC<HowToGuidesSectionProps> = ({
       steps: [
         'Open your document with the PDF to PNG converter.',
         'Choose your desired resolution: 72 DPI for web, 150 DPI for screens, or 300 DPI for print.',
-        'Select transparent margins or clean solid white background.',
+        'Select transparent margins or solid white background.',
         'Click Convert and download individual PNG pages or the complete ZIP bundle.'
       ]
     },
     {
-      title: 'How to convert PDF to scalable vector SVG',
+      title: 'How to convert PDF to scalable SVG',
       slug: 'pdf-to-svg',
       steps: [
-        'Upload your PDF schematic, logo, or document into the PDF to SVG engine.',
-        'The vectorizer preserves mathematical path curves and layout geometry.',
-        'Export standard SVG 1.1/2.0 files ready for Illustrator, Figma, or Webflow.',
-        'Scale infinitely without experiencing pixelation or blurry edges.'
+        'Upload your PDF schematic, logo, or document into the PDF to SVG converter.',
+        'Preserve scalable layout proportions across pages.',
+        'Export standard SVG files ready for Illustrator, Figma, or Webflow.',
+        'Inspect vector results before deploying on production web pages.'
       ]
     },
     {
-      title: 'How to convert PNG to next-gen WebP',
-      slug: 'png-to-webp',
+      title: 'How to compress images to an exact KB target',
+      slug: 'compress-image-to-100kb',
       steps: [
-        'Drop your PNG images with or without transparent backgrounds.',
-        'Select compression quality (recommended: 85-90% for maximum savings).',
-        'Cut file payload by 25% to 75% compared to original PNGs.',
-        'Pass Google Core Web Vitals (LCP) with ultra-fast loading speeds.'
+        'Drop your JPG, PNG, or WebP photo into the Exact Size Image Compressor.',
+        'Select 100 KB, 200 KB, 500 KB, or enter any custom KB target.',
+        'Allow adaptive quality search and optional dimension downscaling if needed.',
+        'Inspect the before/after visual comparison slider before downloading.'
       ]
     },
     {
-      title: 'How to fill and sign a PDF online free',
+      title: 'How to place a signature graphic on a PDF',
       slug: 'fill-and-sign-pdf',
       steps: [
-        'Upload your PDF document or contract to the secure sign studio.',
-        'Choose how to create your signature: Type cursive name, Draw with mouse/touchpad, or Upload signature image.',
-        'Drag your signature onto the signature line and add an optional date stamp.',
-        'Download your signed, legally binding PDF with zero server uploads.'
+        'Open your PDF document inside the Fill & Sign PDF workspace.',
+        'Type, draw, or upload a signature graphic and place an optional date line.',
+        'Drag and resize the placement box onto your chosen signature field.',
+        'Export the stamped PDF locally in your browser (graphic placement only; not a legal certificate).'
       ]
     },
     {
-      title: 'How to crop PDF margins & auto-trim white borders',
-      slug: 'crop-pdf-margins',
+      title: 'How to strip hidden EXIF & GPS camera metadata',
+      slug: 'remove-image-metadata',
       steps: [
-        'Drop your multi-page PDF into the browser margin trimmer.',
-        'Click "Auto-Trim White Margins" to automatically detect content boundaries.',
-        'Or adjust Top, Bottom, Left, Right margin sliders to your exact specifications.',
-        'Download your cleanly cropped, reader-friendly PDF with 100% vector retention.'
+        'Upload any JPEG or PNG photo to inspect embedded camera model and GPS tags.',
+        'Click Strip Metadata & Clean to re-encode pixels into a clean container.',
+        'Confirm zero EXIF markers remain in the verified post-clean audit.',
+        'Download the cleaned file for safer public sharing.'
       ]
     },
     {
@@ -69,24 +69,24 @@ export const HowToGuidesSection: React.FC<HowToGuidesSectionProps> = ({
       slug: 'image-to-pdf',
       steps: [
         'Select your collection of JPG, PNG, or WebP photos.',
-        'Drag and drop to arrange pages in your preferred sequential order.',
-        'Standardize on clean A4 or US Letter paper dimensions with margins.',
-        'Download your merged, paginated PDF document instantly.'
+        'Check file order inside your browser conversion queue.',
+        'Compile pages cleanly into a single paginated PDF document.',
+        'Download the merged PDF file immediately.'
       ]
     }
   ];
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-sky-400/20">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-200 dark:border-slate-800">
       <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 font-mono text-xs text-sky-400 mb-2 uppercase tracking-wider font-bold">
+        <div className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 dark:text-sky-400 mb-2 uppercase tracking-wider font-bold">
           <BookOpen className="w-4 h-4" />
-          <span>Practical Tutorials & Guides</span>
+          <span>Educational Workflows &amp; Guides</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
           {t('howToTitle')}
         </h2>
-        <p className="text-sm text-sky-100 max-w-xl mx-auto mt-2">
+        <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto mt-2">
           {t('howToSubtitle')}
         </p>
       </div>
@@ -95,16 +95,16 @@ export const HowToGuidesSection: React.FC<HowToGuidesSectionProps> = ({
         {guides.map((guide, idx) => (
           <div
             key={idx}
-            className="p-6 rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] shadow-xl flex flex-col justify-between text-slate-800"
+            className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 shadow-xs flex flex-col justify-between text-slate-800 dark:text-slate-200"
           >
             <div>
-              <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center justify-between">
-                <span>{guide.title}</span>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">
+                {guide.title}
               </h3>
               <ol className="space-y-3 mb-6">
                 {guide.steps.map((step, sIdx) => (
-                  <li key={sIdx} className="flex items-start gap-3 text-xs text-slate-600 leading-relaxed font-medium">
-                    <span className="w-6 h-6 rounded-lg bg-sky-500 text-white font-mono font-bold flex items-center justify-center shrink-0 text-xs shadow-sm">
+                  <li key={sIdx} className="flex items-start gap-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <span className="w-6 h-6 rounded-lg bg-blue-600 text-white font-mono font-bold flex items-center justify-center shrink-0 text-xs">
                       {sIdx + 1}
                     </span>
                     <span>{step}</span>
@@ -115,10 +115,10 @@ export const HowToGuidesSection: React.FC<HowToGuidesSectionProps> = ({
 
             <button
               onClick={() => onSelectToolBySlug(guide.slug)}
-              className="text-xs font-mono text-sky-700 font-bold flex items-center gap-1.5 hover:text-sky-900 transition-colors cursor-pointer group pt-3 border-t border-sky-200"
+              className="text-xs font-mono text-blue-600 dark:text-sky-400 font-semibold flex items-center gap-1.5 hover:underline cursor-pointer group pt-3 border-t border-slate-100 dark:border-slate-800"
             >
               <span>{t('openTool')}</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
         ))}

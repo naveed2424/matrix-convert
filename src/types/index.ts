@@ -1,18 +1,14 @@
-export type ToolCategory =
-  | 'popular'
-  | 'edit-sign'
-  | 'crop-resize'
-  | 'merge-split'
-  | 'convert-pdf'
-  | 'convert-to-pdf'
-  | 'compress'
-  | 'security'
-  | 'convert-png'
-  | 'convert-svg'
-  | 'convert-webp'
-  | 'convert-jpg'
-  | 'icon-tools'
-  | 'optimize-edit';
+export type MimageCategoryId =
+  | 'image-tools'
+  | 'pdf-tools'
+  | 'file-converters'
+  | 'gif-video-tools'
+  | 'privacy-tools'
+  | 'design-tools'
+  | 'developer-tools';
+
+// Keep legacy union aliases compatible if referenced
+export type ToolCategory = MimageCategoryId | string;
 
 export interface SeoKeywordSet {
   shortTail: string[];
@@ -36,12 +32,18 @@ export interface FaqItem {
   answer: string;
 }
 
+export interface TroubleshootingItem {
+  issue: string;
+  fix: string;
+}
+
 export interface ToolDefinition {
   id: string;
   name: string;
   slug: string;
-  category: ToolCategory;
+  category: MimageCategoryId;
   categoryName: string;
+  legacyCategories?: string[];
   fromFormat: string;
   toFormat: string;
   badge?: string;
@@ -49,6 +51,12 @@ export interface ToolDefinition {
   longDescription: string;
   acceptedFileTypes: string[];
   isPopular?: boolean;
+  isRecentlyAdded?: boolean;
+  isRecommended?: boolean;
+  processingMode?: 'browser-local' | 'browser-local-plus-cdn' | 'network-fetch' | 'optional-network';
+  maxRecommendedSizeMb?: number;
+  limitations?: string[];
+  troubleshooting?: (string | TroubleshootingItem)[];
   whoCanUse: {
     persona: string;
     useCase: string;
@@ -85,6 +93,8 @@ export interface ConvertedFile {
   width?: number;
   height?: number;
   pageNumber?: number;
+  note?: string;
+  textContent?: string;
 }
 
 export interface ConversionSettings {

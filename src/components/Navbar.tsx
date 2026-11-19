@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Globe,
-  Terminal,
   ChevronDown,
-  BookOpen,
-  Sparkles,
-  ShieldCheck,
   Menu,
   X,
-  PenTool,
-  Scissors,
-  Layers,
-  FileText,
-  Archive,
-  Trash2,
-  RotateCw,
-  Image as ImageIcon,
-  Star,
-  Palette
+  Sparkles,
+  FileSearch,
+  ShieldCheck,
+  Terminal,
+  Search,
+  ArrowRight
 } from 'lucide-react';
-import { MATRIX_THEMES, MatrixColorTheme } from './MatrixBackground';
-import { SUPPORTED_LANGUAGES, getTranslation } from '../data/languages';
-import { ToolDefinition } from '../types';
+import { SUPPORTED_LANGUAGES, getLocalizedTool } from '../data/languages';
+import { TOOL_CATEGORIES, TOOLS_DATA } from '../data/toolsData';
+import { searchTools } from '../utils/toolSearch';
 
 interface NavbarProps {
   currentLang: string;
@@ -31,8 +23,9 @@ interface NavbarProps {
   onSelectToolBySlug: (slug: string) => void;
   onOpenMatrixArt: () => void;
   onNavigateBlog: () => void;
-  onNavigateAbout: () => void;
-  onNavigateReviews?: () => void;
+  onNavigatePrivacyCenter: () => void;
+  onNavigateMethodology: () => void;
+  onSearchInDirectory?: (query: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -43,472 +36,458 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectToolBySlug,
   onOpenMatrixArt,
   onNavigateBlog,
-  onNavigateAbout,
-  onNavigateReviews
+  onNavigatePrivacyCenter,
+  onNavigateMethodology,
+  onSearchInDirectory
 }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [allToolsDropdownOpen, setAllToolsDropdownOpen] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
 
-  const handleSwitchMatrixTheme = (themeId: MatrixColorTheme) => {
-    localStorage.setItem('matrix_rain_theme', themeId);
-    window.dispatchEvent(new CustomEvent('matrix-theme-switch', { detail: { theme: themeId } }));
-    setThemeDropdownOpen(false);
-  };
+  const [headerQuery, setHeaderQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [highlightedIdx, setHighlightedIdx] = useState(0);
 
-  const t = (k: string) => getTranslation(currentLang, k);
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const desktopSearchInputRef = useRef<HTMLInputElement | null>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
+
   const activeLanguage =
     SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) || SUPPORTED_LANGUAGES[0];
 
+  const matchingTools = useMemo(() => {
+    if (!headerQuery.trim()) return [];
+    return searchTools(headerQuery, TOOLS_DATA, currentLang);
+  }, [headerQuery, currentLang]);
+
+  const topMatches = matchingTools.slice(0, 8);
+
+  useEffect(() => {
+    setHighlightedIdx(0);
+  }, [headerQuery]);
+
+  // Global "/" hotkey focuses the header search bar cleanly
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || target?.isContentEditable) {
+        return;
+      }
+      e.preventDefault();
+      if (window.innerWidth >= 1024 && desktopSearchInputRef.current) {
+        desktopSearchInputRef.current.focus();
+      } else {
+        setMobileMenuOpen(true);
+        setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Close search dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target as Node)
+      ) {
+        setSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleToolClick = (slug: string) => {
-    setAllToolsDropdownOpen(false);
+    setToolsDropdownOpen(false);
     setMobileMenuOpen(false);
+    setSearchFocused(false);
+    setHeaderQuery('');
     onSelectToolBySlug(slug);
   };
 
   const handleCategoryClick = (catId: string) => {
-    setAllToolsDropdownOpen(false);
+    setToolsDropdownOpen(false);
     setMobileMenuOpen(false);
+    setSearchFocused(false);
     onNavigateCategory(catId);
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setSearchFocused(false);
+      (e.target as HTMLInputElement).blur();
+      return;
+    }
+    if (!topMatches.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIdx((prev) => (prev + 1) % topMatches.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIdx((prev) => (prev - 1 + topMatches.length) % topMatches.length);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const chosen = topMatches[highlightedIdx] || topMatches[0];
+      if (chosen) {
+        handleToolClick(chosen.slug);
+      }
+    }
+  };
+
+  const handleViewAllSearchResults = () => {
+    const q = headerQuery.trim();
+    setSearchFocused(false);
+    setMobileMenuOpen(false);
+    if (onSearchInDirectory) {
+      onSearchInDirectory(q);
+    } else {
+      onNavigateCategory('all');
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 border-b border-sky-400/30 bg-[#050807]/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 h-16">
-        {/* Brand */}
+    <header className="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 h-16">
+        {/* Left Zone: Clean Wordmark Brand */}
         <button
           onClick={onNavigateHome}
-          className="flex items-center gap-2 text-left font-mono text-lg font-bold tracking-tight text-white hover:text-sky-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          className="flex items-center gap-2.5 text-left font-bold text-lg tracking-tight text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-sky-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
         >
-          <span className="text-sky-400 text-glow text-xl">⚡</span>
-          <span>MatrixConvert</span>
+          <span className="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono text-sm font-extrabold flex items-center justify-center shadow-xs">
+            M
+          </span>
+          <span>Mimage</span>
         </button>
 
-        {/* Desktop Nav - Sejda Style Tool Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-mono font-medium text-slate-200">
-          {/* "All Tools" Mega Menu Button */}
+        {/* Center Zone: Single-Row Navigation */}
+        <nav className="hidden lg:flex items-center gap-0.5 text-xs font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap">
           <div className="relative">
             <button
-              onClick={() => setAllToolsDropdownOpen(!allToolsDropdownOpen)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                allToolsDropdownOpen
-                  ? 'bg-sky-500 text-white font-bold shadow'
-                  : 'hover:bg-sky-950/60 hover:text-sky-300 text-white font-semibold'
+              onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
+              className={`flex items-center gap-1 px-2.5 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                toolsDropdownOpen
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 font-semibold'
               }`}
             >
-              <span>All Tools</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${allToolsDropdownOpen ? 'rotate-180' : ''}`} />
+              <span>Tools</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform ${toolsDropdownOpen ? 'rotate-180' : ''}`}
+              />
             </button>
 
-            {/* Categorized Mega Menu Dropdown (Matches Sejda's all-tools menu) */}
-            {allToolsDropdownOpen && (
+            {toolsDropdownOpen && (
               <div
-                className="absolute left-0 mt-2 w-[720px] rounded-2xl border border-sky-400/50 bg-[#06141c] p-6 shadow-2xl backdrop-blur-2xl z-50 max-h-[85vh] overflow-y-auto"
-                onMouseLeave={() => setAllToolsDropdownOpen(false)}
+                className="absolute left-0 mt-2 w-[660px] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl z-50"
+                onMouseLeave={() => setToolsDropdownOpen(false)}
               >
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-sky-400/20">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold">
-                    All 46+ Client-Side Tools by Category
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-800">
+                  <span className="text-xs font-semibold text-slate-900 dark:text-white">
+                    Mimage Tool Directory ({TOOLS_DATA.length} Utilities)
                   </span>
                   <button
                     onClick={() => handleCategoryClick('all')}
-                    className="text-[11px] text-sky-300 hover:underline cursor-pointer"
+                    className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
                   >
-                    View All 46+ Grid →
+                    View All Tools
                   </button>
                 </div>
 
-                <div className="grid grid-cols-3 gap-6 text-xs font-mono">
-                  {/* Column 1: Edit & Sign + Security */}
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-sky-400 tracking-wider block mb-2">
-                        Edit, Sign & Security
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('fill-and-sign-pdf')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-white"
-                          >
-                            <PenTool className="w-3 h-3 text-sky-400" />
-                            <span>Fill & Sign PDF</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-metadata-editor')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-emerald-300"
-                          >
-                            <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                            <span>PDF Metadata Editor</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-page-numberer')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-sky-300"
-                          >
-                            <FileText className="w-3 h-3 text-sky-400" />
-                            <span>PDF Page Numberer</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-flatten')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
-                          >
-                            <Layers className="w-3 h-3 text-indigo-400" />
-                            <span>PDF Form Flattener</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('delete-pdf-pages')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
-                          >
-                            <Trash2 className="w-3 h-3 text-red-400" />
-                            <span>Delete PDF Pages</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('watermark-pdf')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
-                          >
-                            <Sparkles className="w-3 h-3 text-purple-400" />
-                            <span>Watermark PDF</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-cyan-400 tracking-wider block mb-2">
-                        Merge & Split
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('merge-pdf')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-white"
-                          >
-                            <Layers className="w-3 h-3 text-blue-400" />
-                            <span>Merge PDF Files</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('split-pdf')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
-                          >
-                            <Scissors className="w-3 h-3 text-cyan-400" />
-                            <span>Split & Extract Pages</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                <div className="grid grid-cols-3 gap-6 text-xs">
+                  {/* Column 1: Signature Workflows */}
+                  <div className="space-y-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-sky-400 block">
+                      Signature Workspaces
+                    </span>
+                    <ul className="space-y-2 text-slate-700 dark:text-slate-300">
+                      <li>
+                        <button
+                          onClick={() => handleToolClick('smart-assistant')}
+                          className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center gap-1.5 text-left w-full font-semibold cursor-pointer"
+                        >
+                          <FileSearch className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400 shrink-0" />
+                          <span>Smart File Assistant</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => handleToolClick('optimization-studio')}
+                          className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center gap-1.5 text-left w-full font-semibold cursor-pointer"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400 shrink-0" />
+                          <span>Optimization Studio</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => handleToolClick('website-image-audit')}
+                          className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center gap-1.5 text-left w-full font-semibold cursor-pointer"
+                        >
+                          <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400 shrink-0" />
+                          <span>Website Image Audit</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setToolsDropdownOpen(false);
+                            onOpenMatrixArt();
+                          }}
+                          className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
+                        >
+                          <Terminal className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span>Matrix Art Studio</span>
+                        </button>
+                      </li>
+                    </ul>
                   </div>
 
-                  {/* Column 2: Crop & Resize + Optimize */}
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block mb-2">
-                        Crop & Resize
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
+                  {/* Column 2: 7 Categories */}
+                  <div className="space-y-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      7 Categories
+                    </span>
+                    <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
+                      {TOOL_CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
+                        <li key={cat.id}>
                           <button
-                            onClick={() => handleToolClick('crop-pdf-margins')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer font-bold text-white"
+                            onClick={() => handleCategoryClick(cat.id)}
+                            className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center justify-between w-full text-left py-0.5 cursor-pointer"
                           >
-                            <Scissors className="w-3 h-3 text-emerald-400" />
-                            <span>Crop PDF Margins</span>
+                            <span>{cat.name}</span>
+                            <span className="text-[11px] font-mono text-slate-400 tabular-nums">{cat.count}</span>
                           </button>
                         </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('rotate-pdf')}
-                            className="hover:text-sky-400 flex items-center gap-1.5 text-left w-full cursor-pointer"
-                          >
-                            <RotateCw className="w-3 h-3 text-amber-400" />
-                            <span>Rotate PDF Pages</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-resize')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Image Resizer & Scaler
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-crop')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Image Crop Tool
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-teal-400 tracking-wider block mb-2">
-                        Compress & Edit
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-compress')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer font-bold text-white"
-                          >
-                            Smart Image Compressor
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-exif-stripper')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer font-bold text-emerald-300"
-                          >
-                            EXIF Privacy Stripper
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-aspect-ratio-padder')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Aspect Ratio Padder
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-transparent-png-maker')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer text-cyan-300"
-                          >
-                            Transparent PNG Maker
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-grayscale')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Grayscale / B&W Filter
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                      ))}
+                    </ul>
                   </div>
 
-                  {/* Column 3: Converters & Cyber Art */}
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-purple-400 tracking-wider block mb-2">
-                        Convert from PDF
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
+                  {/* Column 3: Popular Tasks */}
+                  <div className="space-y-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      Popular Shortcuts
+                    </span>
+                    <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
+                      {[
+                        { slug: 'svg-to-png', label: 'SVG to PNG Converter' },
+                        { slug: 'compress-image-to-100kb', label: 'Compress to 100 KB' },
+                        { slug: 'resize-image-for-instagram', label: 'Social Media Resizer' },
+                        { slug: 'remove-image-metadata', label: 'EXIF Viewer & Remover' },
+                        { slug: 'pdf-to-png', label: 'PDF to PNG / JPG' },
+                        { slug: 'pdf-to-markdown', label: 'PDF to Markdown' },
+                        { slug: 'qr-code-generator', label: 'QR Code Generator' }
+                      ].map((item) => (
+                        <li key={item.slug}>
                           <button
-                            onClick={() => handleToolClick('pdf-to-png')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
+                            onClick={() => handleToolClick(item.slug)}
+                            className="hover:text-blue-600 dark:hover:text-sky-400 text-left w-full py-0.5 cursor-pointer"
                           >
-                            PDF to PNG (High DPI)
+                            {item.label}
                           </button>
                         </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-to-svg')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            PDF to SVG Vector
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-to-jpg')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            PDF to JPG
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('pdf-to-text')}
-                            className="hover:text-sky-400 flex items-center gap-1 text-left w-full cursor-pointer font-bold text-teal-300"
-                          >
-                            <FileText className="w-3 h-3 text-teal-400" />
-                            <span>PDF to Text</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-sky-400 tracking-wider block mb-2">
-                        Convert to PDF & Icons
-                      </span>
-                      <ul className="space-y-1.5 text-slate-300">
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-to-pdf')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Images to PDF
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('png-to-ico')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            PNG to ICO Favicon
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleToolClick('image-matrix-art')}
-                            className="hover:text-sky-400 text-left w-full cursor-pointer"
-                          >
-                            Matrix Rain ASCII Art
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Sejda Quick Action Links */}
           <button
-            onClick={() => handleToolClick('image-compress')}
-            className="px-2.5 py-1.5 rounded-lg hover:text-sky-300 hover:bg-sky-950/40 transition-colors whitespace-nowrap cursor-pointer"
+            onClick={() => handleToolClick('smart-assistant')}
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            Compress
+            Assistant
           </button>
 
           <button
-            onClick={() => handleToolClick('fill-and-sign-pdf')}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-sky-300 hover:text-white hover:bg-sky-500/20 transition-colors whitespace-nowrap cursor-pointer font-bold"
+            onClick={() => handleToolClick('optimization-studio')}
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            <PenTool className="w-3 h-3 text-sky-400" />
-            <span>Fill & Sign</span>
+            Studio
           </button>
 
           <button
-            onClick={() => handleToolClick('crop-pdf-margins')}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors whitespace-nowrap cursor-pointer font-bold"
+            onClick={() => handleToolClick('website-image-audit')}
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            <Scissors className="w-3 h-3 text-emerald-400" />
-            <span>Crop</span>
+            Audit
           </button>
 
-          <button
-            onClick={() => handleToolClick('merge-pdf')}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:text-sky-300 hover:bg-sky-950/40 transition-colors whitespace-nowrap cursor-pointer"
-          >
-            <Layers className="w-3 h-3 text-blue-400" />
-            <span>Merge</span>
-          </button>
-
-          <button
-            onClick={() => handleToolClick('delete-pdf-pages')}
-            className="px-2.5 py-1.5 rounded-lg hover:text-red-300 hover:bg-red-500/10 transition-colors whitespace-nowrap cursor-pointer"
-          >
-            Delete Pages
-          </button>
-
-          <div className="h-4 w-px bg-slate-700 mx-1" />
-
-          {/* Blog & Guides */}
           <button
             onClick={onNavigateBlog}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:text-sky-300 transition-colors whitespace-nowrap cursor-pointer font-bold text-sky-400"
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            <BookOpen className="w-3 h-3 text-sky-400" />
-            <span>Blog</span>
+            Guides
           </button>
 
-          {/* Client Reviews & Ratings */}
           <button
-            onClick={onNavigateReviews}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-amber-300 hover:text-white hover:bg-amber-500/10 transition-colors whitespace-nowrap cursor-pointer font-bold border border-amber-500/30 bg-amber-950/20 shadow-xs"
-            title="Avis Clients & Satisfaction 4.8★"
+            onClick={onNavigatePrivacyCenter}
+            className="flex items-center gap-1 px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span>Avis (4.8 ★)</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Privacy</span>
           </button>
 
-          {/* Matrix Art */}
           <button
-            onClick={onOpenMatrixArt}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-sky-400 hover:text-white transition-colors whitespace-nowrap cursor-pointer"
+            onClick={onNavigateMethodology}
+            className="hidden xl:inline-flex px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
           >
-            <Terminal className="w-3 h-3" />
-            <span>Matrix Art</span>
+            Diagnostics
           </button>
+        </nav>
 
-          {/* Matrix Theme Color Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-sky-400/30 bg-sky-950/30 text-sky-300 hover:text-white hover:border-sky-300 transition-colors whitespace-nowrap cursor-pointer text-xs font-mono"
-              title="Change Matrix Rain Color Theme"
-            >
-              <Palette className="w-3.5 h-3.5 text-sky-400" />
-              <span>Theme</span>
-            </button>
+        {/* Global Direct-to-Tool Search + Language + Mobile Toggle */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Desktop Global Search Combobox */}
+          <div ref={searchContainerRef} className="relative hidden md:block w-56 lg:w-60 xl:w-72">
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none" />
+              <input
+                ref={desktopSearchInputRef}
+                type="search"
+                role="combobox"
+                aria-expanded={searchFocused && headerQuery.trim().length > 0}
+                aria-controls="navbar-tool-search-results"
+                aria-label="Search all Mimage tools"
+                value={headerQuery}
+                onFocus={() => setSearchFocused(true)}
+                onChange={(e) => {
+                  setHeaderQuery(e.target.value);
+                  setSearchFocused(true);
+                }}
+                onKeyDown={handleSearchKeyDown}
+                placeholder={`Search ${TOOLS_DATA.length} tools (e.g. svg to png)`}
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 pl-8 pr-12 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors"
+              />
+              {headerQuery ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHeaderQuery('');
+                    desktopSearchInputRef.current?.focus();
+                  }}
+                  aria-label="Clear search query"
+                  className="absolute right-2 p-1 text-slate-400 hover:text-slate-200 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <kbd
+                  title="Press / to focus search"
+                  className="hidden sm:inline-block absolute right-2.5 text-[10px] font-mono text-slate-400 border border-slate-300 dark:border-slate-700 rounded px-1.5 py-0.5 pointer-events-none"
+                >
+                  /
+                </kbd>
+              )}
+            </div>
 
-            {themeDropdownOpen && (
-              <div className="absolute top-full right-0 mt-2 w-48 rounded-xl border border-sky-400/40 bg-[#071318]/95 backdrop-blur-xl p-2.5 shadow-2xl z-50">
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2 px-1 font-bold">
-                  Matrix Rain Colors:
-                </span>
-                <div className="space-y-1">
-                  {MATRIX_THEMES.map((theme) => (
-                    <button
-                      key={theme.id}
-                      onClick={() => handleSwitchMatrixTheme(theme.id)}
-                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-sky-950/60 text-left text-xs font-mono text-slate-200 transition-colors cursor-pointer"
-                    >
-                      <span className={`w-3 h-3 rounded-full ${theme.badgeBg} shrink-0`} />
-                      <span className="truncate">{theme.name}</span>
-                    </button>
-                  ))}
+            {searchFocused && headerQuery.trim().length > 0 && (
+              <div
+                id="navbar-tool-search-results"
+                role="listbox"
+                className="absolute right-0 mt-2 w-[380px] sm:w-[440px] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 shadow-2xl z-50 max-h-[420px] overflow-y-auto"
+              >
+                <div className="px-3 py-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <span className="tabular-nums">
+                    {matchingTools.length} matching {matchingTools.length === 1 ? 'tool' : 'tools'}
+                  </span>
+                  {topMatches.length > 0 && (
+                    <span className="text-[10px] text-emerald-500">Enter to open top match</span>
+                  )}
                 </div>
+
+                {topMatches.length > 0 ? (
+                  <div className="py-1 space-y-0.5">
+                    {topMatches.map((tool, index) => {
+                      const localized = getLocalizedTool(tool, currentLang);
+                      const isHighlighted = index === highlightedIdx;
+                      return (
+                        <button
+                          key={tool.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isHighlighted}
+                          onMouseEnter={() => setHighlightedIdx(index)}
+                          onClick={() => handleToolClick(tool.slug)}
+                          className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-colors cursor-pointer ${
+                            isHighlighted
+                              ? 'bg-emerald-500/15 border border-emerald-500/40'
+                              : 'hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-transparent'
+                          }`}
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                                {localized.name}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                              {tool.categoryName} · {localized.shortDescription}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0 font-mono text-[11px] font-semibold text-emerald-500">
+                            <span>
+                              {tool.fromFormat} → {tool.toFormat}
+                            </span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </div>
+                        </button>
+                      );
+                    })}
+
+                    {matchingTools.length > topMatches.length && (
+                      <button
+                        type="button"
+                        onClick={handleViewAllSearchResults}
+                        className="w-full mt-1 px-3 py-2 rounded-xl text-center text-xs font-semibold text-blue-600 dark:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                      >
+                        Show all {matchingTools.length} matching tools in directory →
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="px-4 py-6 text-center space-y-2">
+                    <p className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                      No direct match found for &ldquo;{headerQuery}&rdquo;.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick('all')}
+                      className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
+                    >
+                      Browse all {TOOLS_DATA.length} tools in directory →
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
-        </nav>
 
-        {/* Right Zone: Language + Mobile Toggle */}
-        <div className="flex items-center gap-2.5 shrink-0">
           {/* Language Selector */}
           <div className="relative">
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="flex items-center gap-1.5 rounded-xl border border-sky-400/50 bg-sky-950/80 px-2.5 py-1.5 text-xs font-mono text-sky-200 hover:border-sky-300 hover:text-white transition-colors cursor-pointer shadow-sm"
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-blue-400 hover:text-blue-600 dark:hover:text-sky-300 transition-colors cursor-pointer"
               aria-label="Select website language"
             >
-              <Globe className="w-3.5 h-3.5 text-sky-400" />
-              <span className="hidden sm:inline font-bold">{activeLanguage.nativeName}</span>
-              <span className="sm:hidden font-bold">{activeLanguage.code.toUpperCase()}</span>
-              <ChevronDown className="w-3 h-3 text-sky-300" />
+              <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
+              <span className="hidden sm:inline font-semibold">{activeLanguage.nativeName}</span>
+              <span className="sm:hidden font-semibold">{activeLanguage.code.toUpperCase()}</span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
             </button>
 
             {langMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-52 rounded-2xl border-2 border-sky-400 bg-[#06141c] py-2 shadow-2xl backdrop-blur-xl z-50 max-h-80 overflow-y-auto"
+                className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2 shadow-2xl z-50 max-h-80 overflow-y-auto"
                 onMouseLeave={() => setLangMenuOpen(false)}
               >
-                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-sky-400 font-bold border-b border-sky-500/20 flex items-center justify-between">
-                  <span>Auto-Translate Site</span>
-                  <span className="text-[9px] px-1 rounded bg-sky-500/20 text-sky-300">Google AI</span>
+                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
+                  Translate Interface
                 </div>
                 {currentLang !== 'en' && (
                   <button
@@ -516,10 +495,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onSelectLang('en');
                       setLangMenuOpen(false);
                     }}
-                    className="flex items-center justify-between w-full px-3.5 py-2 text-xs text-left bg-sky-950/60 hover:bg-sky-900 text-sky-300 font-semibold border-b border-sky-500/20 transition-colors cursor-pointer"
+                    className="flex items-center justify-between w-full px-3.5 py-2 text-xs text-left bg-blue-50 dark:bg-sky-950/50 text-blue-700 dark:text-sky-300 font-semibold border-b border-slate-100 dark:border-slate-800 cursor-pointer"
                   >
-                    <span>Reset to English (Original)</span>
-                    <span className="text-sm ml-2">🇺🇸</span>
+                    <span>Reset to English</span>
+                    <span>🇺🇸</span>
                   </button>
                 )}
                 {SUPPORTED_LANGUAGES.map((lang) => (
@@ -531,11 +510,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className={`flex items-center justify-between w-full px-3.5 py-2 text-xs text-left transition-colors cursor-pointer ${
                       currentLang === lang.code
-                        ? 'bg-sky-500 text-white font-bold'
-                        : 'text-sky-100 hover:bg-sky-900/60 hover:text-white'
+                        ? 'bg-blue-600 text-white font-semibold'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
-                    <span>{lang.nativeName} ({lang.name})</span>
+                    <span>
+                      {lang.nativeName} ({lang.name})
+                    </span>
                     <span className="text-sm ml-2">{lang.flag}</span>
                   </button>
                 ))}
@@ -543,10 +524,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl border border-sky-400/40 bg-sky-950/60 text-sky-300 hover:text-white cursor-pointer"
+            className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 cursor-pointer"
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -555,97 +536,128 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-sky-400/30 bg-[#050807]/98 px-4 py-6 font-mono text-xs space-y-4 max-h-[85vh] overflow-y-auto">
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleToolClick('fill-and-sign-pdf')}
-              className="p-3 rounded-xl border border-sky-400/30 bg-sky-950/40 text-left font-bold text-sky-300 flex items-center gap-2"
-            >
-              <PenTool className="w-4 h-4" />
-              <span>Fill & Sign PDF</span>
-            </button>
-            <button
-              onClick={() => handleToolClick('crop-pdf-margins')}
-              className="p-3 rounded-xl border border-emerald-400/30 bg-emerald-950/40 text-left font-bold text-emerald-300 flex items-center gap-2"
-            >
-              <Scissors className="w-4 h-4" />
-              <span>Crop PDF</span>
-            </button>
-            <button
-              onClick={() => handleToolClick('merge-pdf')}
-              className="p-3 rounded-xl border border-blue-400/30 bg-blue-950/40 text-left font-bold text-blue-300 flex items-center gap-2"
-            >
-              <Layers className="w-4 h-4" />
-              <span>Merge PDF</span>
-            </button>
-            <button
-              onClick={() => handleToolClick('delete-pdf-pages')}
-              className="p-3 rounded-xl border border-red-400/30 bg-red-950/40 text-left font-bold text-red-300 flex items-center gap-2"
-            >
-              <Trash2 className="w-4 h-4" />
-              <span>Delete Pages</span>
-            </button>
+        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-5 text-xs space-y-4 max-h-[85vh] overflow-y-auto">
+          {/* Mobile Direct Tool Search */}
+          <div className="space-y-2">
+            <label htmlFor="mobile-tool-search" className="block text-[11px] font-mono uppercase tracking-wider text-slate-400">
+              Jump directly to any tool ({TOOLS_DATA.length})
+            </label>
+            <div className="relative flex items-center">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+              <input
+                id="mobile-tool-search"
+                ref={mobileSearchInputRef}
+                type="search"
+                value={headerQuery}
+                onChange={(e) => setHeaderQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search e.g. svg to png, pdf to markdown..."
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 pl-9 pr-9 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
+              />
+              {headerQuery && (
+                <button
+                  type="button"
+                  onClick={() => setHeaderQuery('')}
+                  className="absolute right-2.5 p-1 text-slate-400 hover:text-slate-200"
+                  aria-label="Clear mobile search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {headerQuery.trim().length > 0 && (
+              <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900/70 divide-y divide-slate-800 max-h-60 overflow-y-auto">
+                {topMatches.length > 0 ? (
+                  topMatches.map((tool) => {
+                    const localized = getLocalizedTool(tool, currentLang);
+                    return (
+                      <button
+                        key={tool.id}
+                        type="button"
+                        onClick={() => handleToolClick(tool.slug)}
+                        className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left hover:bg-slate-800 cursor-pointer"
+                      >
+                        <span className="font-semibold text-white truncate">{localized.name}</span>
+                        <span className="font-mono text-[11px] text-emerald-400 shrink-0">
+                          {tool.fromFormat} → {tool.toFormat}
+                        </span>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div className="p-3 text-center font-mono text-slate-400">
+                    No matching tools for &ldquo;{headerQuery}&rdquo;.
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          <div className="pt-2 border-t border-slate-800 space-y-2">
+          <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onNavigateHome();
-                onNavigateCategory('all');
-              }}
-              className="block w-full py-2 text-left text-white font-bold"
+              onClick={() => handleToolClick('smart-assistant')}
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-left font-semibold text-slate-900 dark:text-white cursor-pointer"
             >
-              Browse All 46+ Tools →
+              Smart Assistant
             </button>
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onNavigateBlog();
-              }}
-              className="block w-full py-2 text-left text-sky-400 font-bold"
+              onClick={() => handleToolClick('optimization-studio')}
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-left font-semibold text-slate-900 dark:text-white cursor-pointer"
             >
-              Blog & Conversion Guides
+              Optimization Studio
             </button>
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (onNavigateReviews) onNavigateReviews();
-              }}
-              className="flex items-center gap-2 w-full py-2 text-left text-amber-300 font-bold"
+              onClick={() => handleToolClick('website-image-audit')}
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-left font-semibold text-slate-900 dark:text-white cursor-pointer"
             >
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span>Avis Clients & Ratings (4.8 ★)</span>
+              Website Image Audit
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenMatrixArt();
               }}
-              className="block w-full py-2 text-left text-slate-300"
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-left font-semibold text-slate-900 dark:text-white cursor-pointer"
             >
               Matrix Art Studio
             </button>
+          </div>
 
-            {/* Mobile Matrix Colors */}
-            <div className="pt-2 border-t border-slate-800">
-              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block mb-2 font-bold">
-                Matrix Rain Color Theme:
-              </span>
-              <div className="grid grid-cols-4 gap-2">
-                {MATRIX_THEMES.map((theme) => (
-                  <button
-                    key={theme.id}
-                    onClick={() => {
-                      handleSwitchMatrixTheme(theme.id);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`h-8 rounded-lg ${theme.badgeBg} border border-white/20 flex items-center justify-center`}
-                    title={theme.name}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2 text-slate-700 dark:text-slate-300 font-medium">
+            <button
+              onClick={() => handleCategoryClick('all')}
+              className="block w-full py-1.5 text-left font-semibold text-blue-600 dark:text-sky-400 cursor-pointer"
+            >
+              All Tools Directory
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigateBlog();
+              }}
+              className="block w-full py-1.5 text-left cursor-pointer"
+            >
+              Guides & Articles
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigatePrivacyCenter();
+              }}
+              className="block w-full py-1.5 text-left cursor-pointer"
+            >
+              Privacy Center
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigateMethodology();
+              }}
+              className="block w-full py-1.5 text-left cursor-pointer"
+            >
+              Diagnostics & Feedback
+            </button>
           </div>
         </div>
       )}

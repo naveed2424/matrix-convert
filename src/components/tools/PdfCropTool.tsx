@@ -9,8 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sliders,
-  CheckCircle,
-  Scissors
+  Scissors,
+  AlertCircle
 } from 'lucide-react';
 import { cropPdfMargins, renderPdfThumbnails, detectCanvasWhiteMargins } from '../../services/pdfAdvancedEngine';
 
@@ -35,11 +35,13 @@ export const PdfCropTool: React.FC<PdfCropToolProps> = ({ onBack }) => {
   const [applyToAll, setApplyToAll] = useState<boolean>(true);
   const [isCropping, setIsCropping] = useState<boolean>(false);
   const [isAutoDetecting, setIsAutoDetecting] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Handle PDF select
   const handleFile = async (selectedFile: File) => {
     setFile(selectedFile);
     setIsLoading(true);
+    setErrorMsg(null);
     try {
       const rendered = await renderPdfThumbnails(selectedFile, 30, 1.2);
       setPages(rendered);
@@ -47,9 +49,9 @@ export const PdfCropTool: React.FC<PdfCropToolProps> = ({ onBack }) => {
 
       // Default smart margin
       setMargins({ top: 5, right: 5, bottom: 5, left: 5 });
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('Could not render PDF document.');
+      setErrorMsg(e?.message || 'Could not render PDF document.');
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +114,7 @@ export const PdfCropTool: React.FC<PdfCropToolProps> = ({ onBack }) => {
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     } catch (err: any) {
       console.error('Crop failed:', err);
-      alert(`Crop failed: ${err.message || 'Unknown error'}`);
+      setErrorMsg(`Crop failed: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsCropping(false);
     }
@@ -126,31 +128,34 @@ export const PdfCropTool: React.FC<PdfCropToolProps> = ({ onBack }) => {
       <div className="flex items-center justify-between gap-4 mb-6">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm font-mono text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to All Tools</span>
         </button>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-sky-500/10 border border-sky-400/30 text-sky-300">
-          <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-          <span>Lossless Client-Side PDF Margin Trimmer</span>
+        <span className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>Browser-Local PDF Margin Trimmer</span>
         </span>
       </div>
 
       {/* Main Container */}
-      <div className="rounded-2xl border border-sky-400/30 bg-[#06141c]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 flex items-center justify-center gap-2">
-            <span>Crop PDF Margins</span>
-            <span className="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">
-              Auto-Trim
-            </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+            Crop PDF Margins
           </h1>
-          <p className="text-sm text-slate-300">
-            Trim unnecessary white space, standardize page dimensions, or cut out printer margins from multi-page
-            PDFs with instant browser-based processing.
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            Trim white space or standardize page margins across multi-page PDFs locally in your browser.
           </p>
         </div>
+
+        {errorMsg && (
+          <div className="mb-4 p-3.5 rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
         {/* Upload State */}
         {!file && (

@@ -1,3 +1,4 @@
+import { EDITORIAL_IMAGES } from './editorialAssets';
 export interface BlogPost {
   id: string;
   slug: string;
@@ -108,23 +109,27 @@ export const BLOG_CATEGORIES: BlogCategoryInfo[] = [
 ];
 
 import { FOUR_NEW_MASTER_BLOG_POSTS } from './newBlogPosts';
+import { SIX_QR_CODE_BLOG_POSTS } from './qrBlogPosts';
+import { DEDICATED_TOOL_BLOG_POSTS } from './toolBlogPosts';
 
 export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
+  ...DEDICATED_TOOL_BLOG_POSTS,
+  ...SIX_QR_CODE_BLOG_POSTS,
   ...FOUR_NEW_MASTER_BLOG_POSTS,
   {
     id: 'post-pdf-to-png-300dpi-guide',
     slug: 'ultimate-guide-pdf-to-png-300-dpi',
     title: 'The Ultimate Guide to PDF to PNG Conversion at 300 & 600 DPI: Why Client-Side Vector Extraction Beats Cloud Uploads',
-    metaTitle: 'PDF to PNG 300 DPI Conversion Guide | Zero Upload MatrixConvert',
+    metaTitle: 'PDF to PNG 300 DPI Conversion Guide | Zero Upload Mimage',
     metaDescription: 'Learn how to convert multi-page PDF documents to ultra-crisp 300 & 600 DPI PNG images directly in your browser with transparent backgrounds and zero cloud data leaks.',
     category: 'pdf-workflows',
     publishedDate: '2026-10-24',
     readTime: '12 min read (2,450 words)',
     author: {
-      name: 'Dr. Evelyn Vance',
-      role: 'Head of Document Architecture & WebAssembly Systems',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
-      bio: 'Former PDF renderer engineer at Mozilla with 14 years of experience optimizing PostScript rasterization and client-side cryptography.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator, software developer, and technical writer at Mimage specializing in client-side document rendering, WebAssembly pipelines, and privacy-first web utilities.'
     },
     primaryKeyword: 'PDF to PNG 300 DPI',
     secondaryKeywords: [
@@ -135,14 +140,14 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Sejda PDF alternative free'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'High-resolution digital typography and vector geometry rendering on dark matrix terminal background',
       caption: 'Figure 1: High-DPI rasterization preserves sub-pixel typography hinting without pixelation or color distortion.'
     },
     keyTakeaways: [
       'Standard web PDF viewers render at 72 or 96 DPI, producing blurry text when zoomed or printed. 300 DPI increases visual fidelity by 416%, while 600 DPI ensures museum-grade archival clarity.',
       'Cloud-based PDF converters like Sejda or Adobe Acrobat Web require uploading your confidential PDFs to external servers, creating compliance vulnerabilities under HIPAA, GDPR, and CCPA.',
-      'MatrixConvert utilizes browser WebAssembly (Wasm) and native HTML5 Canvas hardware acceleration to rasterize PDF documents locally on your device, with 0 bytes transmitted over the network.',
+      'Mimage utilizes browser WebAssembly (Wasm) and native HTML5 Canvas hardware acceleration to rasterize PDF documents locally on your device, with 0 bytes transmitted over the network.',
       'Alpha transparency support allows you to export illustrations, charts, and signatures cleanly without annoying white background bounding boxes.'
     ],
     content: `
@@ -172,9 +177,9 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       </ul>
 
       <h2>3. The In-Browser Revolution: How WebAssembly Eliminates Server Uploads</h2>
-      <p>MatrixConvert was architected from the ground up to destroy this trade-off. By compiling modern C++ and Rust rendering engines into client-side WebAssembly (Wasm) combined with modern browser-native OffscreenCanvas and WebGL APIs, the entire document extraction pipeline executes directly inside your device's random access memory (RAM).</p>
+      <p>Mimage was architected from the ground up to destroy this trade-off. By compiling modern C++ and Rust rendering engines into client-side WebAssembly (Wasm) combined with modern browser-native OffscreenCanvas and WebGL APIs, the entire document extraction pipeline executes directly inside your device's random access memory (RAM).</p>
 
-      <p>When you drag a 200-page PDF containing confidential audit disclosures into MatrixConvert:</p>
+      <p>When you drag a 200-page PDF containing confidential audit disclosures into Mimage:</p>
       <ol>
         <li><strong>Zero Network Packets:</strong> The file is read via the browser's <code>FileReader</code> API into an <code>ArrayBuffer</code>. Open your browser Developer Tools Network tab—you will observe that exactly 0 bytes are transmitted outside your computer.</li>
         <li><strong>Hardware-Accelerated Rasterization:</strong> The WebAssembly runtime parses the PDF's PostScript operator stream, translates vector bezier curves into high-precision raster paths, and renders onto an HTML5 canvas at your chosen density (72, 150, 300, or 600 DPI).</li>
@@ -184,13 +189,13 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <h2>4. Step-by-Step Tutorial: Converting PDF to 300 DPI Transparent PNG</h2>
       <p>Follow these four simple steps to convert any PDF into crisp, production-ready PNG images right now:</p>
       <ul>
-        <li><strong>Step 1:</strong> Navigate to the <a href="#/tool/pdf-to-png" class="text-sky-400 underline font-semibold">PDF to PNG Converter Tool</a> on MatrixConvert.</li>
+        <li><strong>Step 1:</strong> Navigate to the <a href="/tool/pdf-to-png" class="text-sky-400 underline font-semibold">PDF to PNG Converter Tool</a> on Mimage.</li>
         <li><strong>Step 2:</strong> Drag and drop your PDF file or click "Browse Files". You can load single-page flyers, contracts, or multi-page technical manuals up to several hundred megabytes.</li>
         <li><strong>Step 3:</strong> In the configuration drawer, toggle the DPI slider to <strong>300 DPI</strong> (or 600 DPI for fine art engravings). If your PDF contains logos or charts that you wish to place over a colored keynote background, toggle <strong>"Transparent Background"</strong> to remove default white page fills.</li>
         <li><strong>Step 4:</strong> Click <strong>"Convert & Export PNG"</strong>. Preview each page in real time, then download individual high-res PNGs or a consolidated ZIP archive with a single click.</li>
       </ul>
 
-      <h2>5. Comparing MatrixConvert vs Sejda.com for Document Rasterization</h2>
+      <h2>5. Comparing Mimage vs Sejda.com for Document Rasterization</h2>
       <p>Sejda is renowned for its clean user interface, but its technical limitations frustrate high-volume professional users. Let us inspect the direct architectural comparison:</p>
       
       <div class="overflow-x-auto my-6">
@@ -199,7 +204,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
             <tr>
               <th class="p-3 border-b border-sky-400/30">Feature</th>
               <th class="p-3 border-b border-sky-400/30">Sejda.com</th>
-              <th class="p-3 border-b border-sky-400/30">MatrixConvert (mimage.netlify.app)</th>
+              <th class="p-3 border-b border-sky-400/30">Mimage (mimage.netlify.app)</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-sky-900/30 text-slate-300">
@@ -237,30 +242,30 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <ul>
         <li><strong>Figma & Adobe Illustrator Designers:</strong> Often, clients supply brand assets locked inside multi-page corporate PDF guidelines. Rather than re-drawing vector logos from scratch, designers extract the pages at 600 DPI with alpha transparency, allowing seamless color picking and tracing.</li>
         <li><strong>Patent Attorneys & Legal Clerks:</strong> Legal discovery involves examining scanned court filings where handwriting or micro-stamps determine evidentiary validity. Converting at 300+ DPI ensures that OCR (Optical Character Recognition) engines achieve 99.8% lexical accuracy.</li>
-        <li><strong>Bioinformaticians & Academic Authors:</strong> Scientific journals require figures submitted in high-res PNG or TIFF at a minimum of 300 DPI with no compression artifacts. MatrixConvert guarantees compliance with Nature, IEEE, and Elsevier author guidelines.</li>
+        <li><strong>Bioinformaticians & Academic Authors:</strong> Scientific journals require figures submitted in high-res PNG or TIFF at a minimum of 300 DPI with no compression artifacts. Mimage guarantees compliance with Nature, IEEE, and Elsevier author guidelines.</li>
       </ul>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'High resolution data visualization chart extracted from PDF document at 300 DPI without blur',
         caption: 'Figure 2: Crisp vector lines and numeric data points preserved after 300 DPI extraction.',
         placement: 'After Section 1 (Resolution Comparison)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Cybersecurity lock and encrypted data transmission concept illustrating zero knowledge client side document privacy',
         caption: 'Figure 3: Zero-knowledge architecture guarantees that confidential documents never touch third-party servers.',
         placement: 'After Section 2 (Cloud Security Risks)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Matrix digital green rain code interface representing WebAssembly client side processing speed',
         caption: 'Figure 4: WebAssembly executes PostScript parsing at native C++ speeds directly within V8 and SpiderMonkey engines.',
         placement: 'After Section 3 (WebAssembly Architecture)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Modern workspace with designer exporting high resolution PNG assets for web and print mockups',
         caption: 'Figure 5: Professional multi-device workflow powered by instant client-side file conversions.',
         placement: 'After Section 4 (Step-by-Step Tutorial)'
@@ -269,17 +274,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Try PDF to PNG Converter at 300 DPI',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Launch the dedicated in-browser PDF to PNG tool with custom DPI and transparency settings.'
       },
       {
         anchor: 'Need True Vector Graphics? Use PDF to SVG',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract infinite-resolution scalable vector paths from your PDF diagrams.'
       },
       {
         anchor: 'Compress Your PNG Outputs with PNG to WebP',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Cut file weight by up to 80% while retaining lossless image quality for web delivery.'
       }
     ],
@@ -303,11 +308,11 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Will converting my PDF to PNG reduce the readability of small text?',
-        answer: 'Not if you render at 300 DPI or higher! Standard 72 DPI exports will blur small text, but MatrixConvert allows you to select 300 DPI (print standard) or 600 DPI (archival standard), preserving razor-sharp typography down to 4-point font.'
+        answer: 'Not if you render at 300 DPI or higher! Standard 72 DPI exports will blur small text, but Mimage allows you to select 300 DPI (print standard) or 600 DPI (archival standard), preserving razor-sharp typography down to 4-point font.'
       },
       {
-        question: 'Does MatrixConvert upload my PDF documents to a cloud database or server?',
-        answer: 'Never. MatrixConvert operates on a strict zero-knowledge client-side architecture. All rendering occurs locally inside your web browser via WebAssembly. Your files never touch our servers or any cloud storage, guaranteeing absolute privacy.'
+        question: 'Does Mimage upload my PDF documents to a cloud database or server?',
+        answer: 'Never. Mimage operates on a strict zero-knowledge client-side architecture. All rendering occurs locally inside your web browser via WebAssembly. Your files never touch our servers or any cloud storage, guaranteeing absolute privacy.'
       },
       {
         question: 'Can I extract transparent PNGs from PDFs that have white backgrounds?',
@@ -315,26 +320,26 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Is there a limit on how many pages or files I can convert for free?',
-        answer: 'No. Unlike Sejda which restricts free users to 3 tasks per hour, MatrixConvert imposes zero task quotas, zero page count limits, and zero registration requirements.'
+        answer: 'No. Unlike Sejda which restricts free users to 3 tasks per hour, Mimage imposes zero task quotas, zero page count limits, and zero registration requirements.'
       }
     ],
     ctaText: 'Convert Your PDF to High-Resolution 300 DPI PNG Free Now',
-    ctaLink: '#/tool/pdf-to-png'
+    ctaLink: '/tool/pdf-to-png'
   },
   {
     id: 'post-avif-webp-png-benchmark-2026',
     slug: 'avif-vs-webp-vs-png-2026-benchmark',
     title: 'AVIF vs WebP vs PNG in 2026: Definitive Compression Benchmarks, Core Web Vitals Impact & Browser Support',
-    metaTitle: 'AVIF vs WebP vs PNG 2026 Benchmark | MatrixConvert',
+    metaTitle: 'AVIF vs WebP vs PNG 2026 Benchmark | Mimage',
     metaDescription: 'Comprehensive empirical benchmark comparing AVIF, WebP, and PNG image formats across 10,000 assets. Discover real-world LCP speedups and SEO ranking boosts.',
     category: 'format-guides',
     publishedDate: '2026-10-23',
     readTime: '14 min read (2,850 words)',
     author: {
-      name: 'Marcus Thorne',
-      role: 'Principal Performance Architect & Web Standards Evangelist',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80',
-      bio: 'Author of Modern Web Asset Optimization and regular contributor to Chromium image decoding benchmarks.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage, writing on web performance optimization, modern image formats, and client-side encoding workflows.'
     },
     primaryKeyword: 'AVIF vs WebP vs PNG',
     secondaryKeywords: [
@@ -345,7 +350,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'next gen image format comparison'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'High speed fiber optic cables and server network lights representing ultra fast website asset loading',
       caption: 'Figure 1: Next-generation image compression formats reduce bandwidth consumption by up to 78% globally.'
     },
@@ -353,7 +358,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'In our test of 10,000 photographic and graphic assets, WebP achieved an average 32.4% file size reduction over optimized PNG, while AVIF achieved a massive 61.8% reduction at identical Structural Similarity Index (SSIM) scores.',
       'Transitioning hero banners from legacy PNG to WebP/AVIF reduced Largest Contentful Paint (LCP) by an average of 1.42 seconds on 4G mobile connections, directly elevating Google search ranking factors.',
       'PNG remains indispensable for pixel-art, medical imaging, and vector schematics requiring mathematical 100% lossless fidelity with 16-bit color depth.',
-      'MatrixConvert provides instant in-browser batch conversion between PNG, WebP, JPG, and SVG without watermark or file size penalties.'
+      'Mimage provides instant in-browser batch conversion between PNG, WebP, JPG, and SVG without watermark or file size penalties.'
     ],
     content: `
       <h2>1. The State of Web Imagery: Why Image Formats Determine Search Rankings</h2>
@@ -423,7 +428,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <h2>4. Impact on Google Search Rankings & Core Web Vitals</h2>
       <p>When Google crawls a webpage, its mobile bot emulates a mid-tier Android smartphone connected to a throttled 4G cellular profile. Under these real-world constraints, downloading a 4.12 MB PNG hero image consumes over 3.2 seconds of raw network bandwidth alone—pushing LCP into the red zone (failing score: 4.8s total).</p>
 
-      <p>By converting that exact PNG image into a <strong>410 KB WebP or 215 KB AVIF</strong> via <a href="#/tool/png-to-webp" class="text-sky-400 underline font-semibold">MatrixConvert PNG to WebP Converter</a>:</p>
+      <p>By converting that exact PNG image into a <strong>410 KB WebP or 215 KB AVIF</strong> via <a href="/tool/png-to-webp" class="text-sky-400 underline font-semibold">Mimage PNG to WebP Converter</a>:</p>
       <ul>
         <li><strong>Network Transfer Time:</strong> Drops from 3.2 seconds to <strong>0.31 seconds</strong> (a 90.3% speedup).</li>
         <li><strong>Cumulative Layout Shift (CLS):</strong> Drops to 0.00 because dimension-aware WebP containers load prior to JavaScript layout calculation.</li>
@@ -441,25 +446,25 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Google Search Console and Lighthouse performance score graph showing 100 on Core Web Vitals',
         caption: 'Figure 2: Perfect 100 Lighthouse score achieved after converting heavy PNGs to WebP.',
         placement: 'After Section 1 (State of Web Imagery)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Code editor terminal displaying AVIF and WebP image decoding algorithms in WebAssembly',
         caption: 'Figure 3: Modern browsers decode WebP and AVIF via dedicated hardware SIMD instructions.',
         placement: 'After Section 2 (Architectural Differences)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Benchmark data chart comparing PNG vs WebP vs AVIF byte size savings',
         caption: 'Figure 4: Empirical compression benchmark reveals over 80% bandwidth savings across 10,000 assets.',
         placement: 'After Section 3 (Empirical Benchmark)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Mobile smartphone loading high-speed eCommerce shop with instant image rendering',
         caption: 'Figure 5: Mobile users experience near-instant page renders, boosting checkout conversion rates.',
         placement: 'After Section 4 (Core Web Vitals Impact)'
@@ -468,17 +473,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Convert PNG to WebP Instantly',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Compress PNG graphics into high-performance WebP images directly in your browser.'
       },
       {
         anchor: 'Convert JPG to PNG Lossless',
-        url: '#/tool/jpg-to-png',
+        url: '/tool/jpg-to-png',
         description: 'Upgrade compressed JPEG photos into editable, lossless PNG canvases.'
       },
       {
         anchor: 'Extract PDF to SVG Vectors',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Transform multi-page documents into infinitely scalable vector graphics.'
       }
     ],
@@ -509,8 +514,8 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'While AVIF achieves superior compression ratios on large photos, its encoding and decoding computational overhead is approximately 4x to 8x higher than WebP. For low-end mobile devices or ultra-rapid batch exports, WebP remains the ideal sweet spot.'
       },
       {
-        question: 'Can I convert animated GIFs to WebP using MatrixConvert?',
-        answer: 'Yes, MatrixConvert supports converting static and animated visual assets into modern WebP containers, reducing animated GIF sizes by up to 85%.'
+        question: 'Can I convert animated GIFs to WebP using Mimage?',
+        answer: 'Yes, Mimage supports converting static and animated visual assets into modern WebP containers, reducing animated GIF sizes by up to 85%.'
       },
       {
         question: 'Will converting PNG to WebP degrade transparent backgrounds?',
@@ -518,22 +523,22 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Batch Convert Your Images to WebP Now & Boost LCP Speed',
-    ctaLink: '#/tool/png-to-webp'
+    ctaLink: '/tool/png-to-webp'
   },
   {
     id: 'post-client-side-zero-knowledge-privacy',
     slug: 'client-side-zero-knowledge-document-processing',
     title: 'Zero-Knowledge In-Browser Document Processing: Ending the Era of Enterprise Cloud Data Leaks',
-    metaTitle: 'Zero-Knowledge Document Processing | In-Browser MatrixConvert',
+    metaTitle: 'Zero-Knowledge Document Processing | In-Browser Mimage',
     metaDescription: 'Why security teams and Fortune 500 enterprises are abandoning cloud PDF upload converters in favor of local client-side WebAssembly zero-knowledge architectures.',
     category: 'privacy-security',
     publishedDate: '2026-10-22',
     readTime: '11 min read (2,180 words)',
     author: {
-      name: 'Elena Rostova, CISSP',
-      role: 'Chief Privacy Officer & Applied Cryptographer',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=250&q=80',
-      bio: 'Advises financial institutions on zero-trust architectures and author of In-Browser Cryptography & Wasm Security Models.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage focused on browser-local document processing, WebAssembly sandboxing, and zero-upload file utilities.'
     },
     primaryKeyword: 'zero knowledge document converter',
     secondaryKeywords: [
@@ -544,14 +549,14 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'offline document converter free'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.privacyBanner,
       alt: 'Encrypted matrix lock with glowing blue cyber shield symbolizing zero knowledge data security',
       caption: 'Figure 1: Zero-knowledge processing guarantees that data never leaves your client device runtime.'
     },
     keyTakeaways: [
       'Over 68% of enterprise data breaches originate from third-party cloud vendors and shadow IT utilities where employees casually upload contracts or customer records.',
       'Traditional "free online converters" monetize user documents by logging IP addresses, mining metadata, and storing files on unencrypted temporary storage.',
-      'MatrixConvert utilizes strict client-side sandboxing: all conversions execute in volatile memory (RAM) within your browser, ensuring complete immunity from network sniffing and server subpoena.',
+      'Mimage utilizes strict client-side sandboxing: all conversions execute in volatile memory (RAM) within your browser, ensuring complete immunity from network sniffing and server subpoena.',
       'Works completely offline: once the WebAssembly bundles are cached in your browser Service Worker, you can disconnect Wi-Fi entirely and process hundreds of files.'
     ],
     content: `
@@ -561,7 +566,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <p>This single casual action constitutes a severe enterprise data leak. The moment that file departs the local workstation over an HTTP POST request, your organization loses sovereign custody of the data. Third-party cloud servers store the document on disk, often across jurisdictions with lax privacy protections, where rogue employees, misconfigured S3 buckets, or sub-processor data aggregators can access it.</p>
 
       <h2>2. What Is "Zero-Knowledge" In-Browser Processing?</h2>
-      <p>In applied cryptography and software architecture, the term <strong>Zero-Knowledge</strong> describes a system where the service provider processes user inputs without having access to, or knowledge of, the underlying plain-text payload. In the context of MatrixConvert:</p>
+      <p>In applied cryptography and software architecture, the term <strong>Zero-Knowledge</strong> describes a system where the service provider processes user inputs without having access to, or knowledge of, the underlying plain-text payload. In the context of Mimage:</p>
       <ul>
         <li><strong>Zero Ingestion:</strong> Our web servers do not receive or store your uploaded files. When you visit <code>mimage.netlify.app</code>, the server merely delivers static HTML, CSS, JavaScript, and WebAssembly compilation binaries.</li>
         <li><strong>Client Sandboxing:</strong> All document parsing, rasterization, color channel extraction, and ZIP compression occur exclusively inside your device's browser memory via the <code>WebAssembly</code> virtual machine and HTML5 <code>Canvas</code> API.</li>
@@ -569,7 +574,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       </ul>
 
       <h2>3. The Technical Architecture: WebAssembly & Memory Isolation</h2>
-      <p>How does MatrixConvert achieve native desktop conversion speeds without sending a single byte to an external server? The answer lies in WebAssembly (Wasm) and low-level memory buffers:</p>
+      <p>How does Mimage achieve native desktop conversion speeds without sending a single byte to an external server? The answer lies in WebAssembly (Wasm) and low-level memory buffers:</p>
 
       <p>When you drag a file into the processing dropzone:</p>
       <ol>
@@ -579,10 +584,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li>The output image is synthesized into a local <code>Blob</code> object and downloaded directly via a generated <code>blob:https://...</code> URI.</li>
       </ol>
 
-      <p>You can verify this yourself: open your browser Developer Tools (Press F12), switch to the <strong>Network</strong> tab, disconnect your computer from the internet (turn off Wi-Fi or unplug Ethernet), and drag any PDF or image into MatrixConvert. The entire conversion completes with zero latency, zero errors, and zero network traffic!</p>
+      <p>You can verify this yourself: open your browser Developer Tools (Press F12), switch to the <strong>Network</strong> tab, disconnect your computer from the internet (turn off Wi-Fi or unplug Ethernet), and drag any PDF or image into Mimage. The entire conversion completes with zero latency, zero errors, and zero network traffic!</p>
 
       <h2>4. Compliance Breakdown: HIPAA, GDPR, and CCPA</h2>
-      <p>Because MatrixConvert never acts as a Data Processor under international data privacy laws, using our tools simplifies corporate compliance:</p>
+      <p>Because Mimage never acts as a Data Processor under international data privacy laws, using our tools simplifies corporate compliance:</p>
       
       <div class="my-6 p-4 rounded-xl border border-emerald-400/30 bg-emerald-950/20">
         <h4 class="text-emerald-300 font-bold mb-2">Compliance Matrix</h4>
@@ -597,7 +602,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <p>To shield your enterprise from inadvertent data disclosures, implement these five best practices across your IT department:</p>
       <ul>
         <li><strong>1. Verify the Network Tab:</strong> Before trusting any online utility with proprietary data, inspect network calls to confirm that file payloads are not uploaded via POST requests.</li>
-        <li><strong>2. Enforce Client-Side Only Utilities:</strong> Standardize on tools like MatrixConvert that operate locally within the browser sandbox.</li>
+        <li><strong>2. Enforce Client-Side Only Utilities:</strong> Standardize on tools like Mimage that operate locally within the browser sandbox.</li>
         <li><strong>3. Disable Server-Side Analytics on Sensitive Documents:</strong> Ensure utility pages do not pass document titles or page contents into third-party tracking scripts.</li>
         <li><strong>4. Use Transparent Formats for Presentation Mockups:</strong> Export transparent PNG or vector SVG rather than taking messy screen captures that inadvertently expose desktop tabs or notification banners.</li>
         <li><strong>5. Educate Remote Workers:</strong> Inform remote employees that "free" online converter websites often monetize uploaded PDFs by parsing contact information or selling corporate metadata.</li>
@@ -605,25 +610,25 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Abstract cybersecurity shield protecting digital documents in memory',
         caption: 'Figure 2: Memory isolation ensures that your document stays within your local device memory.',
         placement: 'After Section 1 (Hidden Epidemic)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'WebAssembly binary bytecode visualization showing zero network requests',
         caption: 'Figure 3: WebAssembly executes local byte-level manipulation without server assistance.',
         placement: 'After Section 2 (Zero Knowledge)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Developer tools network inspector confirming zero bytes sent over the internet',
         caption: 'Figure 4: Verify in DevTools: 0 bytes uploaded to external endpoints during conversion.',
         placement: 'After Section 3 (Technical Architecture)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Corporate compliance officer reviewing security certificates and privacy standards',
         caption: 'Figure 5: Enterprise security teams approve client-side WebAssembly tools for confidential files.',
         placement: 'After Section 4 (Compliance Breakdown)'
@@ -632,17 +637,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Secure PDF to PNG Conversion (Client-Side)',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Process multi-page confidential PDFs with zero cloud uploads.'
       },
       {
         anchor: 'Convert SVG to PNG Without Leaking Designs',
-        url: '#/tool/svg-to-png',
+        url: '/tool/svg-to-png',
         description: 'Render vector illustrations securely inside your local browser.'
       },
       {
         anchor: 'Read Our Complete Privacy Policy & Zero-Log Architecture',
-        url: '#/privacy',
+        url: '/privacy-center',
         description: 'Comprehensive legal documentation on our zero-retention architecture.'
       }
     ],
@@ -665,39 +670,39 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     ],
     faq: [
       {
-        question: 'Does MatrixConvert require an internet connection to convert files?',
-        answer: 'Only for the initial page load! Once the page and WebAssembly scripts are loaded in your browser, MatrixConvert functions 100% offline. You can disconnect your network cable or enable airplane mode and continue converting files without interruption.'
+        question: 'Does Mimage require an internet connection to convert files?',
+        answer: 'Only for the initial page load! Once the page and WebAssembly scripts are loaded in your browser, Mimage functions 100% offline. You can disconnect your network cable or enable airplane mode and continue converting files without interruption.'
       },
       {
         question: 'Can company employees be tracked by what file names they convert?',
         answer: 'No. File names, file sizes, and document metadata remain strictly within your local browser memory and are never transmitted to our servers or telemetry endpoints.'
       },
       {
-        question: 'How does MatrixConvert compare to desktop software like Adobe Acrobat Pro?',
-        answer: 'Adobe Acrobat Pro requires expensive per-seat licenses, gigabytes of disk space, and continuous background update services. MatrixConvert gives you instantaneous, frictionless rasterization and conversion for free right inside your web browser.'
+        question: 'How does Mimage compare to desktop software like Adobe Acrobat Pro?',
+        answer: 'Adobe Acrobat Pro requires expensive per-seat licenses, gigabytes of disk space, and continuous background update services. Mimage gives you instantaneous, frictionless rasterization and conversion for free right inside your web browser.'
       },
       {
-        question: 'Is it safe to convert bank statements and tax filings on MatrixConvert?',
-        answer: 'Yes. Because your financial documents are never uploaded to any server or third-party cloud, MatrixConvert is one of the safest free converters available anywhere on the web.'
+        question: 'Is it safe to convert bank statements and tax filings on Mimage?',
+        answer: 'Yes. Because your financial documents are never uploaded to any server or third-party cloud, Mimage is one of the safest free converters available anywhere on the web.'
       }
     ],
-    ctaText: 'Experience 100% Private Client-Side Conversion on MatrixConvert',
-    ctaLink: '#/tool/pdf-to-png'
+    ctaText: 'Experience 100% Private Client-Side Conversion on Mimage',
+    ctaLink: '/tool/pdf-to-png'
   },
   {
     id: 'post-pdf-to-svg-vector-perfection',
     slug: 'convert-pdf-to-svg-vector-perfection',
     title: 'Converting PDF to SVG Without Quality Loss: How Web Vector Parsers Render Infinite-Resolution Typography',
-    metaTitle: 'Convert PDF to SVG Vector Free | Infinite Resolution MatrixConvert',
+    metaTitle: 'Convert PDF to SVG Vector Free | Infinite Resolution Mimage',
     metaDescription: 'Extract true scalable vector paths (SVG) from PDF blueprints, logos, and charts with perfect bezier curve accuracy and zero pixelation at any display scale.',
     category: 'graphic-design',
     publishedDate: '2026-10-21',
     readTime: '13 min read (2,340 words)',
     author: {
-      name: 'Sofia Al-Mansoor',
-      role: 'Lead Vector Typography & SVG Rendering Engineer',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=250&q=80',
-      bio: 'Typography designer and W3C SVG Working Group contributor specializing in PostScript font outlines and cubic bezier curve optimization.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage specializing in vector graphics workflows, PostScript/SVG geometry, and client-side design converters.'
     },
     primaryKeyword: 'PDF to SVG converter',
     secondaryKeywords: [
@@ -708,14 +713,14 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Sejda PDF to SVG alternative'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Geometric cubic bezier curves and vector anchor points in vibrant glowing colors on dark canvas',
       caption: 'Figure 1: Mathematical bezier curves allow vector SVGs to scale infinitely without pixel blur.'
     },
     keyTakeaways: [
       'While raster images (PNG, JPEG) represent pictures as a fixed grid of color pixels, Scalable Vector Graphics (SVG) represent graphics as mathematical coordinates, bezier curves, and XML path definitions.',
       'Converting a vector PDF to PNG locks the image to a single fixed resolution; converting PDF to SVG preserves infinite scalability, editable paths, and microscopic file weights (often under 50 KB).',
-      'MatrixConvert extracts native PDF vector streams, translates TrueType/Type1 font glyphs into native <code>&lt;path&gt;</code> elements, and preserves embedded color gradients.',
+      'Mimage extracts native PDF vector streams, translates TrueType/Type1 font glyphs into native <code>&lt;path&gt;</code> elements, and preserves embedded color gradients.',
       'Extracted SVGs can be directly imported and manipulated inside Figma, Adobe Illustrator, Canva, Inkscape, or styled dynamically via CSS.'
     ],
     content: `
@@ -726,13 +731,13 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <p>By converting directly to <strong>Scalable Vector Graphics (SVG)</strong>, you retain the original mathematical bezier definitions. The asset remains 100% crisp whether viewed on an Apple Watch screen or projected across an IMAX theater wall.</p>
 
-      <h2>2. Inside the Pipeline: How MatrixConvert Translates PDF to SVG</h2>
+      <h2>2. Inside the Pipeline: How Mimage Translates PDF to SVG</h2>
       <p>Translating a compiled PDF into valid, clean, W3C-compliant SVG XML is one of the most demanding problems in computer graphics. Many cheap online converters resort to "fake vectorization"—taking a raster screenshot of the PDF and wrapping it inside an SVG <code>&lt;image&gt;</code> tag! This deceives the user with an SVG file extension while delivering none of the vector benefits.</p>
 
-      <p>MatrixConvert performs genuine, high-precision vector extraction locally in your browser:</p>
+      <p>Mimage performs genuine, high-precision vector extraction locally in your browser:</p>
       <ul>
         <li><strong>Path Reconstruction:</strong> PDF drawing operators (such as <code>m</code> for moveto, <code>l</code> for lineto, and <code>c</code> for curveto) are parsed and mapped directly to SVG <code>&lt;path d="M... C..."&gt;</code> syntax.</li>
-        <li><strong>Font Glyph to Path Translation:</strong> PDF documents frequently embed subsetted binary fonts. MatrixConvert traces the vector glyph outlines of embedded characters, ensuring that typography renders identically on any machine—even if the viewing computer lacks the original font installed!</li>
+        <li><strong>Font Glyph to Path Translation:</strong> PDF documents frequently embed subsetted binary fonts. Mimage traces the vector glyph outlines of embedded characters, ensuring that typography renders identically on any machine—even if the viewing computer lacks the original font installed!</li>
         <li><strong>Clipping Path & Mask Preservation:</strong> Complex vector illustrations use intersecting clipping paths. Our engine synthesizes these into native SVG <code>&lt;clipPath&gt;</code> and <code>&lt;mask&gt;</code> elements with clean CSS styling.</li>
         <li><strong>Color Space Normalization:</strong> CMYK colors commonly found in print PDFs are mathematically transformed into calibrated sRGB or Display-P3 color profiles for vibrant web rendering.</li>
       </ul>
@@ -747,7 +752,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
               <th class="p-3 border-b border-sky-400/30">Document Graphic</th>
               <th class="p-3 border-b border-sky-400/30">Input PDF Size</th>
               <th class="p-3 border-b border-sky-400/30">300 DPI PNG Export</th>
-              <th class="p-3 border-b border-sky-400/30">MatrixConvert SVG Export</th>
+              <th class="p-3 border-b border-sky-400/30">Mimage SVG Export</th>
               <th class="p-3 border-b border-sky-400/30">Resolution Capability</th>
             </tr>
           </thead>
@@ -778,58 +783,58 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       </div>
 
       <h2>4. Editing Your Extracted SVG in Figma, Illustrator, and Canva</h2>
-      <p>Once you extract your SVG from MatrixConvert, you gain unprecedented creative superpowers:</p>
+      <p>Once you extract your SVG from Mimage, you gain unprecedented creative superpowers:</p>
       <ol>
         <li><strong>Direct Path Manipulation in Figma:</strong> Drag the downloaded SVG onto your Figma canvas. Each shape, letter, and gradient is instantly editable as individual vector layers. You can re-color, adjust bezier handles, or extract isolated iconography in seconds.</li>
         <li><strong>Styling with CSS & Animation:</strong> Because SVG is clean XML, web developers can embed the markup directly into React, Vue, or HTML templates. You can animate stroke paths with <code>stroke-dashoffset</code>, change hover colors via CSS variables, or make charts responsive.</li>
         <li><strong>Lossless Plotter & Laser Cutting:</strong> Makers and manufacturing engineers can pipe the SVG directly into laser cutters, vinyl plotters, or CNC milling software (such as LightBurn or Cricut Design Space).</li>
       </ol>
 
-      <h2>5. How MatrixConvert Beats Sejda on PDF to SVG Conversion</h2>
+      <h2>5. How Mimage Beats Sejda on PDF to SVG Conversion</h2>
       <p>Sejda charges premium subscription rates for heavy SVG batch jobs and enforces strict hourly queue limits. Furthermore, Sejda’s SVG parser frequently flattens complex embedded curves into low-fidelity polygon segments to reduce server compute loads.</p>
 
-      <p>Because MatrixConvert runs entirely on your client machine's GPU and multi-core CPU, we do not need to cut mathematical corners. You get genuine cubic bezier interpolation, full embedded font preservation, and 100% free unlimited batch processing with zero file size restrictions!</p>
+      <p>Because Mimage runs entirely on your client machine's GPU and multi-core CPU, we do not need to cut mathematical corners. You get genuine cubic bezier interpolation, full embedded font preservation, and 100% free unlimited batch processing with zero file size restrictions!</p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Vector graphic editing software showing bezier points on typographic logo',
         caption: 'Figure 2: True vector paths allow designers to edit individual anchor points in Figma.',
         placement: 'After Section 1 (The Vector Advantage)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Clean SVG XML code syntax highlighted in modern code editor',
         caption: 'Figure 3: Semantic SVG markup enables direct CSS styling and responsive web animation.',
         placement: 'After Section 2 (Inside Pipeline)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'File size comparison graph showing SVG 98 percent smaller than raster PNG',
         caption: 'Figure 4: Microscopic SVG payloads dramatically accelerate mobile page load times.',
         placement: 'After Section 3 (Benchmarks)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Creative designer working on multi-screen setup editing vector blueprints',
-        caption: 'Figure 5: Professional vector workflows powered by MatrixConvert in-browser extraction.',
+        caption: 'Figure 5: Professional vector workflows powered by Mimage in-browser extraction.',
         placement: 'After Section 4 (Editing SVG)'
       }
     ],
     internalLinks: [
       {
         anchor: 'Try PDF to SVG Converter Now',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract mathematical vector paths from any PDF document without quality degradation.'
       },
       {
         anchor: 'Convert SVG to High-Res PNG',
-        url: '#/tool/svg-to-png',
+        url: '/tool/svg-to-png',
         description: 'Render your vector graphics into high-DPI raster images for web and print.'
       },
       {
         anchor: 'Explore PDF to High-DPI PNG Guide',
-        url: '#/blog/ultimate-guide-pdf-to-png-300-dpi',
+        url: '/blog/ultimate-guide-pdf-to-png-300-dpi',
         description: 'Learn when to choose 300 DPI PNG vs vector SVG for your document workflow.'
       }
     ],
@@ -853,23 +858,23 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Does converting PDF to SVG convert scanned physical documents into vectors?',
-        answer: 'If the PDF contains scanned photos of paper, the output SVG will contain an embedded image because physical scans lack mathematical vector paths. However, if the PDF was generated digitally (from Word, Figma, Illustrator, AutoCAD, or LaTeX), MatrixConvert extracts genuine vector curves.'
+        answer: 'If the PDF contains scanned photos of paper, the output SVG will contain an embedded image because physical scans lack mathematical vector paths. However, if the PDF was generated digitally (from Word, Figma, Illustrator, AutoCAD, or LaTeX), Mimage extracts genuine vector curves.'
       },
       {
         question: 'Will text inside the converted SVG remain editable?',
-        answer: 'By default, MatrixConvert converts font glyphs into precise vector paths so that the visual appearance is 100% identical regardless of whether the viewer has the font installed. If you need live editable text, you can open the SVG in Illustrator or Figma and replace text layers.'
+        answer: 'By default, Mimage converts font glyphs into precise vector paths so that the visual appearance is 100% identical regardless of whether the viewer has the font installed. If you need live editable text, you can open the SVG in Illustrator or Figma and replace text layers.'
       },
       {
         question: 'Can I batch convert multi-page PDF documents to separate SVG files?',
-        answer: 'Yes! MatrixConvert automatically splits multi-page PDFs into numbered individual SVG files (e.g., page-1.svg, page-2.svg) and packages them into a convenient ZIP archive.'
+        answer: 'Yes! Mimage automatically splits multi-page PDFs into numbered individual SVG files (e.g., page-1.svg, page-2.svg) and packages them into a convenient ZIP archive.'
       },
       {
         question: 'Is there any cost or watermark added to the SVG files?',
-        answer: 'No. MatrixConvert is 100% free with zero watermarks, zero email registrations, and zero usage limits.'
+        answer: 'No. Mimage is 100% free with zero watermarks, zero email registrations, and zero usage limits.'
       }
     ],
     ctaText: 'Convert Your PDF to Scalable SVG Vectors Free',
-    ctaLink: '#/tool/pdf-to-svg'
+    ctaLink: '/tool/pdf-to-svg'
   },
 
   // 5. Fill & Sign PDF Blog
@@ -883,10 +888,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-28',
     readTime: '11 min read (2,300 words)',
     author: {
-      name: 'Victoria Vance',
-      role: 'Legal Tech & Workflow Strategist',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-      bio: 'Former corporate legal ops specialist advising startups on digital signatures, ESIGN Act compliance, and paperless business operations.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage building browser-local PDF and image workflows for freelancers, legal operations, and everyday users.'
     },
     primaryKeyword: 'fill and sign pdf',
     secondaryKeywords: [
@@ -897,12 +902,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'sign pdf document legally'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Signing a legal PDF contract online with digital pen and electronic signature pad',
       caption: 'Digital e-signatures eliminate printing, scanning, and courier fees while complying with federal ESIGN standards.'
     },
     keyTakeaways: [
-      'Electronic signatures created on client-side web tools carry equal legal validity to physical ink signatures under the U.S. ESIGN Act and EU eIDAS regulations.',
+      'Visual signature placement adds your typed, drawn, or uploaded signature image into a PDF, though high-stakes contracts may require a cryptographic certificate from a qualified trust provider.',
       'Unlike legacy SaaS tools that charge $15 to $40 per user per month (like Adobe Acrobat and DocuSign), modern WebAssembly utilities let you sign unlimited documents for free.',
       'Client-side PDF signing executes entirely inside your browser memory—your confidential agreements never upload to third-party cloud servers or external databases.',
       'You can sign using three distinct methods: typing in authentic cursive script, drawing with a mouse or trackpad, or uploading an existing high-resolution signature image.'
@@ -924,7 +929,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Three Ways to Create an Electronic Signature Online</h2>
       <p>
-        A professional e-signing tool should accommodate different signers' preferences and hardware setups. MatrixConvert provides three built-in signature generation pathways:
+        A professional e-signing tool should accommodate different signers' preferences and hardware setups. Mimage provides three built-in signature generation pathways:
       </p>
 
       <h3>1. Type in Cursive Calligraphy</h3>
@@ -953,7 +958,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Step-by-Step: How to Sign a PDF in 30 Seconds</h2>
       <ol>
-        <li><strong>Upload your document:</strong> Navigate to the <a href="#/tool/fill-and-sign-pdf" class="text-sky-400 font-bold hover:underline">Fill & Sign PDF tool</a> and drag your PDF into the processing zone.</li>
+        <li><strong>Upload your document:</strong> Navigate to the <a href="/tool/fill-and-sign-pdf" class="text-sky-400 font-bold hover:underline">Fill & Sign PDF tool</a> and drag your PDF into the processing zone.</li>
         <li><strong>Create your signature:</strong> Click <em>+ Create Signature</em> and choose whether to type, draw, or upload your autograph.</li>
         <li><strong>Place & Resize:</strong> A movable signature box appears over your document preview. Drag it to the exact signature line on your page and adjust the size slider as needed.</li>
         <li><strong>Add an Automated Date Stamp:</strong> Check the "Include Date" option to stamp today's date directly beside your name in clean standard notation.</li>
@@ -965,12 +970,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         When you sign a PDF through traditional cloud services, your document is transmitted across public networks and stored on remote multi-tenant databases. If you are executing an employment contract containing your Social Security Number, a financial loan disclosure, or a confidential Non-Disclosure Agreement (NDA), cloud storage introduces undeniable compliance and hacking risks.
       </p>
       <p>
-        MatrixConvert utilizes <strong>pure client-side WebAssembly</strong>. Your files are decrypted, modified, and saved exclusively in your local device's random access memory (RAM). The moment you close the tab, the data disappears from memory. No server logs exist, no third parties inspect your agreements, and your data cannot be breached because it was never collected.
+        Mimage utilizes <strong>pure client-side WebAssembly</strong>. Your files are decrypted, modified, and saved exclusively in your local device's random access memory (RAM). The moment you close the tab, the data disappears from memory. No server logs exist, no third parties inspect your agreements, and your data cannot be breached because it was never collected.
       </p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Contract document showing digital signature and date stamp on signature line',
         caption: 'Placing signatures and date stamps accurately ensures corporate legal compliance.',
         placement: 'after-step-by-step'
@@ -979,17 +984,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Fill & Sign PDF Online Tool',
-        url: '#/tool/fill-and-sign-pdf',
+        url: '/tool/fill-and-sign-pdf',
         description: 'Interactive client-side PDF signature studio with type, draw, and upload modes.'
       },
       {
         anchor: 'Crop PDF Margins',
-        url: '#/tool/crop-pdf-margins',
+        url: '/tool/crop-pdf-margins',
         description: 'Trim excess scanner margins before sending finalized contracts.'
       },
       {
         anchor: 'Merge PDF Files',
-        url: '#/tool/merge-pdf',
+        url: '/tool/merge-pdf',
         description: 'Combine signed agreements with exhibits and attachments into a single file.'
       }
     ],
@@ -1007,20 +1012,20 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     ],
     faq: [
       {
-        question: 'Are electronic signatures created on MatrixConvert legally valid?',
-        answer: 'Yes. Under the U.S. ESIGN Act, UETA, and EU eIDAS regulations, Standard Electronic Signatures (SES) are legally binding for general commercial agreements, freelancer contracts, non-disclosure agreements, and standard business forms.'
+        question: 'Are electronic signatures created on Mimage legally valid?',
+        answer: 'Yes. Under the U.S. ESIGN Act, UETA, and EU eIDAS regulations, Standard electronic marks can indicate consent on routine forms under frameworks like ESIGN and UETA, while Mimage embeds visual signatures locally without issuing a cryptographic digital certificate or guaranteeing legal enforceability.'
       },
       {
         question: 'Is there a limit on how many documents I can sign per day?',
-        answer: 'No! Unlike Sejda (limited to 3 tasks/day) or DocuSign (limited envelopes per year), MatrixConvert is 100% free with unlimited signatures.'
+        answer: 'No! Unlike Sejda (limited to 3 tasks/day) or DocuSign (limited envelopes per year), Mimage is 100% free with unlimited signatures.'
       },
       {
-        question: 'Does MatrixConvert save a copy of my signed contract?',
+        question: 'Does Mimage save a copy of my signed contract?',
         answer: 'Never. Processing occurs 100% client-side in your browser memory. We have no servers storing your files.'
       }
     ],
     ctaText: 'Fill & Sign Your PDF Online Free Now',
-    ctaLink: '#/tool/fill-and-sign-pdf'
+    ctaLink: '/tool/fill-and-sign-pdf'
   },
 
   // 6. Delete PDF Pages Blog
@@ -1034,10 +1039,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-27',
     readTime: '9 min read (1,950 words)',
     author: {
-      name: 'Marcus Sterling',
-      role: 'Principal Systems Architect',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      bio: 'Senior document infrastructure engineer specializing in client-side WebAssembly tools and PDF structure optimization.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and developer of Mimage focused on client-side WebAssembly tools and reliable PDF structure workflows.'
     },
     primaryKeyword: 'delete pdf pages',
     secondaryKeywords: [
@@ -1048,7 +1053,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'extract clean pdf'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Document organizer showing paper pages sorted and unwanted sheets being separated',
       caption: 'Removing unwanted slip sheets and duplicate pages reduces PDF file size and improves presentation quality.'
     },
@@ -1056,7 +1061,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Multi-page office scans often introduce blank separator pages, duplicate sheets, and irrelevant cover memos that bloat file sizes and look unprofessional.',
       'Traditional desktop PDF tools require expensive subscriptions just to delete a single page from a document.',
       'Visual thumbnail grid selectors allow you to preview every page before deleting, preventing accidental removal of important content.',
-      'MatrixConvert modifies the internal PDF page tree structure without re-compressing images, ensuring zero degradation to the pages you keep.'
+      'Mimage modifies the internal PDF page tree structure without re-compressing images, ensuring zero degradation to the pages you keep.'
     ],
     content: `
       <h2>The Problem with Cluttered, Bloated PDF Documents</h2>
@@ -1070,15 +1075,15 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         Unfortunately, if you open a PDF in basic operating system viewers like Apple Preview or Google Chrome, deleting pages is either completely unsupported or unintuitive. Adobe Acrobat Pro charges a steep recurring fee just to access basic page organization tools.
       </p>
 
-      <h2>How MatrixConvert Makes Page Deletion Instant & Visual</h2>
+      <h2>How Mimage Makes Page Deletion Instant & Visual</h2>
       <p>
-        Our <a href="#/tool/delete-pdf-pages" class="text-sky-400 font-bold hover:underline">Delete PDF Pages tool</a> was designed specifically around visual clarity:
+        Our <a href="/tool/delete-pdf-pages" class="text-sky-400 font-bold hover:underline">Delete PDF Pages tool</a> was designed specifically around visual clarity:
       </p>
       <ul>
         <li><strong>Interactive Thumbnail Grid:</strong> Upload any PDF, and every page is rendered in high-contrast thumbnails so you can visually confirm exactly what is on each page before deleting.</li>
         <li><strong>One-Click Red Card Tagging:</strong> Simply click any page to tag it with a prominent red "Will Be Deleted" overlay. Click it again if you change your mind.</li>
         <li><strong>Batch Removal:</strong> Remove 1 page or 50 pages simultaneously. The page counter continuously indicates how many pages will remain in your output file.</li>
-        <li><strong>Lossless Vector Retention:</strong> Unlike tools that convert your document to blurry raster images, MatrixConvert uses <code>pdf-lib</code> to simply update the internal PDF Page Tree dictionary. The preserved pages retain 100% of their crisp vector text, clickable links, and embedded images.</li>
+        <li><strong>Lossless Vector Retention:</strong> Unlike tools that convert your document to blurry raster images, Mimage uses <code>pdf-lib</code> to simply update the internal PDF Page Tree dictionary. The preserved pages retain 100% of their crisp vector text, clickable links, and embedded images.</li>
       </ul>
 
       <h2>Step-by-Step: Removing Unwanted Pages in 3 Simple Steps</h2>
@@ -1110,7 +1115,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1568667256549-094345857637?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'High speed document scanner in an office scanning paperwork',
         caption: 'High-speed automated document feeders frequently introduce blank slip sheets that need deletion.',
         placement: 'after-step-by-step'
@@ -1119,17 +1124,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Delete PDF Pages Tool',
-        url: '#/tool/delete-pdf-pages',
+        url: '/tool/delete-pdf-pages',
         description: 'Interactive visual page deletion tool with one-click thumbnail removal.'
       },
       {
         anchor: 'Split & Extract PDF Pages',
-        url: '#/tool/split-pdf',
+        url: '/tool/split-pdf',
         description: 'Extract specific page numbers or ranges into separate standalone files.'
       },
       {
         anchor: 'Rotate PDF Pages',
-        url: '#/tool/rotate-pdf',
+        url: '/tool/rotate-pdf',
         description: 'Straighten upside-down pages while organizing your document.'
       }
     ],
@@ -1143,7 +1148,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Will deleting pages blur or decrease the quality of the remaining pages?',
-        answer: 'Not at all. MatrixConvert manipulates the PDF page tree index directly at the byte level without re-rendering or rasterizing your content. All original fonts, vector curves, and high-resolution images remain pristine.'
+        answer: 'Not at all. Mimage manipulates the PDF page tree index directly at the byte level without re-rendering or rasterizing your content. All original fonts, vector curves, and high-resolution images remain pristine.'
       },
       {
         question: 'Can I delete multiple non-consecutive pages at once?',
@@ -1155,7 +1160,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Delete Unwanted PDF Pages Free Now',
-    ctaLink: '#/tool/delete-pdf-pages'
+    ctaLink: '/tool/delete-pdf-pages'
   },
 
   // 7. Watermark PDF Blog
@@ -1169,10 +1174,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-26',
     readTime: '10 min read (2,100 words)',
     author: {
-      name: 'Victoria Vance',
-      role: 'Legal Tech & Workflow Strategist',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-      bio: 'Former corporate legal ops specialist advising startups on digital signatures, ESIGN Act compliance, and paperless business operations.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage building browser-local PDF and image workflows for freelancers, legal operations, and everyday users.'
     },
     primaryKeyword: 'watermark pdf',
     secondaryKeywords: [
@@ -1183,7 +1188,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'free pdf watermarker'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Business contract stamped with confidential security mark across the page',
       caption: 'Visible watermarks deter unauthorized redistribution and clarify document draft status.'
     },
@@ -1191,7 +1196,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Visible text watermarks like CONFIDENTIAL, DRAFT, SAMPLE, and PRIVATE PREVIEW are standard legal and corporate protections against unauthorized leaks.',
       'Proper watermarks must balance legibility: strong enough to deter copying, but subtle enough to keep underlying text easily readable.',
       'Client-side watermarking ensures that sensitive pre-release manuscripts, financial audits, and trade secret specifications never leave your computer.',
-      'MatrixConvert allows full customization of text, angle (-45° diagonal or horizontal), opacity (10% to 80%), and color.'
+      'Mimage allows full customization of text, angle (-45° diagonal or horizontal), opacity (10% to 80%), and color.'
     ],
     content: `
       <h2>Why Watermarking Is Crucial for Modern Business Security</h2>
@@ -1218,7 +1223,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Step-by-Step: How to Watermark Any PDF in Seconds</h2>
       <ol>
-        <li><strong>Upload Your File:</strong> Open the <a href="#/tool/watermark-pdf" class="text-sky-400 font-bold hover:underline">Watermark PDF tool</a> and drag your document into the browser window.</li>
+        <li><strong>Upload Your File:</strong> Open the <a href="/tool/watermark-pdf" class="text-sky-400 font-bold hover:underline">Watermark PDF tool</a> and drag your document into the browser window.</li>
         <li><strong>Type Your Custom Text:</strong> Enter terms like <code>CONFIDENTIAL</code>, <code>PREVIEW ONLY</code>, <code>INTERNAL REVIEW</code>, or your company name.</li>
         <li><strong>Pick Your Styling:</strong>
           <ul>
@@ -1232,7 +1237,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Business executive reviewing watermarked draft contract',
         caption: 'Diagonal watermarks prevent recipients from cropping out ownership notices.',
         placement: 'after-step-by-step'
@@ -1241,17 +1246,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Watermark PDF Tool',
-        url: '#/tool/watermark-pdf',
+        url: '/tool/watermark-pdf',
         description: 'Interactive client-side PDF watermark stamper with real-time preview.'
       },
       {
         anchor: 'Fill & Sign PDF',
-        url: '#/tool/fill-and-sign-pdf',
+        url: '/tool/fill-and-sign-pdf',
         description: 'Sign approved final drafts with legally binding electronic signatures.'
       },
       {
         anchor: 'Delete PDF Pages',
-        url: '#/tool/delete-pdf-pages',
+        url: '/tool/delete-pdf-pages',
         description: 'Remove internal memo pages before distributing watermarked files.'
       }
     ],
@@ -1265,7 +1270,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Can someone remove the watermark if they have a PDF reader?',
-        answer: 'MatrixConvert embeds the watermark directly into the PDF content stream on every page. Standard viewers cannot toggle or delete the text without professional vector editing tools.'
+        answer: 'Mimage embeds the watermark directly into the PDF content stream on every page. Standard viewers cannot toggle or delete the text without professional vector editing tools.'
       },
       {
         question: 'Can I apply the watermark to multi-page documents all at once?',
@@ -1277,7 +1282,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Watermark Your PDF Online Free Now',
-    ctaLink: '#/tool/watermark-pdf'
+    ctaLink: '/tool/watermark-pdf'
   },
 
   // 8. Merge & Split PDF Blog
@@ -1291,10 +1296,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-25',
     readTime: '12 min read (2,400 words)',
     author: {
-      name: 'Marcus Sterling',
-      role: 'Principal Systems Architect',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      bio: 'Senior document infrastructure engineer specializing in client-side WebAssembly tools and PDF structure optimization.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and developer of Mimage focused on client-side WebAssembly tools and reliable PDF structure workflows.'
     },
     primaryKeyword: 'merge and split pdf',
     secondaryKeywords: [
@@ -1305,7 +1310,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'unlimited pdf merger'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Stacked document binders and organized folders representing merged and separated PDF archives',
       caption: 'Merging and splitting PDF files is fundamental to modern digital document management.'
     },
@@ -1332,7 +1337,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         When combining separate PDF files, sequence is everything. A client will not read your proposal if the pricing page appears before the executive summary.
       </p>
       <p>
-        Using our dedicated <a href="#/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>:
+        Using our dedicated <a href="/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>:
       </p>
       <ol>
         <li><strong>Upload All Files at Once:</strong> Select 2, 5, or 20 PDF documents simultaneously.</li>
@@ -1342,7 +1347,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>How to Split a PDF & Extract Page Ranges</h2>
       <p>
-        When you need to pull specific chapters or evidence pages out of a massive document, you have two options using our <a href="#/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split PDF tool</a>:
+        When you need to pull specific chapters or evidence pages out of a massive document, you have two options using our <a href="/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split PDF tool</a>:
       </p>
       <ul>
         <li><strong>Visual Thumbnail Selection:</strong> Browse through rendered thumbnail cards of every page in your document. Click the exact pages you want to keep.</li>
@@ -1354,7 +1359,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         Cloud-based PDF mergers (like Smallpdf, iLovePDF, or Sejda) require you to upload hundreds of megabytes over your home or office internet connection before processing can even begin. If your internet connection drops midway through uploading a 50 MB scan, the process fails.
       </p>
       <p>
-        Because MatrixConvert runs <strong>100% locally in your browser sandbox via WebAssembly</strong>:
+        Because Mimage runs <strong>100% locally in your browser sandbox via WebAssembly</strong>:
       </p>
       <ul>
         <li><strong>Zero Upload Latency:</strong> File processing begins instantly because no data travels over the internet.</li>
@@ -1364,7 +1369,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Clean modern office desk with organized digital workstation',
         caption: 'Consolidating client documents into a unified PDF improves communication and workflow efficiency.',
         placement: 'after-step-by-step'
@@ -1373,17 +1378,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Merge PDF Files Tool',
-        url: '#/tool/merge-pdf',
+        url: '/tool/merge-pdf',
         description: 'Unlimited client-side PDF merger with visual reordering.'
       },
       {
         anchor: 'Split & Extract PDF Pages',
-        url: '#/tool/split-pdf',
+        url: '/tool/split-pdf',
         description: 'Visual range extractor for separating multi-page documents.'
       },
       {
         anchor: 'Fill & Sign PDF',
-        url: '#/tool/fill-and-sign-pdf',
+        url: '/tool/fill-and-sign-pdf',
         description: 'Add legal signatures to newly merged contracts.'
       }
     ],
@@ -1397,7 +1402,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Is there a limit on how many PDF files I can merge at once?',
-        answer: 'No! MatrixConvert does not impose artificial file count or size caps. You can merge as many documents as your device memory can accommodate.'
+        answer: 'No! Mimage does not impose artificial file count or size caps. You can merge as many documents as your device memory can accommodate.'
       },
       {
         question: 'Can I reorder pages after uploading multiple PDFs?',
@@ -1409,7 +1414,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Merge or Split Your PDF Files Free Now',
-    ctaLink: '#/tool/merge-pdf'
+    ctaLink: '/tool/merge-pdf'
   },
 
   // 9. Dedicated: Merge PDF Files
@@ -1423,10 +1428,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-31',
     readTime: '13 min read (2,600 words)',
     author: {
-      name: 'Marcus Sterling',
-      role: 'Principal Systems Architect',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      bio: 'Senior document infrastructure engineer specializing in client-side WebAssembly tools and PDF structure optimization.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and developer of Mimage focused on client-side WebAssembly tools and reliable PDF structure workflows.'
     },
     primaryKeyword: 'merge pdf files',
     secondaryKeywords: [
@@ -1438,7 +1443,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'merge pdf without adobe acrobat'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Neatly organized binder and document folders representing merged PDF files and unified reports',
       caption: 'Merging multiple PDF files into one cohesive master document streamlines business communication and submission workflows.'
     },
@@ -1484,7 +1489,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         </li>
       </ol>
       <p>
-        MatrixConvert solves this paradigm completely by shifting all document compilation directly into your local browser sandbox through high-performance WebAssembly.
+        Mimage solves this paradigm completely by shifting all document compilation directly into your local browser sandbox through high-performance WebAssembly.
       </p>
 
       <h2>How Client-Side PDF Merging Works Under the Hood</h2>
@@ -1498,7 +1503,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Resource Dictionaries:</strong> Embedded font subsets (TrueType, OpenType, Type 1) and color spaces.</li>
       </ul>
       <p>
-        When you use MatrixConvert's <a href="#/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>, our <code>pdf-lib</code> WebAssembly engine reads the binary ArrayBuffer of each source document directly inside your browser. It creates a new master catalog, clones the page dictionaries and content streams, recalculates object references to prevent identifier collisions, and compiles the unified document in device memory.
+        When you use Mimage's <a href="/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>, our <code>pdf-lib</code> WebAssembly engine reads the binary ArrayBuffer of each source document directly inside your browser. It creates a new master catalog, clones the page dictionaries and content streams, recalculates object references to prevent identifier collisions, and compiles the unified document in device memory.
       </p>
       <p>
         Because this computation happens locally on your computer's CPU, there is <strong>zero upload delay</strong>, <strong>no file count ceiling</strong>, and <strong>zero risk of external eavesdropping</strong>.
@@ -1510,7 +1515,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       </p>
       <ol>
         <li>
-          <strong>Select or Drag Your PDF Files:</strong> Navigate to the <a href="#/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>. Drag all the files you want to combine directly into the upload area, or click "Click to select PDF files" to batch-select documents from your folder.
+          <strong>Select or Drag Your PDF Files:</strong> Navigate to the <a href="/tool/merge-pdf" class="text-sky-400 font-bold hover:underline">Merge PDF Files tool</a>. Drag all the files you want to combine directly into the upload area, or click "Click to select PDF files" to batch-select documents from your folder.
         </li>
         <li>
           <strong>Reorder Documents into Preferred Sequence:</strong> The visual file queue displays the exact name and file size of each uploaded PDF. Use the intuitive <strong>Up (▲)</strong> and <strong>Down (▼)</strong> arrow buttons to arrange your documents in logical reading order (e.g. Cover Letter first, followed by Resume, then Recommendation Letters). If you accidentally included the wrong file, simply click the red trash icon to remove it.
@@ -1548,13 +1553,13 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         </div>
       </div>
 
-      <h2>Document Assembly Comparison: MatrixConvert vs. Competitors</h2>
+      <h2>Document Assembly Comparison: Mimage vs. Competitors</h2>
       <div class="overflow-x-auto my-6">
         <table class="w-full text-left text-xs font-mono border border-sky-400/30 rounded-xl overflow-hidden">
           <thead class="bg-sky-950/80 text-sky-300 border-b border-sky-400/30">
             <tr>
               <th class="p-3">Feature</th>
-              <th class="p-3 text-sky-400 font-bold">MatrixConvert</th>
+              <th class="p-3 text-sky-400 font-bold">Mimage</th>
               <th class="p-3 text-slate-400">Sejda</th>
               <th class="p-3 text-slate-400">Adobe Acrobat Online</th>
             </tr>
@@ -1590,15 +1595,15 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Conclusion & Best Practices for Merging PDFs</h2>
       <p>
-        Merging separate PDFs into one document is one of the highest-leverage productivity habits you can adopt. Before merging, ensure all pages are right-side up using our <a href="#/tool/rotate-pdf" class="text-sky-400 font-bold hover:underline">Rotate PDF Pages tool</a> and trim unwanted scanner borders with our <a href="#/tool/crop-pdf-margins" class="text-sky-400 font-bold hover:underline">Crop PDF Margins tool</a>.
+        Merging separate PDFs into one document is one of the highest-leverage productivity habits you can adopt. Before merging, ensure all pages are right-side up using our <a href="/tool/rotate-pdf" class="text-sky-400 font-bold hover:underline">Rotate PDF Pages tool</a> and trim unwanted scanner borders with our <a href="/tool/crop-pdf-margins" class="text-sky-400 font-bold hover:underline">Crop PDF Margins tool</a>.
       </p>
       <p>
-        Whenever you have multiple documents to combine, avoid recurring subscription paywalls and maintain complete data confidentiality by utilizing MatrixConvert's dedicated browser-first utility.
+        Whenever you have multiple documents to combine, avoid recurring subscription paywalls and maintain complete data confidentiality by utilizing Mimage's dedicated browser-first utility.
       </p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Professional desk setup showing laptop reviewing merged PDF reports',
         caption: 'Arranging documents logically ensures seamless reading and high compliance acceptance.',
         placement: 'after-step-by-step'
@@ -1607,22 +1612,22 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Merge PDF Files Tool',
-        url: '#/tool/merge-pdf',
+        url: '/tool/merge-pdf',
         description: 'Combine unlimited PDF documents with intuitive sequence reordering.'
       },
       {
         anchor: 'Split & Extract PDF Pages',
-        url: '#/tool/split-pdf',
+        url: '/tool/split-pdf',
         description: 'Separate large multi-page PDFs into standalone files.'
       },
       {
         anchor: 'Fill & Sign PDF',
-        url: '#/tool/fill-and-sign-pdf',
+        url: '/tool/fill-and-sign-pdf',
         description: 'Sign your compiled contracts with legally binding digital autographs.'
       },
       {
         anchor: 'Rotate PDF Pages',
-        url: '#/tool/rotate-pdf',
+        url: '/tool/rotate-pdf',
         description: 'Straighten sideways scans before combining into master documents.'
       }
     ],
@@ -1641,11 +1646,11 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     faq: [
       {
         question: 'Is there any limit on how many PDF files I can merge at once?',
-        answer: 'No! Unlike commercial SaaS platforms that cap you at 3 to 10 files, MatrixConvert operates client-side in your web browser memory. You can merge as many documents as your device RAM can hold.'
+        answer: 'No! Unlike commercial SaaS platforms that cap you at 3 to 10 files, Mimage operates client-side in your web browser memory. You can merge as many documents as your device RAM can hold.'
       },
       {
         question: 'Does merging compress or degrade the quality of images inside my PDFs?',
-        answer: 'Never. MatrixConvert performs a direct object-level page tree merge. It transfers original raster photos, vector graphics, and font dictionaries byte-for-byte without re-encoding or compressing them.'
+        answer: 'Never. Mimage performs a direct object-level page tree merge. It transfers original raster photos, vector graphics, and font dictionaries byte-for-byte without re-encoding or compressing them.'
       },
       {
         question: 'Can I reorder the sequence of files before combining them?',
@@ -1657,7 +1662,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Merge Your PDF Files Free & Privately Now',
-    ctaLink: '#/tool/merge-pdf'
+    ctaLink: '/tool/merge-pdf'
   },
 
   // 10. Dedicated: Split & Extract PDF Pages
@@ -1671,10 +1676,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-31',
     readTime: '12 min read (2,450 words)',
     author: {
-      name: 'Victoria Vance',
-      role: 'Legal Tech & Workflow Strategist',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-      bio: 'Former corporate legal ops specialist advising startups on digital signatures, ESIGN Act compliance, and paperless business operations.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage building browser-local PDF and image workflows for freelancers, legal operations, and everyday users.'
     },
     primaryKeyword: 'split and extract pdf pages',
     secondaryKeywords: [
@@ -1686,14 +1691,14 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'extract single page from pdf'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Stack of document binders and individual sheets separated cleanly on a modern desk',
       caption: 'Extracting targeted pages from massive PDF reports allows effortless sharing and precision collaboration.'
     },
     keyTakeaways: [
       'Extracting specific pages or chapters from 100+ page documents eliminates email file size bounces and protects irrelevant confidential data.',
       'Most standard PDF viewers (like Chrome or Apple Preview) lack intuitive visual page range splitters or force users through confusing print-to-PDF workarounds.',
-      'MatrixConvert provides two flexible extraction methods: an interactive visual thumbnail gallery and custom range syntax (e.g. 1-3, 5, 8-12).',
+      'Mimage provides two flexible extraction methods: an interactive visual thumbnail gallery and custom range syntax (e.g. 1-3, 5, 8-12).',
       'Direct binary extraction preserves font subsets, interactive hyperlinks, and original high-DPI raster graphics without rasterization blur.',
       'Client-side execution guarantees that legal depositions, medical histories, and proprietary research never leak to third-party cloud servers.'
     ],
@@ -1731,12 +1736,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         </li>
       </ol>
       <p>
-        Using a purpose-built client-side tool like MatrixConvert's <a href="#/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split & Extract PDF Pages tool</a> bypasses the print driver entirely. It extracts the raw underlying PDF object streams, preserving 100% of the document's original vector fidelity, interactive metadata, and font definitions.
+        Using a purpose-built client-side tool like Mimage's <a href="/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split & Extract PDF Pages tool</a> bypasses the print driver entirely. It extracts the raw underlying PDF object streams, preserving 100% of the document's original vector fidelity, interactive metadata, and font definitions.
       </p>
 
-      <h2>Two Intuitive Ways to Extract Pages in MatrixConvert</h2>
+      <h2>Two Intuitive Ways to Extract Pages in Mimage</h2>
       <p>
-        Every user has different preferences depending on the size of their document. MatrixConvert provides two powerful selection modes:
+        Every user has different preferences depending on the size of their document. Mimage provides two powerful selection modes:
       </p>
 
       <h3>Mode 1: The Interactive Visual Thumbnail Grid</h3>
@@ -1757,7 +1762,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <h2>Step-by-Step Walkthrough: How to Split & Extract Pages</h2>
       <ol>
         <li>
-          <strong>Upload Your Document:</strong> Open the <a href="#/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split PDF tool</a> and drop your multi-page document into the upload window.
+          <strong>Upload Your Document:</strong> Open the <a href="/tool/split-pdf" class="text-sky-400 font-bold hover:underline">Split PDF tool</a> and drop your multi-page document into the upload window.
         </li>
         <li>
           <strong>Pick Your Pages:</strong> Click the thumbnails directly or enter your desired page numbers into the Range input box. You can also click <em>Select All</em> or <em>Deselect All</em> to quickly toggle bulk sets.
@@ -1797,7 +1802,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Security & Confidentiality: The Zero-Knowledge Advantage</h2>
       <p>
-        Because MatrixConvert runs <strong>exclusively inside your browser memory via WebAssembly</strong>, your sensitive files are never uploaded to our servers, stored on Amazon AWS buckets, or processed by remote algorithms.
+        Because Mimage runs <strong>exclusively inside your browser memory via WebAssembly</strong>, your sensitive files are never uploaded to our servers, stored on Amazon AWS buckets, or processed by remote algorithms.
       </p>
       <p>
         Whether you are handling confidential HIPAA medical files, proprietary financial projections, or classified enterprise reports, you can split and extract pages with total confidence that your data remains 100% private and protected from third-party interception.
@@ -1805,7 +1810,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Clean minimalist office desk setup with tablet showing extracted PDF pages',
         caption: 'Extracting targeted pages makes reading and annotating on tablets effortless.',
         placement: 'after-step-by-step'
@@ -1814,22 +1819,22 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Split & Extract PDF Pages Tool',
-        url: '#/tool/split-pdf',
+        url: '/tool/split-pdf',
         description: 'Visual page range extractor with thumbnail previews and instant download.'
       },
       {
         anchor: 'Merge PDF Files',
-        url: '#/tool/merge-pdf',
+        url: '/tool/merge-pdf',
         description: 'Recombine extracted pages with other supporting documents.'
       },
       {
         anchor: 'Delete PDF Pages',
-        url: '#/tool/delete-pdf-pages',
+        url: '/tool/delete-pdf-pages',
         description: 'Quickly discard unwanted pages from multi-page documents.'
       },
       {
         anchor: 'PDF to Text Extractor',
-        url: '#/tool/pdf-to-text',
+        url: '/tool/pdf-to-text',
         description: 'Extract raw selectable text from your isolated PDF pages.'
       }
     ],
@@ -1852,19 +1857,19 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Does extracting pages delete or modify my original PDF file?',
-        answer: 'Not at all. Your original file remains untouched on your computer. MatrixConvert creates an entirely new standalone PDF containing only the pages you selected.'
+        answer: 'Not at all. Your original file remains untouched on your computer. Mimage creates an entirely new standalone PDF containing only the pages you selected.'
       },
       {
         question: 'Does the extracted PDF retain clickable links and vector fonts?',
-        answer: 'Yes! Because MatrixConvert copies the native PDF object streams directly rather than rasterizing pages into images, all original vector typography, font definitions, and clickable links remain fully functional.'
+        answer: 'Yes! Because Mimage copies the native PDF object streams directly rather than rasterizing pages into images, all original vector typography, font definitions, and clickable links remain fully functional.'
       },
       {
         question: 'Is there a limit on how many pages a PDF can have?',
-        answer: 'No! MatrixConvert can render and split PDFs of 50, 100, or several hundred pages directly in your browser without artificial page limits.'
+        answer: 'No! Mimage can render and split PDFs of 50, 100, or several hundred pages directly in your browser without artificial page limits.'
       }
     ],
     ctaText: 'Split & Extract Your PDF Pages Free Now',
-    ctaLink: '#/tool/split-pdf'
+    ctaLink: '/tool/split-pdf'
   },
 
   // 11. Dedicated: Why Converting Heavy PDF to Lightweight PNG/WebP Is Essential
@@ -1878,10 +1883,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-31',
     readTime: '13 min read (2,650 words)',
     author: {
-      name: 'Victoria Vance',
-      role: 'Legal Tech & Workflow Strategist',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-      bio: 'Former corporate legal ops specialist advising startups on digital signatures, ESIGN Act compliance, and paperless business operations.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage building browser-local PDF and image workflows for freelancers, legal operations, and everyday users.'
     },
     primaryKeyword: 'convert pdf to lightweight png',
     secondaryKeywords: [
@@ -1893,7 +1898,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'core web vitals pdf optimization'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Analytics dashboard and high performance web speed scores indicating fast page loading',
       caption: 'Converting bulky PDF embeds to ultra-fast lightweight PNG and WebP graphics slashes page payload by over 80%.'
     },
@@ -1902,7 +1907,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Converting heavy multi-megabyte PDF pages into optimized PNG or next-gen WebP images reduces transfer payloads by 75% to 90% without visible fidelity loss.',
       'Lightweight PNGs support true 8-bit alpha transparency, enabling clean visual overlays in pitch decks, Canva layouts, Figma wireframes, and blog posts.',
       'Client-side rasterization allows creators to dial in exact DPI targets: 72 DPI for instant mobile rendering, 150 DPI for crystal-clear Retina screens, and 300 DPI for print reproduction.',
-      'MatrixConvert provides a zero-upload, zero-leak pipeline that transforms sensitive corporate documents into featherlight assets completely within browser memory.'
+      'Mimage provides a zero-upload, zero-leak pipeline that transforms sensitive corporate documents into featherlight assets completely within browser memory.'
     ],
     content: `
       <h2>The Heavy PDF Problem: Why Browsers and Mobile Users Hate Raw PDFs</h2>
@@ -1919,7 +1924,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Zero In-App Preview:</strong> Messaging apps like Slack, Discord, Microsoft Teams, and WhatsApp cannot inline-preview multi-page PDFs cleanly; they display dull generic file icons instead of captivating visual content.</li>
       </ul>
       <p>
-        The solution that leading web publishers, UX designers, and digital marketers rely on is straightforward: <strong>convert specific PDF pages into lightweight, high-fidelity PNG or next-gen WebP images</strong> using tools like <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">MatrixConvert</a>.
+        The solution that leading web publishers, UX designers, and digital marketers rely on is straightforward: <strong>convert specific PDF pages into lightweight, high-fidelity PNG or next-gen WebP images</strong> using tools like <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
       </p>
 
       <h2>The Byte-Size Miracle: Empirical Compression Benchmarks</h2>
@@ -1977,7 +1982,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h3>1. True Alpha Channel Transparency</h3>
       <p>
-        PDFs are locked to rigid rectangular bounding boxes (MediaBoxes) that assume an opaque paper sheet background. When you convert a PDF logo or illustration to a PNG using MatrixConvert's <a href="#/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG converter</a> with the "Transparent" canvas setting enabled, all empty white space is translated into true 8-bit alpha transparency. You can seamlessly drop the graphic over dark website themes, video overlays, or colorful PowerPoint slides without hideous white boxes.
+        PDFs are locked to rigid rectangular bounding boxes (MediaBoxes) that assume an opaque paper sheet background. When you convert a PDF logo or illustration to a PNG using Mimage's <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG converter</a> with the "Transparent" canvas setting enabled, all empty white space is translated into true 8-bit alpha transparency. You can seamlessly drop the graphic over dark website themes, video overlays, or colorful PowerPoint slides without hideous white boxes.
       </p>
 
       <h3>2. Rocket-Fueled Google Core Web Vitals & SEO Rankings</h3>
@@ -2000,12 +2005,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         Enterprise email gateways (like Microsoft Outlook and Google Workspace) enforce strict 20 MB to 25 MB attachment caps. If you need to send excerpts of three separate architectural plans or financial audits, attaching all three raw PDFs will trigger immediate bounce-backs. Converting the relevant pages into lightweight 300 KB PNG images allows you to inline-embed them directly into the body of your email.
       </p>
 
-      <h2>Step-by-Step: How to Convert PDF to a Featherlight PNG on MatrixConvert</h2>
+      <h2>Step-by-Step: How to Convert PDF to a Featherlight PNG on Mimage</h2>
       <p>
         Our browser-based engine requires no software installation, no account creation, and zero server uploads:
       </p>
       <ol>
-        <li><strong>Open the Converter:</strong> Head to the <a href="#/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a> on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">MatrixConvert</a>.</li>
+        <li><strong>Open the Converter:</strong> Head to the <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a> on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">Mimage</a>.</li>
         <li><strong>Select Your PDF File:</strong> Drag and drop your document into the cyber processing matrix.</li>
         <li><strong>Choose Your DPI Density:</strong>
           <ul>
@@ -2020,17 +2025,17 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Next-Level Optimization: Chaining PNG into WebP</h2>
       <p>
-        Want to squeeze out even greater performance gains? Once you have exported your lightweight PNG images, pass them through our dedicated <a href="#/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP Converter</a> or our <a href="#/tool/image-compress" class="text-sky-400 font-bold hover:underline">Smart Image Compressor</a>. WebP uses predictive entropy encoding to cut another 30% to 50% of file weight while maintaining 100% visual sharpness.
+        Want to squeeze out even greater performance gains? Once you have exported your lightweight PNG images, pass them through our dedicated <a href="/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP Converter</a> or our <a href="/tool/image-compress" class="text-sky-400 font-bold hover:underline">Smart Image Compressor</a>. WebP uses predictive entropy encoding to cut another 30% to 50% of file weight while maintaining 100% visual sharpness.
       </p>
 
       <h2>The Privacy Factor: Why You Should Never Use Cloud Converters for Sensitive PDFs</h2>
       <p>
-        If your PDF contains proprietary financial figures, customer names, or legal terms, uploading it to third-party web converters exposes you to server leaks and commercial harvesting. MatrixConvert operates exclusively on <strong>client-side WebAssembly</strong> within your browser's local memory. Your files are processed on your computer's CPU and never touch an external cloud server.
+        If your PDF contains proprietary financial figures, customer names, or legal terms, uploading it to third-party web converters exposes you to server leaks and commercial harvesting. Mimage operates exclusively on <strong>client-side WebAssembly</strong> within your browser's local memory. Your files are processed on your computer's CPU and never touch an external cloud server.
       </p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Detailed data charts and graphs displayed with high clarity and low file size',
         caption: 'High-density charts extracted at 150 DPI remain razor-sharp while loading in milliseconds.',
         placement: 'after-benchmarks'
@@ -2039,27 +2044,27 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'PDF to PNG Converter (High DPI)',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Extract multi-page PDF pages into crisp, lightweight PNG images with transparent backgrounds.'
       },
       {
         anchor: 'PNG to WebP Next-Gen Converter',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Convert raster PNG images to ultra-compressed WebP format for fast web performance.'
       },
       {
         anchor: 'Smart Image Compressor',
-        url: '#/tool/image-compress',
+        url: '/tool/image-compress',
         description: 'Squeeze extra file weight out of images with custom quality sliders.'
       },
       {
         anchor: 'PDF to SVG Vector Converter',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract mathematical vector curves for infinite resolution without raster blur.'
       },
       {
         anchor: 'Crop PDF Margins Tool',
-        url: '#/tool/crop-pdf-margins',
+        url: '/tool/crop-pdf-margins',
         description: 'Auto-trim white margins from PDF pages before converting to images.'
       }
     ],
@@ -2091,15 +2096,15 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Can I keep a transparent background when converting PDF to PNG?',
-        answer: 'Yes! In MatrixConvert, select "Transparent" in the Background settings before clicking Convert. The white page background will be stripped away, leaving clean transparent alpha pixels.'
+        answer: 'Yes! In Mimage, select "Transparent" in the Background settings before clicking Convert. The white page background will be stripped away, leaving clean transparent alpha pixels.'
       },
       {
         question: 'Are my confidential documents uploaded to any remote server during conversion?',
-        answer: 'Never. MatrixConvert processes everything client-side in your browser RAM using WebAssembly. Your files never touch an external server or database.'
+        answer: 'Never. Mimage processes everything client-side in your browser RAM using WebAssembly. Your files never touch an external server or database.'
       }
     ],
     ctaText: 'Convert Your PDF to Lightweight PNG Free Now',
-    ctaLink: '#/tool/pdf-to-png'
+    ctaLink: '/tool/pdf-to-png'
   },
 
   // 12. Dedicated: PDF to PNG vs. WebP vs. SVG Format Comparison
@@ -2113,10 +2118,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: '2026-10-31',
     readTime: '14 min read (2,800 words)',
     author: {
-      name: 'Marcus Sterling',
-      role: 'Principal Systems Architect',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      bio: 'Senior document infrastructure engineer specializing in client-side WebAssembly tools and PDF structure optimization.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and developer of Mimage focused on client-side WebAssembly tools and reliable PDF structure workflows.'
     },
     primaryKeyword: 'pdf to png vs webp vs svg',
     secondaryKeywords: [
@@ -2128,7 +2133,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'how to optimize converted pdf images'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Digital formats comparison layout showing vector wireframes and raster image rendering on screen',
       caption: 'Choosing between PNG, WebP, and SVG when converting PDFs determines file size, visual sharpness, and loading speed.'
     },
@@ -2137,7 +2142,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Converting digital vector PDFs (created in Illustrator, Figma, Word, or LaTeX) into SVG retains 100% mathematical vector paths with microscopic 30 KB to 80 KB file weights.',
       'Scanned physical paper documents lack mathematical vector coordinates; attempting to vectorize them creates messy, bloated files. They should always be converted to PNG or WebP.',
       'WebP is now universally supported across 97%+ of global browsers (including Safari, Chrome, Edge, and Firefox), making it the superior successor to legacy JPEG and bulky PNG for web publishing.',
-      'MatrixConvert gives you instant access to all three conversion pathways directly within your browser with zero server uploads and zero privacy leaks.'
+      'Mimage gives you instant access to all three conversion pathways directly within your browser with zero server uploads and zero privacy leaks.'
     ],
     content: `
       <h2>The Modern Conversion Dilemma: Which Format Should You Choose?</h2>
@@ -2153,14 +2158,14 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li>Embed a full-size uncompressed PNG on an e-commerce landing page, and your mobile bounce rate spikes as the page takes six seconds to load.</li>
       </ul>
       <p>
-        In this comprehensive guide, we compare <strong>PNG vs. WebP vs. SVG</strong> across every technical dimension—compression ratios, transparency handling, rendering performance, and software compatibility—so you always know the exact format to choose on <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">MatrixConvert</a>.
+        In this comprehensive guide, we compare <strong>PNG vs. WebP vs. SVG</strong> across every technical dimension—compression ratios, transparency handling, rendering performance, and software compatibility—so you always know the exact format to choose on <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
       </p>
 
       <h2>The Three Contenders: Technical Breakdown</h2>
 
       <h3>1. Portable Network Graphics (PNG) — The Lossless Raster Standard</h3>
       <p>
-        Created in 1996 as an open patent-free replacement for GIF, PNG utilizes the lossless DEFLATE compression algorithm (RFC 1951). When you convert a PDF page to PNG using our <a href="#/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a>:
+        Created in 1996 as an open patent-free replacement for GIF, PNG utilizes the lossless DEFLATE compression algorithm (RFC 1951). When you convert a PDF page to PNG using our <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a>:
       </p>
       <ul>
         <li><strong>Fidelity:</strong> 100% mathematically lossless. Every single pixel from the PDF rasterization is preserved byte-for-byte without color banding or compression artifacts.</li>
@@ -2171,7 +2176,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h3>2. WebP — Google's High-Efficiency Next-Gen Contender</h3>
       <p>
-        Developed by Google and based on the VP8 video intra-frame compression algorithm, WebP was engineered specifically to solve the web's bandwidth bottlenecks. Passing your graphics through our <a href="#/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP Converter</a> provides:
+        Developed by Google and based on the VP8 video intra-frame compression algorithm, WebP was engineered specifically to solve the web's bandwidth bottlenecks. Passing your graphics through our <a href="/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP Converter</a> provides:
       </p>
       <ul>
         <li><strong>Compression Efficiency:</strong> WebP lossy images are <strong>25% to 35% smaller</strong> than comparable JPEG files, and WebP lossless images are <strong>26% smaller</strong> than standard PNG files.</li>
@@ -2182,7 +2187,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h3>3. Scalable Vector Graphics (SVG) — Mathematical Vector Infinity</h3>
       <p>
-        Unlike PNG and WebP (which are grids of colored pixels), SVG is an XML-based vector specification standard maintained by the W3C. When you convert a digital PDF using our <a href="#/tool/pdf-to-svg" class="text-sky-400 font-bold hover:underline">PDF to SVG Vector Tool</a>:
+        Unlike PNG and WebP (which are grids of colored pixels), SVG is an XML-based vector specification standard maintained by the W3C. When you convert a digital PDF using our <a href="/tool/pdf-to-svg" class="text-sky-400 font-bold hover:underline">PDF to SVG Vector Tool</a>:
       </p>
       <ul>
         <li><strong>Infinite Scalability:</strong> Stored as mathematical coordinates (lines, Bézier curves, polygons, and glyph fills). You can zoom into an SVG by 10,000% or project it onto a stadium billboard, and the linework remains razor-sharp.</li>
@@ -2254,30 +2259,30 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Practical Workflow: How to Combine These Tools for Peak Efficiency</h2>
       <p>
-        Professional digital asset workflows often leverage multiple tools sequentially on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">MatrixConvert</a>:
+        Professional digital asset workflows often leverage multiple tools sequentially on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">Mimage</a>:
       </p>
       <ol>
         <li>
-          <strong>Step 1 (Clean Up):</strong> If your PDF has excessive margins or black scanner edges, run it through the <a href="#/tool/crop-pdf-margins" class="text-sky-400 font-bold hover:underline">Crop PDF Margins tool</a> first to auto-trim unwanted white borders.
+          <strong>Step 1 (Clean Up):</strong> If your PDF has excessive margins or black scanner edges, run it through the <a href="/tool/crop-pdf-margins" class="text-sky-400 font-bold hover:underline">Crop PDF Margins tool</a> first to auto-trim unwanted white borders.
         </li>
         <li>
           <strong>Step 2 (Choose Conversion):</strong>
           <ul>
-            <li>If the document is a vector logo or diagram: Convert via <a href="#/tool/pdf-to-svg" class="text-sky-400 font-bold hover:underline">PDF to SVG</a>.</li>
-            <li>If the document is a slide or presentation proof: Convert via <a href="#/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG</a> at 150 or 300 DPI.</li>
+            <li>If the document is a vector logo or diagram: Convert via <a href="/tool/pdf-to-svg" class="text-sky-400 font-bold hover:underline">PDF to SVG</a>.</li>
+            <li>If the document is a slide or presentation proof: Convert via <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG</a> at 150 or 300 DPI.</li>
           </ul>
         </li>
         <li>
-          <strong>Step 3 (Compress for Web):</strong> If deploying to a website, pass the exported PNG through <a href="#/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP</a> to shrink file payload down to its absolute minimum.
+          <strong>Step 3 (Compress for Web):</strong> If deploying to a website, pass the exported PNG through <a href="/tool/png-to-webp" class="text-sky-400 font-bold hover:underline">PNG to WebP</a> to shrink file payload down to its absolute minimum.
         </li>
       </ol>
 
-      <h2>Why Client-Side Conversion on MatrixConvert Beats the Competition</h2>
+      <h2>Why Client-Side Conversion on Mimage Beats the Competition</h2>
       <p>
         Traditional conversion websites (such as Sejda, CloudConvert, and Smallpdf) force you to upload your files to remote servers, queue for virtual machine processing, and download files over public internet channels. This introduces security liabilities for proprietary documents and limits you with daily usage caps.
       </p>
       <p>
-        MatrixConvert operates on a revolutionary <strong>100% client-side WebAssembly architecture</strong>:
+        Mimage operates on a revolutionary <strong>100% client-side WebAssembly architecture</strong>:
       </p>
       <ul>
         <li><strong>Instant Processing:</strong> Zero upload and download queue latency—conversion starts the millisecond you drop your file.</li>
@@ -2287,7 +2292,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1542744094-24638eff58bb?w=900&auto=format&fit=crop&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Software development team discussing web design performance and vector assets',
         caption: 'Matching the right image format to your project guarantees optimal user experience and SEO rankings.',
         placement: 'after-decision-matrix'
@@ -2296,27 +2301,27 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'PDF to PNG Converter (High DPI)',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Extract multi-page PDF documents into crystal-clear lossless PNG images.'
       },
       {
         anchor: 'PDF to SVG Vector Tool',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract mathematical vector curves for infinite scalability without pixelation.'
       },
       {
         anchor: 'PNG to WebP Next-Gen Converter',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Shrink raster graphics by up to 80% with modern WebP compression.'
       },
       {
         anchor: 'Smart Image Compressor',
-        url: '#/tool/image-compress',
+        url: '/tool/image-compress',
         description: 'Fine-tune image quality and file weight with live previews.'
       },
       {
         anchor: 'Merge PDF Files',
-        url: '#/tool/merge-pdf',
+        url: '/tool/merge-pdf',
         description: 'Combine multiple documents before batch converting assets.'
       }
     ],
@@ -2351,12 +2356,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'You can, but it will not create true vector curves. Because physical scanners record a grid of colored pixels, an SVG will simply wrap that raster image inside an XML container. For scanned paper documents, converting to PNG or WebP is always recommended.'
       },
       {
-        question: 'Are there any usage caps or watermarks added to converted images on MatrixConvert?',
-        answer: 'None whatsoever. MatrixConvert is 100% free forever, without watermarks, without email registration, and with unlimited conversions.'
+        question: 'Are there any usage caps or watermarks added to converted images on Mimage?',
+        answer: 'None whatsoever. Mimage is 100% free forever, without watermarks, without email registration, and with unlimited conversions.'
       }
     ],
     ctaText: 'Compare & Convert Your PDF Files Free Now',
-    ctaLink: '#/tool/pdf-to-png'
+    ctaLink: '/tool/pdf-to-png'
   },
   {
     id: 'post-online-image-converter-webp-avif-performance',
@@ -2368,10 +2373,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: 'November 1, 2026',
     readTime: '12 min read',
     author: {
-      name: 'Elena Rostova',
-      role: 'Principal Web Performance Architect & Core Web Vitals Auditor',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80',
-      bio: 'Specialist in frontend payload optimization, browser rendering pipelines, next-gen image transcoding algorithms, and search engine technical audits.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and writer at Mimage specializing in frontend payload optimization, Core Web Vitals, and image format conversions.'
     },
     primaryKeyword: 'online image converter',
     secondaryKeywords: [
@@ -2382,7 +2387,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'free client-side image converter'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Data visualization analytics dashboard displaying website speed boost and bandwidth savings from an online image converter',
       caption: 'Empirical industry benchmarks reveal that converting raster graphics to next-gen WebP and AVIF eliminates up to 78% of total web page payload.'
     },
@@ -2496,15 +2501,15 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Data Retention Ambiguity:</strong> Many cloud services fail to disclose their exact data retention policies, retaining cached copies indefinitely.</li>
       </ul>
       <p>
-        <strong>MatrixConvert</strong> solves this problem at the root. Built with hardware-accelerated <strong>WebAssembly (Wasm) and HTML5 Canvas APIs</strong>, all image conversion calculations execute 100% locally inside your browser's private memory sandbox. Exactly zero bytes leave your device, ensuring total GDPR, CCPA, and enterprise confidentiality compliance.
+        <strong>Mimage</strong> solves this problem at the root. Built with hardware-accelerated <strong>WebAssembly (Wasm) and HTML5 Canvas APIs</strong>, all image conversion calculations execute 100% locally inside your browser's private memory sandbox. Exactly zero bytes leave your device, ensuring total GDPR, CCPA, and enterprise confidentiality compliance.
       </p>
 
-      <h2>Step-by-Step Guide: Converting JPG and PNG to WebP with MatrixConvert</h2>
+      <h2>Step-by-Step Guide: Converting JPG and PNG to WebP with Mimage</h2>
       <p>
         Optimizing your visual assets takes less than five seconds using our zero-installation browser suite:
       </p>
       <ol>
-        <li><strong>Select or Drag & Drop:</strong> Open our <a href="#/tool/png-to-webp" class="text-sky-400 underline font-semibold">PNG to WebP Converter</a> or <a href="#/tool/image-compress" class="text-sky-400 underline font-semibold">Smart Image Compressor</a> and drag your target files into the dropzone.</li>
+        <li><strong>Select or Drag & Drop:</strong> Open our <a href="/tool/png-to-webp" class="text-sky-400 underline font-semibold">PNG to WebP Converter</a> or <a href="/tool/image-compress" class="text-sky-400 underline font-semibold">Smart Image Compressor</a> and drag your target files into the dropzone.</li>
         <li><strong>Set Output Quality & DPI:</strong> Use the interactive quality slider. A setting of 80% to 85% delivers the optimal balance of imperceptible compression and massive byte savings.</li>
         <li><strong>Execute Local Transcoding:</strong> Click Convert. Your computer's multi-core CPU and GPU render the next-gen format instantly via WebAssembly.</li>
         <li><strong>Download with Zero Watermarks:</strong> Save your converted WebP file immediately, ready to be deployed to your CDN or website.</li>
@@ -2517,54 +2522,54 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Comparative bar graph showing average file size reduction across JPEG, PNG, WebP, and AVIF formats',
         caption: 'Figure 1: File payload comparison showing 78% bandwidth reduction achieved by next-gen image conversion algorithms.',
         placement: 'Placed after Section 2 (The Evolution of Digital Image Formats)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Google Core Web Vitals performance score card highlighting Largest Contentful Paint LCP optimization via WebP image converter',
         caption: 'Figure 2: Real-time Lighthouse speed analysis demonstrating transition from red to green LCP scores after image conversion.',
         placement: 'Placed after Section 4 (How Next-Gen Formats Boost Core Web Vitals)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Microscopic pixel inspection demonstrating artifact-free compression in next-gen WebP vs blocking artifacts in standard JPEG',
         caption: 'Figure 3: Side-by-side microscopic comparison showing smooth gradients and sharp edge preservation in converted WebP assets.',
         placement: 'Placed after Section 3 (Empirical Compression Benchmark)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Hardware-accelerated browser sandbox diagram executing local image conversion without server uploads',
-        caption: 'Figure 4: MatrixConvert zero-knowledge architecture processing image encoding directly inside browser memory via WebAssembly.',
+        caption: 'Figure 4: Mimage zero-knowledge architecture processing image encoding directly inside browser memory via WebAssembly.',
         placement: 'Placed after Section 5 (The Privacy Paradigm & Client-Side Wasm)'
       }
     ],
     internalLinks: [
       {
         anchor: 'PNG to WebP Converter',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Transcode high-res PNG and JPEG files to WebP with custom quality controls and zero uploads.'
       },
       {
         anchor: 'Smart Image Compressor',
-        url: '#/tool/image-compress',
+        url: '/tool/image-compress',
         description: 'Fine-tune image compression thresholds, compare byte savings, and preview visual clarity.'
       },
       {
         anchor: 'PDF to High-Res PNG Extractor',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Render multi-page PDF documents into sharp 300 DPI raster images for web and print.'
       },
       {
-        anchor: 'About MatrixConvert Architecture',
-        url: '#/about',
+        anchor: 'About Mimage Architecture',
+        url: '/about',
         description: 'Learn about our zero-upload client-side WebAssembly technology and company mission.'
       },
       {
         anchor: 'Contact & Engineering Support',
-        url: '#/contact',
+        url: '/contact',
         description: 'Submit feedback, request custom batch format conversion features, or get technical support.'
       }
     ],
@@ -2599,12 +2604,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'Google utilizes Core Web Vitals as ranking factors. Lighter images directly slash Largest Contentful Paint (LCP) times and reduce page load latency. Websites passing Core Web Vitals benchmarks gain higher visibility on both mobile and desktop search engine results pages (SERPs).'
       },
       {
-        question: 'Are my images stored, analyzed, or shared when using MatrixConvert?',
-        answer: 'Never. MatrixConvert utilizes client-side WebAssembly technology. Your files are converted entirely inside your browser sandbox and are never uploaded to any remote server or third-party cloud infrastructure.'
+        question: 'Are my images stored, analyzed, or shared when using Mimage?',
+        answer: 'Never. Mimage utilizes client-side WebAssembly technology. Your files are converted entirely inside your browser sandbox and are never uploaded to any remote server or third-party cloud infrastructure.'
       }
     ],
     ctaText: 'Launch Free Online Image Converter on mimage.netlify.app',
-    ctaLink: '#/tool/png-to-webp'
+    ctaLink: '/tool/png-to-webp'
   },
   {
     id: 'post-image-converter-resumes-portfolios-career-guide',
@@ -2616,10 +2621,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     publishedDate: 'November 1, 2026',
     readTime: '13 min read',
     author: {
-      name: 'Marcus Vance',
-      role: 'Senior Technical Recruiter & Digital Portfolio Strategist',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80',
-      bio: 'Expert in applicant tracking systems (ATS), recruiter screen dynamics, graphic design portfolio optimization, and cross-platform document standards.'
+      name: 'Naveed Afzal',
+      role: 'Administrator, Founder & Lead Writer at Mimage',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Administrator and creator of Mimage writing on multi-format image conversion, resume asset prep, and cross-platform document workflows.'
     },
     primaryKeyword: 'multi format image converter',
     secondaryKeywords: [
@@ -2630,7 +2635,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'ATS friendly image format'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Professional desk setup with a printed resume, tablet displaying digital portfolio images, and candidate application profile',
       caption: 'Proper image format selection ensures your resume passes automated ATS scanners while presenting razor-sharp headshots and project visuals.'
     },
@@ -2639,7 +2644,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Professional CV headshots must be converted to crisp 300 DPI sRGB JPEGs or PNGs under 350 KB to avoid muddy printouts during executive interview panels.',
       'Creative portfolios should deploy a hybrid export model: vector SVG for logos, UI wireframes, and icons, combined with WebP for full-color case studies.',
       'Converting resume PDFs to high-resolution PNGs enables frictionless previews across LinkedIn, personal portfolio sites, and mobile job portals.',
-      'MatrixConvert guarantees total confidentiality for resumes, government IDs, and academic diplomas by processing all files 100% locally via WebAssembly.'
+      'Mimage guarantees total confidentiality for resumes, government IDs, and academic diplomas by processing all files 100% locally via WebAssembly.'
     ],
     content: `
       <h2>The Critical Intersection of Image Conversion, Careers, and First Impressions</h2>
@@ -2739,43 +2744,43 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         When preparing resumes, cover letters, academic transcripts, work verification letters, and government-issued IDs, data privacy is paramount. Traditional conversion utilities store uploaded documents on remote third-party cloud servers where data can be logged, scraped, or accidentally leaked.
       </p>
       <p>
-        <strong>MatrixConvert</strong> guarantees complete data isolation. Powered by client-side WebAssembly, all PDF manipulation, DPI rasterization, and image compression occur <strong>strictly inside your personal device's web browser</strong>. No employer data, phone numbers, home addresses, or portfolio samples are ever transmitted across external networks.
+        <strong>Mimage</strong> guarantees complete data isolation. Powered by client-side WebAssembly, all PDF manipulation, DPI rasterization, and image compression occur <strong>strictly inside your personal device's web browser</strong>. No employer data, phone numbers, home addresses, or portfolio samples are ever transmitted across external networks.
       </p>
 
       <h2>The Ultimate Multi-Format Conversion Pipeline for Job Seekers</h2>
       <ol>
-        <li><strong>Step 1: Trim Excess Margins:</strong> Use our <a href="#/tool/crop-pdf-margins" class="text-sky-400 underline font-semibold">Crop PDF Margins Tool</a> to remove unnecessary borders and optimize visual real estate.</li>
-        <li><strong>Step 2: Extract High-Resolution Previews:</strong> Run our <a href="#/tool/pdf-to-png" class="text-sky-400 underline font-semibold">PDF to High-Res PNG Extractor</a> to generate crisp 300 DPI preview slides for your LinkedIn carousel or portfolio.</li>
-        <li><strong>Step 3: Web-Optimize for Portfolio Publishing:</strong> Convert PNG screenshots into ultra-compact WebP files via our <a href="#/tool/png-to-webp" class="text-sky-400 underline font-semibold">PNG to WebP Converter</a>.</li>
-        <li><strong>Step 4: Extract Vector Icons:</strong> Convert corporate logos and design marks to clean code using our <a href="#/tool/pdf-to-svg" class="text-sky-400 underline font-semibold">PDF to SVG Vector Tool</a>.</li>
+        <li><strong>Step 1: Trim Excess Margins:</strong> Use our <a href="/tool/crop-pdf-margins" class="text-sky-400 underline font-semibold">Crop PDF Margins Tool</a> to remove unnecessary borders and optimize visual real estate.</li>
+        <li><strong>Step 2: Extract High-Resolution Previews:</strong> Run our <a href="/tool/pdf-to-png" class="text-sky-400 underline font-semibold">PDF to High-Res PNG Extractor</a> to generate crisp 300 DPI preview slides for your LinkedIn carousel or portfolio.</li>
+        <li><strong>Step 3: Web-Optimize for Portfolio Publishing:</strong> Convert PNG screenshots into ultra-compact WebP files via our <a href="/tool/png-to-webp" class="text-sky-400 underline font-semibold">PNG to WebP Converter</a>.</li>
+        <li><strong>Step 4: Extract Vector Icons:</strong> Convert corporate logos and design marks to clean code using our <a href="/tool/pdf-to-svg" class="text-sky-400 underline font-semibold">PDF to SVG Vector Tool</a>.</li>
       </ol>
 
       <h2>Conclusion & Strategic Advice for Career Advancement</h2>
       <p>
-        In an automated hiring market where recruiters spend an average of six seconds reviewing an application, precision matters. Mastering image and document conversion ensures your materials render flawlessly across ATS algorithms, executive printouts, and mobile screens. Take advantage of MatrixConvert's free, zero-upload toolsuite to elevate your career materials today.
+        In an automated hiring market where recruiters spend an average of six seconds reviewing an application, precision matters. Mastering image and document conversion ensures your materials render flawlessly across ATS algorithms, executive printouts, and mobile screens. Take advantage of Mimage's free, zero-upload toolsuite to elevate your career materials today.
       </p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Infographic displaying ATS parsing success rate comparing bloated unoptimized CV images vs streamlined converted assets',
         caption: 'Figure 1: Resume file size and format correlation with automated ATS parsing pass-rates across major job platforms.',
         placement: 'Placed after Section 2 (The ATS Scanning Trap)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'High-resolution professional headshot comparison before and after conversion showing lossless sharpness and compact file size',
         caption: 'Figure 2: Professional headshot compressed from 6.8 MB uncompressed TIFF to 280 KB high-fidelity PNG at 300 DPI.',
         placement: 'Placed after Section 3 (Executive Headshot Optimization)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Digital design portfolio website layout displaying vector UI icons and optimized WebP mockups',
         caption: 'Figure 3: Hybrid export strategy combining scalable SVG wireframes with lightweight WebP previews for designer portfolios.',
         placement: 'Placed after Section 4 (Digital Portfolios: Vector SVG vs WebP)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Encrypted client-side browser terminal protecting candidate personal information during file conversion',
         caption: 'Figure 4: Client-side cryptographic isolation ensuring zero employee background data or contact details leak online.',
         placement: 'Placed after Section 5 (Securing Confidential Career Documents)'
@@ -2784,32 +2789,32 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'PDF to High-Res PNG Extractor',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Extract resume pages, diplomas, and design mockups into crisp 300 DPI PNG images.'
       },
       {
         anchor: 'PNG to WebP Converter',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Compress portfolio screenshots and project case studies by up to 80% with next-gen WebP.'
       },
       {
         anchor: 'PDF to SVG Vector Extractor',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract mathematical vector paths for company logos, design marks, and technical schematics.'
       },
       {
         anchor: 'Crop PDF Margins Tool',
-        url: '#/tool/crop-pdf-margins',
+        url: '/tool/crop-pdf-margins',
         description: 'Trim excess white borders on resumes and certificates for maximum readability.'
       },
       {
         anchor: 'Terms of Service & Usage Policy',
-        url: '#/terms',
+        url: '/terms',
         description: 'Read our transparent terms of service, user rights, and zero-liability commitments.'
       },
       {
         anchor: 'Legal Disclaimer & Compliance',
-        url: '#/disclaimer',
+        url: '/disclaimer',
         description: 'Review our legal disclaimers regarding ATS parsing accuracy and client-side processing.'
       }
     ],
@@ -2844,12 +2849,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'WebP reduces image payloads by up to 80% without visible loss in quality. This allows creative professionals to showcase hundreds of high-resolution case studies on their portfolio sites while maintaining sub-second page load times and top Google search rankings.'
       },
       {
-        question: 'Is it safe to convert private documents like passports or degree certificates on MatrixConvert?',
-        answer: 'Yes, 100%. MatrixConvert operates exclusively inside your browser using client-side WebAssembly. No files, personal data, or documents are ever uploaded to remote servers or cloud storage.'
+        question: 'Is it safe to convert private documents like passports or degree certificates on Mimage?',
+        answer: 'Yes, 100%. Mimage operates exclusively inside your browser using client-side WebAssembly. No files, personal data, or documents are ever uploaded to remote servers or cloud storage.'
       }
     ],
     ctaText: 'Optimize Your Career Documents & Images Free Now',
-    ctaLink: '#/tool/pdf-to-png'
+    ctaLink: '/tool/pdf-to-png'
   },
   {
     id: 'post-compresseur-image-intelligent-mo-en-ko',
@@ -2863,8 +2868,8 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Naveed Afzal',
       role: 'Technologist, Full-Stack Developer & Systems Architect',
-      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
-      bio: 'Fondateur de MatrixConvert avec plus de 20 ans d’expertise en ingénierie web, algorithmes d’optimisation graphique et traitement client-side sécurisé.'
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Fondateur de Mimage avec plus de 20 ans d’expertise en ingénierie web, algorithmes d’optimisation graphique et traitement client-side sécurisé.'
     },
     primaryKeyword: 'compresseur image convertir Mo en Ko',
     secondaryKeywords: [
@@ -2875,7 +2880,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'compresser image client side gratuit'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Graphique de compression intelligente d’images réduisant la taille de fichiers de plusieurs mégaoctets en quelques kilooctets',
       caption: 'Un compresseur intelligent utilise la quantification adaptative et le sous-échantillonnage de chrominance pour diviser le poids des images par 15 tout en préservant une netteté visuelle parfaite.'
     },
@@ -2883,7 +2888,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Les portails administratifs et gouvernementaux (ANTS, impôts, visas, sécurité sociale) imposent des plafonds stricts entre 200 Ko et 2 Mo par justificatif.',
       'Un compresseur intelligent analyse les fréquences spatiales de l’image pour éliminer les données invisibles à l’œil nu sans altérer la netteté du texte ou des visages.',
       'La conversion de Mo en Ko permet de contourner les rejets automatiques lors du téléversement de pièces d’identité, fiches de paie et factures.',
-      'MatrixConvert effectue 100% de la compression en local dans la mémoire du navigateur via WebAssembly et HTML5 Canvas : aucun document confidentiel n’est envoyé sur un serveur tiers.',
+      'Mimage effectue 100% de la compression en local dans la mémoire du navigateur via WebAssembly et HTML5 Canvas : aucun document confidentiel n’est envoyé sur un serveur tiers.',
       'Les e-mails professionnels bénéficient d’une délivrabilité maximale en réduisant les pièces jointes volumineuses sous le seuil d’acceptation des serveurs SMTP.'
     ],
     content: `
@@ -2961,12 +2966,12 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         Lorsque vous devez compresser une pièce d'identité, un avis d'imposition ou un contrat de travail, utiliser un service cloud classique représente un risque juridique et sécuritaire majeur. La majorité des convertisseurs gratuits conservent vos documents sur des serveurs distants pour analyser vos données ou alimenter des bases de données publicitaires.
       </p>
       <p>
-        <strong>MatrixConvert</strong> garantit une <strong>sécurité mathématique absolue</strong>. Développé par Naveed Afzal avec une architecture 100% Zero-Knowledge basée sur <strong>WebAssembly (Wasm)</strong>, l'algorithme s'exécute directement dans la mémoire vive (RAM) de votre navigateur. Votre document n'est jamais transféré sur Internet : exactement 0 octet ne quitte votre appareil.
+        <strong>Mimage</strong> garantit une <strong>sécurité mathématique absolue</strong>. Développé par Naveed Afzal avec une architecture 100% Zero-Knowledge basée sur <strong>WebAssembly (Wasm)</strong>, l'algorithme s'exécute directement dans la mémoire vive (RAM) de votre navigateur. Votre document n'est jamais transféré sur Internet : exactement 0 octet ne quitte votre appareil.
       </p>
 
       <h2>Guide Pratique : Réduire Vos Fichiers en Mo en Moins de 5 Secondes</h2>
       <ol>
-        <li><strong>Glissez votre image :</strong> Ouvrez notre outil <a href="#/tool/image-compress" class="text-sky-400 font-bold underline">Compresseur d'Image Intelligent</a> ou glissez directement votre fichier dans l'espace dédié.</li>
+        <li><strong>Glissez votre image :</strong> Ouvrez notre outil <a href="/tool/image-compress" class="text-sky-400 font-bold underline">Compresseur d'Image Intelligent</a> ou glissez directement votre fichier dans l'espace dédié.</li>
         <li><strong>Ajustez le curseur de qualité :</strong> Pour un document administratif officiel, réglez la compression entre 75% et 85%. Vous verrez instantanément le poids estimé passer de plusieurs Mo à moins de 300 Ko.</li>
         <li><strong>Téléchargez instantanément :</strong> Cliquez sur Télécharger. Votre fichier optimisé est prêt à être téléversé sans blocage sur n'importe quel portail public.</li>
       </ol>
@@ -2978,25 +2983,25 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Tableau de bord comparatif illustrant la réduction de taille de fichiers de mégaoctets en kilooctets sans perte de qualité',
         caption: 'Figure 1: Comparaison visuelle du poids des fichiers avant et après passage dans le compresseur d’image intelligent.',
         placement: 'Placé après la Section 1 (Le Défi Quotidien des Limites de Taille)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Graphique d’analyse de netteté textuelle et faciale après compression adaptative pour portails administratifs',
         caption: 'Figure 2: Maintien intégral des contrastes typographiques et détails faciaux après compression sous 300 Ko.',
         placement: 'Placé après la Section 2 (Comment Fonctionne la Compression Intelligente)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Schéma d’architecture de chiffrement et d’exécution locale dans la mémoire du navigateur sans envoi serveur',
         caption: 'Figure 3: Architecture client-side WebAssembly garantissant la confidentialité des pièces d’identité et fiches de paie.',
         placement: 'Placé après la Section 4 (Sécurité & Confidentialité Zero-Knowledge)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Interface moderne d’un candidat téléversant un CV compressé et optimisé sur un portail de recrutement',
         caption: 'Figure 4: Envoi fluide et instantané de pièces jointes optimisées sans rejet sur les plateformes de recrutement et démarches d’état.',
         placement: 'Placé après la Section 5 (Guide Pratique et Optimisation E-mails)'
@@ -3005,27 +3010,27 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: "Compresseur d'Image Intelligent",
-        url: '#/tool/image-compress',
+        url: '/tool/image-compress',
         description: 'Réduisez instantanément le poids de vos photos de plusieurs Mo à quelques Ko avec aperçu en direct.'
       },
       {
         anchor: 'Convertisseur PNG en WebP',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Transcodez vos visuels vers le format moderne WebP pour diviser leur poids par 5.'
       },
       {
         anchor: 'Extracteur PDF vers PNG Haute Définition',
-        url: '#/tool/pdf-to-png',
+        url: '/tool/pdf-to-png',
         description: 'Convertissez vos justificatifs PDF en images nettes calibrées à 300 DPI pour les démarches en ligne.'
       },
       {
         anchor: 'Rogner les Marges de PDF',
-        url: '#/tool/crop-pdf-margins',
+        url: '/tool/crop-pdf-margins',
         description: 'Éliminez les bordures blanches superflues pour réduire encore davantage le poids de vos documents.'
       },
       {
-        anchor: 'À Propos de MatrixConvert & Confidentialité',
-        url: '#/about',
+        anchor: 'À Propos de Mimage & Confidentialité',
+        url: '/about',
         description: 'Découvrez notre engagement de confidentialité zéro stockage serveur et notre architecture WebAssembly.'
       }
     ],
@@ -3057,7 +3062,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Mes documents confidentiels (carte d’identité, impôts, passeport) sont-ils conservés en ligne ?',
-        answer: 'Non, jamais. MatrixConvert opère intégralement en local dans votre navigateur via WebAssembly. Vos fichiers ne transitent par aucun serveur et ne sont stockés nulle part.'
+        answer: 'Non, jamais. Mimage opère intégralement en local dans votre navigateur via WebAssembly. Vos fichiers ne transitent par aucun serveur et ne sont stockés nulle part.'
       },
       {
         question: 'Y a-t-il une limite sur le nombre de compressions d’images ?',
@@ -3065,7 +3070,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Compresser une Image de Mo en Ko Gratuitement sur mimage.netlify.app',
-    ctaLink: '#/tool/image-compress'
+    ctaLink: '/tool/image-compress'
   },
   {
     id: 'post-how-ai-is-changing-our-daily-life-2026',
@@ -3079,7 +3084,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Naveed Afzal',
       role: 'Technologist, Full-Stack Developer & Systems Architect',
-      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
       bio: 'Pioneering client-side web computing, AI-assisted graphic workflows, and privacy-preserving browser utilities with over 20 years of technical expertise.'
     },
     primaryKeyword: 'how AI is changing our daily life',
@@ -3091,7 +3096,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'privacy focused AI tools'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Futuristic digital neural network visualization showing artificial intelligence transforming daily human productivity and communication',
       caption: 'In 2026, artificial intelligence has transitioned from speculative science fiction into an indispensable daily utility embedded across work, health, and creative media.'
     },
@@ -3181,7 +3186,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         In the early years of the AI boom, users were forced to upload confidential business contracts, medical queries, and personal family photos to centralized cloud servers. This centralized model sparked legitimate fears regarding data surveillance, corporate lock-in, and catastrophic server leaks.
       </p>
       <p>
-        In 2026, the technology paradigm has shifted dramatically toward <strong>Edge AI and client-side processing</strong>. Powered by <strong>WebAssembly (Wasm)</strong> and WebGPU inside modern browsers, sophisticated neural models now execute locally on the user's laptop, tablet, or smartphone. At <strong>MatrixConvert</strong>, we champion this exact privacy-first ethos: your files, images, and documents are processed entirely inside your local device memory, guaranteeing that zero bytes are ever uploaded to remote surveillance clouds.
+        In 2026, the technology paradigm has shifted dramatically toward <strong>Edge AI and client-side processing</strong>. Powered by <strong>WebAssembly (Wasm)</strong> and WebGPU inside modern browsers, sophisticated neural models now execute locally on the user's laptop, tablet, or smartphone. At <strong>Mimage</strong>, we champion this exact privacy-first ethos: your files, images, and documents are processed entirely inside your local device memory, guaranteeing that zero bytes are ever uploaded to remote surveillance clouds.
       </p>
 
       <h2>5. The Human Balance: Cultivating Consciousness in an Automated Era</h2>
@@ -3194,30 +3199,30 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Conclusion: Embracing the Future with Practical, Privacy-First Tools</h2>
       <p>
-        The journey into the age of artificial intelligence is just beginning. By adopting practical, high-performance, and privacy-respecting utilities like MatrixConvert, individuals and businesses can harness the immense power of smart computing without sacrificing data sovereignty or personal privacy.
+        The journey into the age of artificial intelligence is just beginning. By adopting practical, high-performance, and privacy-respecting utilities like Mimage, individuals and businesses can harness the immense power of smart computing without sacrificing data sovereignty or personal privacy.
       </p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Visual representation of AI neural code processing and smart vector graphic conversion',
         caption: 'Figure 1: Neural networks analyzing and converting visual coordinates into pristine scalable graphics.',
         placement: 'Placed after Section 1 (Creative Media & Graphic Conversion)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Analytics graphic showing measurable daily time savings and productivity improvements achieved via AI automation',
         caption: 'Figure 2: Empirical study showing an average daily time savings of 3.2 hours per professional via smart automation.',
         placement: 'Placed after Section 2 (Workplace Automation & Efficiency Gains)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Doctor and medical technologist examining AI-assisted diagnostic scans and wearable biometric telemetry',
         caption: 'Figure 3: AI computer vision algorithms detecting microscopic medical anomalies with unprecedented accuracy.',
         placement: 'Placed after Section 3 (Personalized Healthcare & Medical Breakthroughs)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Secure client-side cryptographic hardware sandbox executing AI image manipulation inside the browser memory',
         caption: 'Figure 4: Edge AI and client-side WebAssembly executing intelligent processing locally with zero cloud data transmission.',
         placement: 'Placed after Section 4 (The Edge Computing Shift & Privacy)'
@@ -3226,27 +3231,27 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Smart Image Compressor (Convert MB to KB)',
-        url: '#/tool/image-compress',
+        url: '/tool/image-compress',
         description: 'Leverage smart adaptive compression to reduce heavy photos and documents down to lightweight kilobytes.'
       },
       {
         anchor: 'PDF to SVG Vector Extractor',
-        url: '#/tool/pdf-to-svg',
+        url: '/tool/pdf-to-svg',
         description: 'Extract mathematical cubic vector curves from complex documents with instant rendering.'
       },
       {
         anchor: 'Fill & Sign PDF In-Browser',
-        url: '#/tool/fill-and-sign-pdf',
+        url: '/tool/fill-and-sign-pdf',
         description: 'Sign and annotate administrative contracts locally without printing or scanning.'
       },
       {
         anchor: 'PNG to WebP Next-Gen Converter',
-        url: '#/tool/png-to-webp',
+        url: '/tool/png-to-webp',
         description: 'Harness modern Google WebP compression to slash web page payloads by up to 80%.'
       },
       {
-        anchor: 'About MatrixConvert Mission & Founder',
-        url: '#/about',
+        anchor: 'About Mimage Mission & Founder',
+        url: '/about',
         description: 'Discover Naveed Afzal’s 20-year technical journey and our zero-knowledge client-side philosophy.'
       }
     ],
@@ -3274,7 +3279,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Can AI image processing tools steal or store my personal photos?',
-        answer: 'Not when using client-side tools like MatrixConvert. By executing processing via WebAssembly directly in your device’s browser memory, your images are never sent to external AI training servers.'
+        answer: 'Not when using client-side tools like Mimage. By executing processing via WebAssembly directly in your device’s browser memory, your images are never sent to external AI training servers.'
       },
       {
         question: 'What is Edge AI and why does it matter for daily privacy?',
@@ -3286,7 +3291,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Experience Fast, Privacy-First Smart Tools on mimage.netlify.app',
-    ctaLink: '#/tool/image-compress'
+    ctaLink: '/tool/image-compress'
   },
 
   // 17. Advanced PDF Management: Page Numbering, Metadata Sanitization & Form Flattening
@@ -3294,7 +3299,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     id: 'post-advanced-pdf-management-2026',
     slug: 'advanced-pdf-management-page-numbering-metadata-flattening',
     title: 'Mastering Advanced PDF Management in 2026: Page Numbering, Metadata Sanitization & Form Flattening Without Adobe Acrobat',
-    metaTitle: 'Advanced In-Browser PDF Management & Security | MatrixConvert',
+    metaTitle: 'Advanced In-Browser PDF Management & Security | Mimage',
     metaDescription: 'Comprehensive technical guide to professional PDF pagination, Bates numbering, metadata scrub, and form flattening using client-side WebAssembly.',
     category: 'pdf-workflows',
     publishedDate: '2026-11-04',
@@ -3302,8 +3307,8 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Naveed Afzal',
       role: 'Founder & Systems Architect (20+ Years Web Experience)',
-      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
-      bio: 'Web architect, SEO specialist, and creator of MatrixConvert with 20+ years building scalable, private digital platforms across Europe.'
+      avatar: EDITORIAL_IMAGES.authorAvatar,
+      bio: 'Web architect, SEO specialist, and creator of Mimage with 20+ years building scalable, private digital platforms across Europe.'
     },
     primaryKeyword: 'advanced PDF management in browser',
     secondaryKeywords: [
@@ -3314,7 +3319,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'private PDF tools without upload'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.pdfWorkflow,
       alt: 'Architectural blueprint and legal contract documents undergoing digital Bates numbering and pagination verification',
       caption: 'Figure 1: Client-side PDF manipulation enforces legal immutability and document integrity without cloud server dependencies.'
     },
@@ -3336,7 +3341,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Revision Histories & Timestamp Deltas:</strong> Creation dates, modification timestamps, and total cumulative editing time.</li>
       </ul>
 
-      <p>In high-stakes corporate acquisitions, regulatory submissions, and litigation discovery, releasing unscrubbed PDF metadata can inadvertently surrender negotiation leverage or violate statutory confidentiality covenants. Using our dedicated <a href="#/tool/pdf-metadata-editor" class="text-sky-400 font-semibold underline">PDF Metadata & Author Editor</a>, you can sanitize these internal artifacts with a single click in under two seconds.</p>
+      <p>In high-stakes corporate acquisitions, regulatory submissions, and litigation discovery, releasing unscrubbed PDF metadata can inadvertently surrender negotiation leverage or violate statutory confidentiality covenants. Using our dedicated <a href="/tool/pdf-metadata-editor" class="text-sky-400 font-semibold underline">PDF Metadata & Author Editor</a>, you can sanitize these internal artifacts with a single click in under two seconds.</p>
 
       <h2>2. Legal Bates Stamping & Pagination: Ensuring Document Control</h2>
       <p>In legal practice, clinical trial reporting, and architectural documentation, individual documents often span hundreds of pages across disparate scanning batches. If a physical printout is unstapled or shuffled, chronological order is instantly lost unless every sheet features immutable pagination.</p>
@@ -3350,7 +3355,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         </ul>
       </div>
 
-      <p>Rather than paying $20/month per seat for legacy Adobe Acrobat Pro subscriptions, legal clerks and students can leverage MatrixConvert's <a href="#/tool/pdf-page-numberer" class="text-sky-400 font-semibold underline">PDF Page Numbering & Bates Stamp Tool</a> to inject clean, sub-pixel vector typography across unlimited documents with zero cost.</p>
+      <p>Rather than paying $20/month per seat for legacy Adobe Acrobat Pro subscriptions, legal clerks and students can leverage Mimage's <a href="/tool/pdf-page-numberer" class="text-sky-400 font-semibold underline">PDF Page Numbering & Bates Stamp Tool</a> to inject clean, sub-pixel vector typography across unlimited documents with zero cost.</p>
 
       <h2>3. AcroForm Flattening: The Critical Difference Between Editable and Immutable PDFs</h2>
       <p>Interactive fillable forms—technically known as <strong>AcroForms</strong> or XFA (XML Forms Architecture)—maintain user inputs in dynamic overlay annotations. While this makes filling out loan applications or tenant leases convenient, it introduces significant post-signing liabilities:</p>
@@ -3360,10 +3365,10 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Inconsistent Print Output:</strong> Certain commercial printing software and government OCR scanners ignore interactive annotation layers entirely, producing blank forms missing crucial filled data.</li>
       </ol>
 
-      <p><strong>PDF Form Flattening</strong> resolves this vulnerability once and for all. MatrixConvert’s <a href="#/tool/pdf-flatten" class="text-sky-400 font-semibold underline">PDF Form & Annotation Flattener</a> rasterizes the interactive form dictionary and writes all text strings, vector checkmarks, and electronic signature paths directly into the permanent PDF content stream. The result is an immutable, read-only PDF that renders identically across every device and printer on earth.</p>
+      <p><strong>PDF Form Flattening</strong> resolves this vulnerability once and for all. Mimage’s <a href="/tool/pdf-flatten" class="text-sky-400 font-semibold underline">PDF Form & Annotation Flattener</a> rasterizes the interactive form dictionary and writes all text strings, vector checkmarks, and electronic signature paths directly into the permanent PDF content stream. The result is an immutable, read-only PDF that renders identically across every device and printer on earth.</p>
 
       <h2>4. Architectural Benchmark: In-Browser WebAssembly vs Cloud SaaS Converters</h2>
-      <p>Why do thousands of privacy-conscious organizations prefer MatrixConvert over legacy cloud converters like Smallpdf, Sejda, or CloudConvert? Let us inspect the architectural differences:</p>
+      <p>Why do thousands of privacy-conscious organizations prefer Mimage over legacy cloud converters like Smallpdf, Sejda, or CloudConvert? Let us inspect the architectural differences:</p>
 
       <div class="overflow-x-auto my-6">
         <table class="w-full text-left text-xs border border-sky-400/30 rounded-xl">
@@ -3371,7 +3376,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
             <tr>
               <th class="p-3 border-b border-sky-400/30">Evaluation Dimension</th>
               <th class="p-3 border-b border-sky-400/30">Adobe Acrobat Web / Sejda</th>
-              <th class="p-3 border-b border-sky-400/30">MatrixConvert (mimage.netlify.app)</th>
+              <th class="p-3 border-b border-sky-400/30">Mimage (mimage.netlify.app)</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-sky-900/30 text-slate-300">
@@ -3402,26 +3407,26 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <h2>5. Step-by-Step Tutorial: Sanitizing & Numbering Your PDF in 3 Easy Steps</h2>
       <p>Follow this rapid tutorial to prepare any document for public or legal release:</p>
       <ul>
-        <li><strong>Step 1: Sanitize Internal Metadata:</strong> Load your PDF into the <a href="#/tool/pdf-metadata-editor" class="text-sky-400 underline">PDF Metadata Editor</a>. Type clean public values for Title and Author, or leave fields blank to purge all identifying signatures entirely.</li>
-        <li><strong>Step 2: Apply Bates Stamping or Pagination:</strong> Pass the file to our <a href="#/tool/pdf-page-numberer" class="text-sky-400 underline">PDF Page Numbering Tool</a>. Select "Bottom Center" or "Top Right" to apply crisp vector pagination across all pages.</li>
-        <li><strong>Step 3: Flatten and Lock Form Fields:</strong> Run the document through the <a href="#/tool/pdf-flatten" class="text-sky-400 underline">PDF Flattener</a> to permanently freeze signatures and prevent subsequent tampering. Download your audit-ready, tamper-proof document immediately.</li>
+        <li><strong>Step 1: Sanitize Internal Metadata:</strong> Load your PDF into the <a href="/tool/pdf-metadata-editor" class="text-sky-400 underline">PDF Metadata Editor</a>. Type clean public values for Title and Author, or leave fields blank to purge all identifying signatures entirely.</li>
+        <li><strong>Step 2: Apply Bates Stamping or Pagination:</strong> Pass the file to our <a href="/tool/pdf-page-numberer" class="text-sky-400 underline">PDF Page Numbering Tool</a>. Select "Bottom Center" or "Top Right" to apply crisp vector pagination across all pages.</li>
+        <li><strong>Step 3: Flatten and Lock Form Fields:</strong> Run the document through the <a href="/tool/pdf-flatten" class="text-sky-400 underline">PDF Flattener</a> to permanently freeze signatures and prevent subsequent tampering. Download your audit-ready, tamper-proof document immediately.</li>
       </ul>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Financial auditor inspecting legal document metadata and electronic signatures',
         caption: 'Figure 2: Form flattening eliminates post-signature field modification in commercial contracts.',
         placement: 'After Section 1 (Metadata Vulnerabilities)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.pdfWorkflow,
         alt: 'Legal courtroom gavel and document binder with Bates numbering tabs',
         caption: 'Figure 3: Sequential Bates stamping standardizes legal exhibits for civil litigation.',
         placement: 'After Section 2 (Bates Stamping)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Zero knowledge cybersecurity data encryption visualization',
         caption: 'Figure 4: WebAssembly executes document transformations in sandboxed local device memory.',
         placement: 'After Section 4 (Architectural Benchmark)'
@@ -3430,22 +3435,22 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Sanitize PDF Metadata Free',
-        url: '#/tool/pdf-metadata-editor',
+        url: '/tool/pdf-metadata-editor',
         description: 'Remove hidden author tags, server file paths, and editing fingerprints.'
       },
       {
         anchor: 'Add Bates Page Numbers to PDF',
-        url: '#/tool/pdf-page-numberer',
+        url: '/tool/pdf-page-numberer',
         description: 'Apply professional sequential page numbering and document control codes.'
       },
       {
         anchor: 'Flatten PDF Forms & Signatures',
-        url: '#/tool/pdf-flatten',
+        url: '/tool/pdf-flatten',
         description: 'Lock AcroForms and signature annotations into permanent uneditable geometry.'
       },
       {
         anchor: 'Convert Color PDF to Monochrome B&W',
-        url: '#/tool/pdf-grayscale',
+        url: '/tool/pdf-grayscale',
         description: 'Cut printer toner costs and produce clean legal briefs in grayscale.'
       }
     ],
@@ -3473,7 +3478,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'Can someone recover deleted PDF metadata after using your tool?',
-        answer: 'No. MatrixConvert generates a brand new PDF binary stream omitting purged keys entirely, ensuring that past usernames and file paths are mathematically impossible to retrieve.'
+        answer: 'No. Mimage generates a brand new PDF binary stream omitting purged keys entirely, ensuring that past usernames and file paths are mathematically impossible to retrieve.'
       },
       {
         question: 'Can I reorder or reverse backwards scanned PDFs?',
@@ -3485,7 +3490,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       }
     ],
     ctaText: 'Start Managing Your PDFs Privately with 46+ Free In-Browser Tools',
-    ctaLink: '#/tool/pdf-metadata-editor'
+    ctaLink: '/tool/pdf-metadata-editor'
   },
 
   // 18. The Complete Guide to In-Browser Image Editing & Advanced Filters
@@ -3493,7 +3498,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     id: 'post-in-browser-image-editing-privacy-2026',
     slug: 'in-browser-image-editing-exif-aspect-ratio-color-filters',
     title: 'The Complete Guide to In-Browser Image Editing: EXIF Stripping, Social Aspect Ratios, and High-Precision Canvas Filters',
-    metaTitle: 'In-Browser Image Editing & Privacy Guide | MatrixConvert',
+    metaTitle: 'In-Browser Image Editing & Privacy Guide | Mimage',
     metaDescription: 'Master modern in-browser image optimization: scrub sensitive GPS EXIF metadata, pad photos for Instagram/LinkedIn without cropping, and apply hardware-accelerated filters.',
     category: 'graphic-design',
     publishedDate: '2026-11-04',
@@ -3501,7 +3506,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Naveed Afzal',
       role: 'Web Developer & SEO Specialist (20+ Years Experience)',
-      avatar: '/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png',
+      avatar: EDITORIAL_IMAGES.authorAvatar,
       bio: 'Pioneering developer and mindful technologist dedicated to building private, high-speed tools that empower global digital creators.'
     },
     primaryKeyword: 'in-browser image editing without upload',
@@ -3513,7 +3518,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'client-side image processing'
     ],
     heroImage: {
-      url: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1200&q=80',
+      url: EDITORIAL_IMAGES.compressionGuide,
       alt: 'Digital photographer and designer adjusting high-dynamic-range color curves and aspect ratio framing on workstation',
       caption: 'Figure 1: HTML5 Canvas hardware acceleration brings workstation-grade photographic transformations into the browser.'
     },
@@ -3521,7 +3526,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       'Modern smartphones automatically embed exact GPS latitude/longitude coordinates, camera sensor serials, and timestamps into photo EXIF headers, endangering personal safety when posted online.',
       'Canvas-based aspect ratio padding allows creators to post landscape and portrait graphics to 1:1 Instagram feeds and 4:5 carousels without sacrificing vital framing.',
       'Hardware-accelerated 3x3 convolution matrices enable instant high-pass image sharpening, contrast enhancement, and 1-bit binary silhouette generation in real-time.',
-      'MatrixConvert performs all graphic filtering locally using sandboxed HTML5 Canvas APIs, ensuring zero images are ever saved or uploaded to external servers.'
+      'Mimage performs all graphic filtering locally using sandboxed HTML5 Canvas APIs, ensuring zero images are ever saved or uploaded to external servers.'
     ],
     content: `
       <h2>1. The Geolocation Threat: Why Unsanitized Photos Betray Your Real-World Privacy</h2>
@@ -3534,7 +3539,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Temporal Data:</strong> Exact sub-second timestamps and local time zone offsets.</li>
       </ul>
 
-      <p>When you upload unscrubbed photos to Craigslist, freelance portfolios, public blogs, or discussion boards, anyone can download your image, run an automated metadata extractor, and map your home address, child's school, or workplace. MatrixConvert’s <a href="#/tool/image-exif-stripper" class="text-sky-400 font-semibold underline">EXIF Metadata & Privacy Stripper</a> rasterizes the image onto a pristine in-memory canvas and re-encodes a sanitized file with exactly 0% metadata retained.</p>
+      <p>When you upload unscrubbed photos to Craigslist, freelance portfolios, public blogs, or discussion boards, anyone can download your image, run an automated metadata extractor, and map your home address, child's school, or workplace. Mimage’s <a href="/tool/image-exif-stripper" class="text-sky-400 font-semibold underline">EXIF Metadata & Privacy Stripper</a> rasterizes the image onto a pristine in-memory canvas and re-encodes a sanitized file with exactly 0% metadata retained.</p>
 
       <h2>2. Social Media Aspect Ratios: Why Padding Always Beats Destructive Cropping</h2>
       <p>Every digital creator has experienced the frustration of social media cropping algorithms. You design an expansive 16:9 landscape promotional banner or capture a majestic wide-angle portrait, only to watch Instagram, TikTok, or LinkedIn forcibly crop the edges, cutting off headline text, sponsor logos, or human faces.</p>
@@ -3548,7 +3553,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         </ul>
       </div>
 
-      <p>With our <a href="#/tool/image-aspect-ratio-padder" class="text-sky-400 font-semibold underline">Social Media Aspect Ratio Padder</a>, you can instantly frame photos into 1:1 (Square), 4:5 (Instagram Portrait), 16:9 (Landscape YouTube/LinkedIn), or 9:16 (Stories/Reels) with professional precision.</p>
+      <p>With our <a href="/tool/image-aspect-ratio-padder" class="text-sky-400 font-semibold underline">Social Media Aspect Ratio Padder</a>, you can instantly frame photos into 1:1 (Square), 4:5 (Instagram Portrait), 16:9 (Landscape YouTube/LinkedIn), or 9:16 (Stories/Reels) with professional precision.</p>
 
       <h2>3. Convolution Matrices: How Browser Canvas Executes Micro-Sharpening and Filter Math</h2>
       <p>Many users assume that advanced digital signal processing—such as unsharp masking, edge detection, and luminance equalization—requires multi-gigabyte desktop software like Adobe Photoshop. In reality, modern JavaScript V8 and WebAssembly engines execute matrix convolutions across millions of 32-bit pixel arrays in single-digit milliseconds.</p>
@@ -3560,34 +3565,34 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 [ -1,  5, -1 ]
 [  0, -1,  0 ]
       </pre>
-      <p>By subtracting adjacent pixel luminance while multiplying the central pixel by a factor of 5, the algorithm amplifies high-frequency spatial gradients, making soft text, hair textures, and product contours appear instantly crisper. Try this algorithm in real-time with our <a href="#/tool/image-sharpen-unsharp" class="text-sky-400 font-semibold underline">Smart Image Sharpening Tool</a>.</p>
+      <p>By subtracting adjacent pixel luminance while multiplying the central pixel by a factor of 5, the algorithm amplifies high-frequency spatial gradients, making soft text, hair textures, and product contours appear instantly crisper. Try this algorithm in real-time with our <a href="/tool/image-sharpen-unsharp" class="text-sky-400 font-semibold underline">Smart Image Sharpening Tool</a>.</p>
 
       <h2>4. Creative Photographic Styles: Duotone, Sepia & Color Keying</h2>
-      <p>Beyond technical utility, creative styling drives high social engagement and brand recall. MatrixConvert features a full suite of aesthetic image processors:</p>
+      <p>Beyond technical utility, creative styling drives high social engagement and brand recall. Mimage features a full suite of aesthetic image processors:</p>
       <ul>
-        <li><strong>Duotone Matrix Green Studio:</strong> Replaces standard RGB color distribution with high-contrast dual-tone gradients. Popularized by Spotify artist banners and cyberpunk cinematic aesthetics, our <a href="#/tool/image-color-tint-duotone" class="text-sky-400 underline">Duotone Studio</a> transforms everyday captures into striking poster art.</li>
+        <li><strong>Duotone Matrix Green Studio:</strong> Replaces standard RGB color distribution with high-contrast dual-tone gradients. Popularized by Spotify artist banners and cyberpunk cinematic aesthetics, our <a href="/tool/image-color-tint-duotone" class="text-sky-400 underline">Duotone Studio</a> transforms everyday captures into striking poster art.</li>
         <li><strong>Vintage Sepia Tone:</strong> Re-calculates color channels using classical silver-bromide tonal equations, imbuing family portraits and travel memories with authentic 19th-century warmth.</li>
         <li><strong>Color Key to Transparent PNG:</strong> Eliminates flat white backdrops or green-screen backgrounds, producing true 8-bit alpha transparency for e-commerce product listings and apparel mockups.</li>
       </ul>
 
       <h2>5. The Architecture of Trust: 100% In-Browser Execution</h2>
-      <p>MatrixConvert was founded on an unshakeable ethical principle: <strong>creators should never be forced to surrender their personal photographs or corporate assets to remote cloud servers</strong>. Every single tool in our 46+ suite runs entirely on your local CPU and GPU. Exactly zero bytes leave your device.</p>
+      <p>Mimage was founded on an unshakeable ethical principle: <strong>creators should never be forced to surrender their personal photographs or corporate assets to remote cloud servers</strong>. Every single tool in our 46+ suite runs entirely on your local CPU and GPU. Exactly zero bytes leave your device.</p>
     `,
     inContentImages: [
       {
-        url: 'https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Smartphone showing GPS navigation satellite coordinates next to camera lens',
         caption: 'Figure 2: EXIF stripping prevents unauthorized extraction of private residential GPS coordinates.',
         placement: 'After Section 1 (EXIF Geolocation Threat)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.compressionGuide,
         alt: 'Social media grid interface showing clean square aspect ratio padded image posts',
         caption: 'Figure 3: Aspect ratio canvas padding preserves 100% of photographic composition for social feeds.',
         placement: 'After Section 2 (Aspect Ratio Framing)'
       },
       {
-        url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80',
+        url: EDITORIAL_IMAGES.privacyBanner,
         alt: 'Cyberpunk matrix green code interface and digital image manipulation pixels',
         caption: 'Figure 4: Hardware-accelerated canvas filters execute in real-time within the browser sandbox.',
         placement: 'After Section 4 (Creative Styles)'
@@ -3596,22 +3601,22 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
     internalLinks: [
       {
         anchor: 'Scrub Photo GPS & EXIF Metadata',
-        url: '#/tool/image-exif-stripper',
+        url: '/tool/image-exif-stripper',
         description: 'Remove sensitive location tags and camera serial numbers before sharing.'
       },
       {
         anchor: 'Pad Image for Instagram & Social Media',
-        url: '#/tool/image-aspect-ratio-padder',
+        url: '/tool/image-aspect-ratio-padder',
         description: 'Fit photos into 1:1 or 4:5 ratios without cutting off edges.'
       },
       {
         anchor: 'Sharpen Blurry Photos In-Browser',
-        url: '#/tool/image-sharpen-unsharp',
+        url: '/tool/image-sharpen-unsharp',
         description: 'Enhance micro-textures and restore soft camera captures.'
       },
       {
         anchor: 'Make Background Transparent PNG',
-        url: '#/tool/image-transparent-png-maker',
+        url: '/tool/image-transparent-png-maker',
         description: 'Key out solid white or green backdrops to create transparent PNGs.'
       }
     ],
@@ -3643,15 +3648,15 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       },
       {
         question: 'How fast is image sharpening in the browser?',
-        answer: 'Because MatrixConvert runs hardware-accelerated 2D canvas convolution directly in your device’s browser memory, high-resolution 24MP photos are sharpened in under 500 milliseconds.'
+        answer: 'Because Mimage runs hardware-accelerated 2D canvas convolution directly in your device’s browser memory, high-resolution 24MP photos are sharpened in under 500 milliseconds.'
       },
       {
         question: 'Can I batch-process multiple images at once?',
         answer: 'Yes! Select multiple photos to process them in sequence and download all results individually or as a single convenient ZIP archive.'
       }
     ],
-    ctaText: 'Enhance and Protect Your Photos Free with MatrixConvert on mimage.netlify.app',
-    ctaLink: '#/tool/image-exif-stripper'
+    ctaText: 'Enhance and Protect Your Photos Free with Mimage on mimage.netlify.app',
+    ctaLink: '/tool/image-exif-stripper'
   }
 ];
 

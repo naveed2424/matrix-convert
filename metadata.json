@@ -1,6 +1,6 @@
 {
-  "name": "MatrixConvert - Free Image & Document Converter",
-  "description": "Universal free client-side image and document converter inspired by Sejda with falling Matrix digital rain. Convert PDF to PNG, PDF to SVG, JPG, WebP, ICO, AVIF and more with zero file uploads and complete privacy.",
+  "name": "Mimage - Free Online File & Image Tools",
+  "description": "Mimage is a fast, private online file and image workspace. Compress images to target KB sizes, convert PNG/JPG/WebP/AVIF/SVG, organize and sign PDFs, inspect & remove EXIF metadata, generate QR codes, and optimize SVGs in your browser.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

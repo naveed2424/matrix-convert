@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, ShieldCheck, FileText, Info, Mail, Map, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, ShieldCheck, FileText, Info, Mail, Map, CheckCircle2 } from 'lucide-react';
 import { TOOLS_DATA } from '../data/toolsData';
+import { EDITORIAL_IMAGES } from '../data/editorialAssets';
 import { ToolDefinition } from '../types';
 
 export type LegalPageType = 'privacy' | 'terms' | 'about' | 'contact' | 'sitemap';
@@ -16,15 +17,16 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
   onClose,
   onSelectTool
 }) => {
+  const [quickSent, setQuickSent] = useState(false);
+
   if (!pageType) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-2 border-sky-400 bg-[#f0f9ff] p-6 sm:p-8 shadow-2xl text-left text-slate-900 font-sans">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-sky-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-2xl text-left text-slate-900 dark:text-slate-100 font-sans">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-sky-500 text-white shadow-md">
+            <div className="p-2.5 rounded-xl bg-blue-600 text-white">
               {pageType === 'privacy' && <ShieldCheck className="w-5 h-5" />}
               {pageType === 'terms' && <FileText className="w-5 h-5" />}
               {pageType === 'about' && <Info className="w-5 h-5" />}
@@ -32,352 +34,183 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
               {pageType === 'sitemap' && <Map className="w-5 h-5" />}
             </div>
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
                 {pageType === 'privacy' && 'Privacy Policy'}
                 {pageType === 'terms' && 'Terms of Service'}
-                {pageType === 'about' && 'About MatrixConvert'}
+                {pageType === 'about' && 'About Mimage'}
                 {pageType === 'contact' && 'Contact & Support'}
                 {pageType === 'sitemap' && 'HTML Website Sitemap'}
               </h2>
-              <span className="text-xs font-mono text-sky-700 font-semibold">
-                Google AdSense & Web Compliance
+              <span className="text-xs font-mono text-blue-600 dark:text-sky-400">
+                Mimage Online File &amp; Image Workspace
               </span>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 hover:text-slate-800 hover:bg-sky-100 transition-colors cursor-pointer"
+            className="rounded-lg p-2 text-slate-400 hover:text-slate-800 dark:hover:text-white cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content Body */}
-        <div className="py-6 text-sm leading-relaxed text-slate-700 space-y-5">
-          {/* =========================================================================
-              PRIVACY POLICY (Strictly compliant with Google AdSense, GDPR, CCPA)
-             ========================================================================= */}
+        <div className="py-6 text-sm leading-relaxed text-slate-600 dark:text-slate-300 space-y-5">
           {pageType === 'privacy' && (
             <>
-              <p className="text-xs text-slate-500 font-mono">
-                Last updated: October 21, 2026
-              </p>
-
+              <p className="text-xs text-slate-500 font-mono">Last updated: November 2026</p>
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  1. Zero File Upload & Total Processing Privacy
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                  1. Local-First Processing &amp; Transparent Exceptions
                 </h3>
                 <p>
-                  At MatrixConvert, privacy is our fundamental architecture. All image and document conversions (including PDF to PNG, PDF to SVG, WebP, JPG, and ICO) occur <strong>100% client-side inside your local web browser's memory</strong> using HTML5 Canvas and WebAssembly. Your files, documents, and images are never uploaded to any remote server or stored in any database.
+                  All image, PDF, EXIF, color, SVG, and QR utilities on Mimage process files locally inside your browser using HTML5 Canvas and WebAssembly with zero document storage on our servers. When you use OCR Text Extraction, your browser downloads Tesseract traineddata dictionaries from CDN on demand; when you use Website Image Audit, Mimage fetches public HTTPS URLs via public CORS mirrors if needed and never accesses private IP addresses.
                 </p>
               </div>
-
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  2. Google AdSense & Third-Party Advertising Cookies
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                  2. Google AdSense &amp; Analytics Cookies
                 </h3>
                 <p>
-                  We use third-party advertising companies, including <strong>Google AdSense</strong>, to serve advertisements when you visit our website. These companies may use cookies, web beacons, and other tracking technologies to collect information about your visits to this and other websites in order to provide personalized advertisements about goods and services of interest to you.
-                </p>
-                <ul className="list-disc pl-5 mt-2 space-y-1">
-                  <li>
-                    Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet.
-                  </li>
-                  <li>
-                    Users may opt out of personalized advertising by visiting{' '}
-                    <a
-                      href="https://www.google.com/settings/ads"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sky-700 underline font-semibold"
-                    >
-                      Google Ads Settings
-                    </a>
-                    . Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting{' '}
-                    <a
-                      href="https://www.aboutads.info/choices/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sky-700 underline font-semibold"
-                    >
-                      www.aboutads.info
-                    </a>
-                    .
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  3. Log Files & Web Analytics
-                </h3>
-                <p>
-                  Like most standard web applications, we use Google Analytics (gtag.js) to understand general traffic trends, country of origin, and browser types to improve conversion performance. No personally identifiable information (PII) is stored or connected to converted files.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  4. GDPR (General Data Protection Regulation) Compliance
-                </h3>
-                <p>
-                  For users located in the European Economic Area (EEA), all processing of files occurs solely on your device. We do not transfer personal data outside the EEA because we never collect or transmit your files.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  5. CCPA (California Consumer Privacy Act)
-                </h3>
-                <p>
-                  Under the CCPA, California residents have the right to know what personal data is collected and request deletion. Because MatrixConvert does not sell personal information or retain uploaded files, your privacy is safeguarded by default.
+                  We use Google AdSense and Google Analytics 4 (G-ZM8R2JF6WT) for site sustainability and aggregated usage statistics. Users can manage personalized ads via Google Ads Settings or opt out using standard browser cookie controls.
                 </p>
               </div>
             </>
           )}
 
-          {/* =========================================================================
-              TERMS OF SERVICE
-             ========================================================================= */}
           {pageType === 'terms' && (
             <>
-              <p className="text-xs text-slate-500 font-mono">
-                Last updated: October 21, 2026
-              </p>
-
+              <p className="text-xs text-slate-500 font-mono">Last updated: November 2026</p>
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  1. Agreement to Terms
-                </h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">1. Permitted Use</h3>
                 <p>
-                  By accessing and using MatrixConvert, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not use our service.
+                  Mimage utilities are free for personal, educational, and commercial workflows. You retain full ownership of all input and output files.
                 </p>
               </div>
-
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  2. Free License & Fair Use
-                </h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">2. E-Signature &amp; Tool Limitations</h3>
                 <p>
-                  MatrixConvert is provided 100% free of charge for personal, commercial, and educational purposes. You may convert unlimited images and documents without any licensing fees, registrations, or artificial limitations.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  3. User Responsibility & Content Ownership
-                </h3>
-                <p>
-                  You retain all copyrights and intellectual property rights to the images and documents you convert. Because processing occurs locally on your machine, you are solely responsible for ensuring you have legal rights to the files you process.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  4. Disclaimer of Warranties
-                </h3>
-                <p>
-                  MatrixConvert is provided "AS IS" and "AS AVAILABLE" without warranties of any kind, whether express or implied. We do not warrant that results will meet specific commercial expectations, although we strive for maximum accuracy and fidelity.
+                  Tools are provided &quot;AS IS&quot;. Visual PDF signatures embed graphics locally and do not provide cryptographic certification or legal signature guarantees.
                 </p>
               </div>
             </>
           )}
 
-          {/* =========================================================================
-              ABOUT US
-             ========================================================================= */}
           {pageType === 'about' && (
             <>
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  Our Mission
-                </h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Our Mission</h3>
                 <p>
-                  MatrixConvert was created to give creators, developers, designers, and students an open, free, and completely private image and document conversion toolkit inspired by productive tools like Sejda and styled with the iconic falling green digital rain of the Matrix film.
+                  Mimage gives everyday users, bloggers, designers, and developers fast, honest, sign-up-free file utilities directly inside modern browsers.
                 </p>
               </div>
 
-              {/* Founder Profile Card */}
-              <div className="p-4 rounded-xl bg-gradient-to-r from-sky-50 to-cyan-50 border-2 border-sky-300">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-sky-400 bg-slate-900 shrink-0 shadow">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 shrink-0">
                     <img
-                      src="/assets/aistudio/Portfolio_technologique_et_m_ditatif_de_Naveed_Afzal_4cd849be.png"
-                      alt="Naveed Afzal"
-                      className="w-full h-full object-cover object-top scale-110"
+                      src={EDITORIAL_IMAGES.authorAvatar}
+                      alt="Naveed Afzal - Administrator & Writer"
+                      className="w-full h-full object-cover object-top"
                     />
                   </div>
                   <div>
-                    <div className="font-extrabold text-slate-900 flex items-center gap-2">
-                      <span>Naveed Afzal</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-800 font-semibold">Founder • 20+ Yrs Exp</span>
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 hover:underline font-mono">
-                        Afzal460@gmail.com
-                      </a>
-                    </div>
+                    <div className="font-bold text-slate-900 dark:text-white">Naveed Afzal</div>
+                    <div className="text-[11px] font-mono text-emerald-400">Administrator, Founder &amp; Writer</div>
+                    <a href="mailto:Afzal460@gmail.com" className="text-xs text-blue-600 dark:text-sky-400 hover:underline font-mono">
+                      Afzal460@gmail.com
+                    </a>
                   </div>
                 </div>
-                <p className="text-xs text-slate-700 leading-relaxed font-sans">
-                  "With over 20 years of hands-on web engineering and SEO experience, I designed MatrixConvert to provide high-performance in-browser tools with 100% client-side privacy. Exactly zero bytes of user data are ever uploaded to cloud servers." — Naveed Afzal
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-sky-100 border border-sky-300">
-                <h4 className="font-bold text-sky-900 mb-1">
-                  Why In-Browser Processing Matters:
-                </h4>
-                <p className="text-xs text-sky-800 leading-relaxed">
-                  Traditional online file converters force users to upload confidential contracts, personal photos, and sensitive receipts to unknown remote servers. MatrixConvert utilizes modern WebAssembly and HTML5 Canvas to perform every rasterization, vectorization, and compression task directly on your CPU/GPU, eliminating bandwidth delays and eliminating privacy risks entirely.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">
-                  Core Capabilities
-                </h3>
-                <p>
-                  Support for over 30 conversion pathways including PDF to PNG (with custom 300 DPI), PDF to SVG, PNG to WebP, Multi-Image to PDF document compilation, Favicon (.ICO) multi-layer generation, and Matrix Rain ASCII art.
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Administrator, creator, and lead writer of Mimage (mimage.netlify.app). Built around client-side WebAssembly, transparent limitations, and fast access.
                 </p>
               </div>
             </>
           )}
 
-          {/* =========================================================================
-              CONTACT US
-             ========================================================================= */}
           {pageType === 'contact' && (
             <>
-              <p>
-                Have questions, feature suggestions, or need technical support? We would love to hear from you.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-                <div className="p-4 rounded-xl bg-sky-50 border-2 border-sky-400 shadow-sm">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="font-bold text-slate-900">Founder Direct:</div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-200 text-sky-800 font-mono font-bold">Priority</span>
-                  </div>
-                  <div className="text-xs text-sky-800 font-bold">Naveed Afzal (Founder & Systems Architect)</div>
-                  <a href="mailto:Afzal460@gmail.com" className="text-xs text-sky-700 font-mono hover:underline block mt-1 font-semibold">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                  <div className="font-bold text-slate-900 dark:text-white">Creator Direct</div>
+                  <div className="text-xs text-blue-600 dark:text-sky-400 font-semibold mt-1">Naveed Afzal</div>
+                  <a href="mailto:Afzal460@gmail.com" className="text-xs text-blue-600 dark:text-sky-400 font-mono hover:underline block mt-1">
                     Afzal460@gmail.com
                   </a>
-                  <p className="text-xs text-slate-500 mt-1">Direct inquiries, custom tooling & partnerships</p>
                 </div>
-
-                <div className="p-4 rounded-xl bg-white border border-sky-300 shadow-sm">
-                  <div className="font-bold text-slate-900 mb-1">General Support:</div>
-                  <a href="mailto:support@mimage.netlify.app" className="text-xs text-sky-700 font-mono hover:underline block">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                  <div className="font-bold text-slate-900 dark:text-white">Support</div>
+                  <a href="mailto:support@mimage.netlify.app" className="text-xs text-blue-600 dark:text-sky-400 font-mono hover:underline block mt-2">
                     support@mimage.netlify.app
                   </a>
-                  <p className="text-xs text-slate-500 mt-1">Average response time: &lt; 24 hours</p>
                 </div>
               </div>
 
-              {/* Quick feedback message box */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert('Thank you! Your message has been sent to our support team.');
-                  onClose();
-                }}
-                className="space-y-3 p-4 rounded-xl bg-sky-100/70 border border-sky-300"
-              >
-                <div className="font-bold text-slate-900 text-xs font-mono uppercase tracking-wider">
-                  Quick Message Form
+              {quickSent ? (
+                <div className="p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-200 text-xs flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>Email client opened. Thank you for reaching out to Mimage!</span>
                 </div>
-                <div>
+              ) : (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setQuickSent(true);
+                  }}
+                  className="space-y-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800"
+                >
+                  <div className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider">
+                    Quick Support Message
+                  </div>
                   <input
                     type="email"
                     required
                     placeholder="Your Email Address"
-                    className="w-full p-2.5 rounded-lg border border-sky-300 bg-white text-xs text-slate-900 focus:outline-none focus:border-sky-600"
+                    className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white"
                   />
-                </div>
-                <div>
                   <textarea
                     required
                     rows={3}
-                    placeholder="How can we help you?"
-                    className="w-full p-2.5 rounded-lg border border-sky-300 bg-white text-xs text-slate-900 focus:outline-none focus:border-sky-600"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-lg bg-sky-600 text-white font-mono text-xs font-bold hover:bg-sky-700 transition-colors cursor-pointer"
-                >
-                  Send Message
-                </button>
-              </form>
+                    placeholder="How can we help?"
+                    className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white"
+                  />
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-lg bg-blue-600 text-white font-mono text-xs font-bold hover:bg-blue-700 cursor-pointer"
+                  >
+                    Send Message
+                  </button>
+                </form>
+              )}
             </>
           )}
 
-          {/* =========================================================================
-              HTML SITEMAP (User-Facing Directory for Crawlers & Visitors)
-             ========================================================================= */}
           {pageType === 'sitemap' && (
-            <>
-              <p>
-                Full index of all conversion tools, utilities, and resources available on MatrixConvert:
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 my-4">
-                {TOOLS_DATA.map((tool) => (
-                  <button
-                    key={tool.id}
-                    onClick={() => {
-                      onClose();
-                      onSelectTool(tool);
-                    }}
-                    className="p-3 rounded-xl bg-white border border-sky-200 hover:border-sky-500 hover:bg-sky-50 text-left transition-all cursor-pointer group shadow-sm"
-                  >
-                    <div className="font-mono text-[10px] text-sky-700 font-bold">
-                      {tool.fromFormat} → {tool.toFormat}
-                    </div>
-                    <div className="font-bold text-xs text-slate-900 group-hover:text-sky-700 transition-colors truncate">
-                      {tool.name}
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              <div className="pt-3 border-t border-sky-200 flex flex-wrap gap-4 text-xs font-mono">
-                <a
-                  href="/sitemap.xml"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sky-700 underline font-bold"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 my-2">
+              {TOOLS_DATA.map((tool) => (
+                <button
+                  key={tool.id}
+                  onClick={() => {
+                    onClose();
+                    onSelectTool(tool);
+                  }}
+                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-400 text-left transition-colors cursor-pointer"
                 >
-                  View XML Sitemap (/sitemap.xml)
-                </a>
-                <a
-                  href="/robots.txt"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sky-700 underline font-bold"
-                >
-                  View Robots.txt (/robots.txt)
-                </a>
-                <a
-                  href="/ads.txt"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sky-700 underline font-bold"
-                >
-                  View Ads.txt (/ads.txt)
-                </a>
-              </div>
-            </>
+                  <div className="font-mono text-[10px] text-blue-600 dark:text-sky-400 font-bold">
+                    {tool.fromFormat} → {tool.toFormat}
+                  </div>
+                  <div className="font-semibold text-xs text-slate-900 dark:text-white truncate">{tool.name}</div>
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Footer of Modal */}
-        <div className="pt-4 border-t border-sky-200 flex justify-end">
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-sky-600 text-white font-mono text-xs font-bold hover:bg-sky-700 transition-colors cursor-pointer"
+            className="px-5 py-2 rounded-xl bg-blue-600 text-white font-mono text-xs font-semibold hover:bg-blue-700 cursor-pointer"
           >
             Close
           </button>

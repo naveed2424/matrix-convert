@@ -27,7 +27,7 @@ export const SUPPORTED_LANGUAGES: Language[] = [
 
 export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Universal Free Image & Document Converter',
     subTagline: 'Convert PDF, PNG, SVG, WebP, JPG, ICO and 30+ formats directly in your browser. 100% Free, zero file uploads, instant client-side privacy.',
     allTools: 'All 35+ Tools',
@@ -62,7 +62,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparent',
     white: 'Solid White',
     allFreePledge: 'Free forever for everyone. No registration, no watermarks, no daily limits.',
-    languageBannerText: 'MatrixConvert is also available in your language.',
+    languageBannerText: 'Mimage is also available in your language.',
     switchLang: 'Switch language',
     openTool: 'Open Converter →',
     readyForDownload: 'Ready for Download',
@@ -75,7 +75,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Learn how to convert, optimize, and export documents and graphics with zero quality loss.'
   },
   es: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Conversor Universal Gratuito de Imágenes y Documentos',
     subTagline: 'Convierte PDF, PNG, SVG, WebP, JPG, ICO y más de 30 formatos directamente en tu navegador. 100% Gratis, sin subir archivos.',
     allTools: 'Todas las 35+ Herramientas',
@@ -110,7 +110,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparente',
     white: 'Blanco Sólido',
     allFreePledge: 'Gratis para siempre. Sin registro, sin marcas de agua, sin límites.',
-    languageBannerText: 'MatrixConvert está disponible en español.',
+    languageBannerText: 'Mimage está disponible en español.',
     switchLang: 'Cambiar de idioma',
     openTool: 'Abrir Conversor →',
     readyForDownload: 'Listo para Descargar',
@@ -123,7 +123,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Aprende a convertir, optimizar y exportar documentos e imágenes sin pérdida de calidad.'
   },
   fr: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Convertisseur Gratuit d\'Images et de Documents',
     subTagline: 'Convertissez PDF, PNG, SVG, WebP, JPG, ICO et 30+ formats dans votre navigateur. 100% Gratuit, aucun envoi de fichier sur serveur.',
     allTools: 'Tous les 35+ Outils',
@@ -158,7 +158,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparent',
     white: 'Blanc uni',
     allFreePledge: 'Gratuit pour toujours. Sans inscription, sans filigrane, sans limite.',
-    languageBannerText: 'MatrixConvert est disponible en français.',
+    languageBannerText: 'Mimage est disponible en français.',
     switchLang: 'Changer de langue',
     openTool: 'Ouvrir l\'Outil →',
     readyForDownload: 'Prêt pour le Téléchargement',
@@ -171,7 +171,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Découvrez comment convertir, compresser et exporter sans perte de netteté.'
   },
   de: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Kostenloser Bild- & Dokumentkonverter',
     subTagline: 'Konvertieren Sie PDF, PNG, SVG, WebP, JPG, ICO und über 30 Formate direkt im Browser. 100% Kostenlos und privat.',
     allTools: 'Alle 35+ Werkzeuge',
@@ -206,7 +206,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparent',
     white: 'Weiß',
     allFreePledge: 'Für immer kostenlos. Ohne Anmeldung, ohne Wasserzeichen.',
-    languageBannerText: 'MatrixConvert ist auf Deutsch verfügbar.',
+    languageBannerText: 'Mimage ist auf Deutsch verfügbar.',
     switchLang: 'Sprache wechseln',
     openTool: 'Werkzeug öffnen →',
     readyForDownload: 'Bereit zum Download',
@@ -219,7 +219,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Erfahren Sie, wie Sie Grafiken und PDFs ohne Qualitätsverlust konvertieren.'
   },
   it: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Convertitore Gratuito di Immagini e Documenti',
     subTagline: 'Converti PDF, PNG, SVG, WebP, JPG, ICO e più di 30 formati direttamente nel browser. 100% Gratuito, nessun upload sul server.',
     allTools: 'Tutti i 35+ Strumenti',
@@ -254,7 +254,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Trasparente',
     white: 'Bianco Solido',
     allFreePledge: 'Gratuito per sempre. Nessuna registrazione, senza watermark.',
-    languageBannerText: 'MatrixConvert è disponibile in italiano.',
+    languageBannerText: 'Mimage è disponibile in italiano.',
     switchLang: 'Cambia lingua',
     openTool: 'Apri Strumento →',
     readyForDownload: 'Pronto per il Download',
@@ -267,7 +267,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Impara a convertire e comprimere immagini e PDF senza perdere qualità.'
   },
   pt: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Conversor Gratuito de Imagens e Documentos',
     subTagline: 'Converta PDF, PNG, SVG, WebP, JPG, ICO e mais de 30 formatos no seu navegador. 100% Gratuito, sem envio para servidores.',
     allTools: 'Todas as 35+ Ferramentas',
@@ -302,7 +302,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparente',
     white: 'Branco Sólido',
     allFreePledge: 'Gratuito para sempre. Sem cadastro, sem marcas d\'água.',
-    languageBannerText: 'MatrixConvert está disponível em português.',
+    languageBannerText: 'Mimage está disponível em português.',
     switchLang: 'Mudar idioma',
     openTool: 'Abrir Conversor →',
     readyForDownload: 'Pronto para Download',
@@ -315,7 +315,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Aprenda a converter e otimizar imagens e documentos com total nitidez.'
   },
   ja: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: '完全無料の画像・ドキュメント変換ツール',
     subTagline: 'PDF、PNG、SVG、WebP、JPG、ICOなど30種類以上の形式をブラウザ上で安全に変換。100%無料、サーバー送信なしの完全プライバシー。',
     allTools: '全35+ツール一覧',
@@ -350,7 +350,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: '透過背景',
     white: '白背景',
     allFreePledge: '誰でもずっと完全無料。会員登録不要・透かしなし・無制限。',
-    languageBannerText: 'MatrixConvert は日本語でご利用いただけます。',
+    languageBannerText: 'Mimage は日本語でご利用いただけます。',
     switchLang: '言語を切り替える',
     openTool: 'ツールを開く →',
     readyForDownload: 'ダウンロードの準備完了',
@@ -363,7 +363,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: '画質を落とさずに画像やPDFを変換・圧縮する方法をご紹介します。'
   },
   zh: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: '完全免费的图像与文档转换器',
     subTagline: '在浏览器本地直接转换 PDF、PNG、SVG、WebP、JPG、ICO 等30多种格式。100%免费，文件无需上传云端，保障个人隐私。',
     allTools: '全部 35+ 款工具',
@@ -398,7 +398,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: '透明背景',
     white: '纯白背景',
     allFreePledge: '永久免费供所有人使用。无须注册、无水印、无限制。',
-    languageBannerText: 'MatrixConvert 现已支持简体中文。',
+    languageBannerText: 'Mimage 现已支持简体中文。',
     switchLang: '切换语言',
     openTool: '打开工具 →',
     readyForDownload: '文件已生成，可供下载',
@@ -411,7 +411,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: '快速掌握高质量转换、矢量导出及图片压缩技巧。'
   },
   ru: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Бесплатный Конвертер Изображений и Документов',
     subTagline: 'Конвертируйте PDF, PNG, SVG, WebP, JPG, ICO и более 30 форматов прямо в браузере. 100% Бесплатно, без загрузки на сервер.',
     allTools: 'Все 35+ Инструментов',
@@ -446,7 +446,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Прозрачный',
     white: 'Белый',
     allFreePledge: 'Бесплатно навсегда. Без регистрации и водяных знаков.',
-    languageBannerText: 'MatrixConvert доступен на русском языке.',
+    languageBannerText: 'Mimage доступен на русском языке.',
     switchLang: 'Переключить язык',
     openTool: 'Открыть Конвертер →',
     readyForDownload: 'Готово к Скачиванию',
@@ -459,7 +459,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Узнайте, как конвертировать и сжимать файлы без потери качества.'
   },
   ar: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'محول صور ومستندات مجاني وشامل',
     subTagline: 'قم بتحويل PDF وPNG وSVG وWebP وJPG وICO وأكثر من 30 صيغة في متصفحك مباشرة. مجاني 100%، بدون رفع ملفات.',
     allTools: 'جميع الـ 35+ أداة',
@@ -494,7 +494,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'شفافة',
     white: 'أبيض ناصع',
     allFreePledge: 'مجاني للجميع إلى الأبد. بدون تسجيل أو علامة مائية.',
-    languageBannerText: 'MatrixConvert متاح باللغة العربية.',
+    languageBannerText: 'Mimage متاح باللغة العربية.',
     switchLang: 'تغيير اللغة',
     openTool: 'فتح المحول ←',
     readyForDownload: 'الملفات جاهزة للتحميل',
@@ -507,7 +507,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'تعلم كيفية تحويل وضغط المستندات والصور بأعلى دقة ممكنة.'
   },
   hi: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'मुफ़्त इमेज और डॉक्यूमेंट कन्वर्टर',
     subTagline: 'PDF, PNG, SVG, WebP, JPG, ICO और 30+ फ़ॉर्मेट्स को सीधे अपने ब्राउज़र में बदलें। 100% मुफ़्त और सुरक्षित।',
     allTools: 'सभी 35+ टूल्स',
@@ -542,7 +542,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'पारदर्शी (Transparent)',
     white: 'सफेद',
     allFreePledge: 'हमेशा के लिए मुफ़्त। बिना किसी रजिस्ट्रेशन के।',
-    languageBannerText: 'MatrixConvert हिन्दी में भी उपलब्ध है।',
+    languageBannerText: 'Mimage हिन्दी में भी उपलब्ध है।',
     switchLang: 'भाषा बदलें',
     openTool: 'टूल खोलें →',
     readyForDownload: 'डाउनलोड के लिए तैयार',
@@ -555,7 +555,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'बिना क्वालिटी खोए फ़ाइलें कन्वर्ट और कंप्रेस करने का आसान तरीका।'
   },
   nl: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'Gratis Afbeeldingen- en Documentconverter',
     subTagline: 'Converteer PDF, PNG, SVG, WebP, JPG, ICO en 30+ formaten direct in je browser. 100% Gratis en veilig.',
     allTools: 'Alle 35+ Gereedschappen',
@@ -590,7 +590,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'Transparant',
     white: 'Wit',
     allFreePledge: 'Voor altijd gratis. Geen registratie, geen watermerken.',
-    languageBannerText: 'MatrixConvert is ook beschikbaar in het Nederlands.',
+    languageBannerText: 'Mimage is ook beschikbaar in het Nederlands.',
     switchLang: 'Taal wisselen',
     openTool: 'Open Converter →',
     readyForDownload: 'Klaar om te Downloaden',
@@ -603,7 +603,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     howToSubtitle: 'Ontdek hoe u afbeeldingen en PDF\'s converteert zonder kwaliteitsverlies.'
   },
   bn: {
-    appTitle: 'MatrixConvert',
+    appTitle: 'Mimage',
     tagline: 'ইউনিভার্সাল ফ্রি ইমেজ এবং ডকুমেন্ট কনভার্টার',
     subTagline: 'PDF, PNG, SVG, WebP, JPG, ICO সহ ৪৬+ ফরম্যাট সরাসরি আপনার ব্রাউজারে কনভার্ট করুন। ১০০% ফ্রি, কোনো ফাইল আপলোড নেই।',
     allTools: 'সব ৪৬+ টুলস',
@@ -638,7 +638,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     transparent: 'স্বচ্ছ (Transparent)',
     white: 'সাদা',
     allFreePledge: 'সবার জন্য চিরকাল বিনামূল্যে। কোনো রেজিস্ট্রেশন বা সীমা নেই।',
-    languageBannerText: 'MatrixConvert এখন বাংলাতেও উপলব্ধ।',
+    languageBannerText: 'Mimage এখন বাংলাতেও উপলব্ধ।',
     switchLang: 'বাংলা ভাষায় পরিবর্তন করুন',
     openTool: 'টুল খুলুন →',
     readyForDownload: 'ডাউনলোডের জন্য প্রস্তুত',

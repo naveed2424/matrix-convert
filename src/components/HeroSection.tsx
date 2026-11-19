@@ -1,7 +1,18 @@
-import React, { useState, useRef } from 'react';
-import { UploadCloud, Search, ShieldCheck, Cpu, Zap, ArrowRight, FileText, Sparkles } from 'lucide-react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import {
+  UploadCloud,
+  Search,
+  ShieldCheck,
+  Zap,
+  ArrowRight,
+  FileSearch,
+  Globe,
+  Sparkles,
+  Lock
+} from 'lucide-react';
 import { getTranslation, getLocalizedTool } from '../data/languages';
 import { ToolDefinition } from '../types';
+import { searchTools } from '../utils/toolSearch';
 
 interface HeroSectionProps {
   currentLang: string;
@@ -9,6 +20,7 @@ interface HeroSectionProps {
   onSearchChange: (q: string) => void;
   onFileDropped: (files: FileList) => void;
   onSelectTool: (tool: ToolDefinition) => void;
+  onSelectToolSlug: (slug: string) => void;
   allTools: ToolDefinition[];
   onScrollToTools: () => void;
 }
@@ -19,10 +31,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onSearchChange,
   onFileDropped,
   onSelectTool,
+  onSelectToolSlug,
   allTools,
   onScrollToTools
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [highlightedIdx, setHighlightedIdx] = useState(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const t = (key: string) => getTranslation(currentLang, key);
@@ -51,220 +65,253 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   };
 
-  // Filter matching tools
-  const filteredTools = searchQuery.trim()
-    ? allTools.filter((tool) => {
-        const localized = getLocalizedTool(tool, currentLang);
-        const q = searchQuery.toLowerCase();
-        return (
-          localized.name.toLowerCase().includes(q) ||
-          tool.name.toLowerCase().includes(q) ||
-          tool.fromFormat.toLowerCase().includes(q) ||
-          tool.toFormat.toLowerCase().includes(q) ||
-          localized.shortDescription.toLowerCase().includes(q) ||
-          tool.seoKeywords.shortTail.some((kw) => kw.toLowerCase().includes(q))
-        );
-      })
-    : [];
+  const filteredTools = useMemo(() => {
+    return searchQuery.trim() ? searchTools(searchQuery, allTools, currentLang) : [];
+  }, [searchQuery, allTools, currentLang]);
+
+  const topResults = filteredTools.slice(0, 10);
+
+  useEffect(() => {
+    setHighlightedIdx(0);
+  }, [searchQuery]);
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      onSearchChange('');
+      return;
+    }
+    if (!topResults.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIdx((prev) => (prev + 1) % topResults.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIdx((prev) => (prev - 1 + topResults.length) % topResults.length);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const chosen = topResults[highlightedIdx] || topResults[0];
+      if (chosen) {
+        onSelectTool(chosen);
+        onSearchChange('');
+      }
+    }
+  };
 
   return (
-    <section className="relative pt-10 pb-12 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
-      {/* Decorative Matrix Stream indicator */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/50 bg-sky-950/80 px-4 py-1 text-xs font-mono text-sky-300 mb-6 backdrop-blur-md shadow-lg">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-400"></span>
-        </span>
-        <span className="font-bold tracking-wide">MATRIX ENGINE // 100% PRIVATE CLIENT-SIDE CONVERTER</span>
-      </div>
-
+    <section className="relative pt-10 pb-10 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
       {/* Main Title */}
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-tight">
-        {t('tagline')}
+      <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4 leading-tight">
+        Free Online File &amp; Image Tools —{' '}
+        <span className="text-blue-600 dark:text-sky-400">Private, Fast, No Sign-Up.</span>
       </h1>
 
       {/* Subtitle */}
-      <p className="text-base sm:text-lg text-sky-100 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
-        {t('subTagline')}
+      <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+        {t('subTagline')} Compress, resize, convert formats, strip hidden camera metadata, and organize PDFs right in your browser.
       </p>
 
-      {/* Primary Action CTA Buttons */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-600 px-8 py-3.5 font-mono text-sm font-bold text-white shadow-[0_0_25px_rgba(14,165,233,0.5)] hover:from-sky-300 hover:to-blue-500 hover:shadow-[0_0_35px_rgba(14,165,233,0.8)] transition-all cursor-pointer"
-        >
-          <UploadCloud className="w-5 h-5 text-white" />
-          <span>{t('heroButton')}</span>
-          <ArrowRight className="w-4 h-4 text-white" />
-        </button>
-
-        <button
-          onClick={onScrollToTools}
-          className="w-full sm:w-auto px-6 py-3.5 rounded-xl border-2 border-sky-400 bg-sky-950/80 font-mono text-xs font-bold text-sky-200 hover:bg-sky-900 hover:text-white transition-colors cursor-pointer shadow-md"
-        >
-          {t('browseAllBelow')}
-        </button>
-      </div>
-
+      {/* Primary Dropzone */}
       <input
         ref={fileInputRef}
         type="file"
         multiple
         className="hidden"
         onChange={handleFileSelect}
-        accept=".pdf,.png,.jpg,.jpeg,.webp,.svg,.avif,.ico,.bmp"
+        accept=".pdf,.png,.jpg,.jpeg,.webp,.svg,.avif,.ico,.bmp,.gif,.heic"
       />
 
-      {/* Universal Drag & Drop Area: Distinct Light Sky Blue Card */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative group rounded-2xl border-2 border-dashed p-8 transition-all cursor-pointer backdrop-blur-md mb-8 ${
+        className={`relative group rounded-2xl border-2 border-dashed p-8 transition-all cursor-pointer mb-6 ${
           isDragging
-            ? 'border-sky-500 bg-sky-100 shadow-[0_0_30px_rgba(14,165,233,0.5)] scale-[1.01]'
-            : 'border-sky-300 bg-[#f0f9ff] hover:border-sky-500 hover:bg-sky-50 shadow-xl'
+            ? 'border-blue-600 bg-blue-50 dark:bg-sky-950/50 scale-[1.01]'
+            : 'border-blue-300 dark:border-slate-700 bg-white/95 dark:bg-slate-900/90 hover:border-blue-500 shadow-lg'
         }`}
       >
         <div className="flex flex-col items-center justify-center gap-3">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform">
-            <UploadCloud className="w-8 h-8" />
+          <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+            <UploadCloud className="w-7 h-7" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-900">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
               {t('dropTitle')}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1 font-mono font-medium">
-              {t('dropSubtitle')}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Drop any photo, SVG, GIF, or PDF to inspect its file signature and launch compatible tools automatically.
             </p>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
-            {['PDF', 'PNG', 'SVG', 'WEBP', 'JPG', 'ICO', 'AVIF'].map((fmt) => (
-              <span
-                key={fmt}
-                className="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold bg-sky-200/90 text-sky-900 border border-sky-300 shadow-sm"
-              >
-                {fmt}
-              </span>
-            ))}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+              PNG · JPG · WEBP · AVIF · SVG · HEIC · GIF · PDF
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Live Search & Filter Bar */}
-      <div className="relative max-w-xl mx-auto mb-10">
+      {/* Live Tool Search Bar */}
+      <div className="relative max-w-xl mx-auto mb-8">
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-4 h-4 text-sky-500 pointer-events-none" />
+          <Search className="absolute left-4 w-4 h-4 text-slate-400 pointer-events-none" />
           <input
-            type="text"
+            type="search"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder={t('searchPlaceholder')}
-            className="w-full rounded-xl border-2 border-sky-300 bg-white pl-11 pr-4 py-3.5 font-mono text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-600 focus:ring-2 focus:ring-sky-400 shadow-xl"
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Search any tool (e.g. svg to png, pdf to markdown, 100kb)..."
+            aria-label="Search tools and jump directly to converter page"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 pl-11 pr-20 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-sm"
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-3.5 text-xs font-mono font-bold text-sky-700 hover:text-slate-900 px-2 py-1 cursor-pointer"
+              className="absolute right-3 text-xs font-mono font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white px-2 py-1 cursor-pointer"
             >
-              CLEAR
+              Clear
             </button>
           )}
         </div>
 
-        {/* Live Search Results Dropdown in Light Sky Blue */}
         {searchQuery.trim() && (
-          <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl border-2 border-sky-300 bg-white p-3 shadow-2xl z-30 text-left max-h-80 overflow-y-auto">
-            {filteredTools.length > 0 ? (
+          <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 shadow-2xl z-30 text-left max-h-80 overflow-y-auto">
+            {topResults.length > 0 ? (
               <div className="space-y-1">
-                <div className="px-3 py-1.5 text-[10px] font-mono uppercase text-sky-800 font-bold tracking-wider border-b border-sky-200">
-                  Matching Converters ({filteredTools.length})
+                <div className="px-3 py-1.5 text-[11px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <span className="tabular-nums">Matching Tools ({filteredTools.length})</span>
+                  <span className="text-[10px] text-emerald-500 normal-case">Press Enter to open top tool</span>
                 </div>
-                {filteredTools.map((tool) => {
+                {topResults.map((tool, index) => {
                   const localized = getLocalizedTool(tool, currentLang);
+                  const isHighlighted = index === highlightedIdx;
                   return (
                     <button
                       key={tool.id}
+                      type="button"
+                      onMouseEnter={() => setHighlightedIdx(index)}
                       onClick={() => {
                         onSelectTool(tool);
                         onSearchChange('');
                       }}
-                      className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-sky-100 text-left transition-colors cursor-pointer group"
+                      className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-colors cursor-pointer group ${
+                        isHighlighted
+                          ? 'bg-emerald-500/15 border border-emerald-500/40'
+                          : 'hover:bg-blue-50 dark:hover:bg-slate-800 border border-transparent'
+                      }`}
                     >
-                      <div>
-                        <div className="font-bold text-sm text-slate-900 group-hover:text-sky-700 transition-colors flex items-center gap-2">
+                      <div className="min-w-0 pr-2">
+                        <div className="font-semibold text-sm text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors truncate">
                           {localized.name}
-                          {tool.badge && (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-200 text-sky-900 font-semibold">
-                              {tool.badge}
-                            </span>
-                          )}
                         </div>
-                        <div className="text-xs text-slate-600 line-clamp-1 mt-0.5">
-                          {localized.shortDescription}
+                        <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                          {tool.categoryName} · {localized.shortDescription}
                         </div>
                       </div>
-                      <span className="font-mono text-xs font-bold text-sky-700 shrink-0 ml-2">
-                        {tool.fromFormat} → {tool.toFormat}
+                      <span className="font-mono text-xs font-semibold text-emerald-500 shrink-0 ml-2 flex items-center gap-1">
+                        <span>{tool.fromFormat} → {tool.toFormat}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </button>
                   );
                 })}
               </div>
             ) : (
-              <div className="p-4 text-center font-mono text-xs text-slate-600">
-                No tools matching "{searchQuery}".
+              <div className="p-4 text-center font-mono text-xs text-slate-500">
+                No tools matching &ldquo;{searchQuery}&rdquo;.
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Trust & Guarantee Badges: Light Sky Blue Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 text-left">
-        <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#f0f9ff] border-2 border-sky-300 shadow-md">
-          <div className="p-2 rounded-xl bg-sky-500 text-white shrink-0 mt-0.5">
-            <ShieldCheck className="w-5 h-5" />
+      {/* Three Signature Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 text-left">
+        <button
+          onClick={() => onSelectToolSlug('smart-assistant')}
+          className="flex items-start gap-3 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all shadow-sm text-left cursor-pointer group"
+        >
+          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-600 dark:text-sky-400 shrink-0">
+            <FileSearch className="w-5 h-5" />
           </div>
-          <div>
-            <h4 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider">
-              100% Client-Side Privacy
-            </h4>
-            <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-medium">
-              Files processed in browser sandboxed memory. Zero server uploads.
+          <div className="min-w-0">
+            <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 flex items-center justify-between gap-2">
+              <span>Smart File Assistant</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              Verify binary file signatures locally and see only compatible actions.
             </p>
           </div>
-        </div>
+        </button>
 
-        <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#f0f9ff] border-2 border-sky-300 shadow-md">
-          <div className="p-2 rounded-xl bg-sky-500 text-white shrink-0 mt-0.5">
-            <Zap className="w-5 h-5" />
+        <button
+          onClick={() => onSelectToolSlug('optimization-studio')}
+          className="flex items-start gap-3 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all shadow-sm text-left cursor-pointer group"
+        >
+          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-600 dark:text-sky-400 shrink-0">
+            <Sparkles className="w-5 h-5" />
           </div>
-          <div>
-            <h4 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider">
-              No Limits or Watermarks
-            </h4>
-            <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-medium">
-              Free forever for everyone. Unlimited conversions without registration.
+          <div className="min-w-0">
+            <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 flex items-center justify-between gap-2">
+              <span>Optimization Studio</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              Resize, convert WebP/AVIF, strip EXIF, rename &amp; ZIP download.
             </p>
           </div>
-        </div>
+        </button>
 
-        <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#f0f9ff] border-2 border-sky-300 shadow-md">
-          <div className="p-2 rounded-xl bg-sky-500 text-white shrink-0 mt-0.5">
-            <Cpu className="w-5 h-5" />
+        <button
+          onClick={() => onSelectToolSlug('website-image-audit')}
+          className="flex items-start gap-3 p-4 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all shadow-sm text-left cursor-pointer group"
+        >
+          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-600 dark:text-sky-400 shrink-0">
+            <Globe className="w-5 h-5" />
           </div>
-          <div>
-            <h4 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider">
-              High-DPI & Vector Fidelity
-            </h4>
-            <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed font-medium">
-              Export up to 300 DPI for print and infinite scalable vector SVG geometry.
+          <div className="min-w-0">
+            <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 flex items-center justify-between gap-2">
+              <span>Website Image Audit</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              Spot missing ALT attributes, unoptimized formats, and oversized assets.
             </p>
           </div>
+        </button>
+      </div>
+
+      {/* Honest Architecture Guarantees */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <div className="text-xs text-slate-700 dark:text-slate-300">
+            <strong className="text-slate-900 dark:text-white">Browser-Local First:</strong> Media tools execute locally in device memory.
+          </div>
         </div>
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+          <Zap className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+          <div className="text-xs text-slate-700 dark:text-slate-300">
+            <strong className="text-slate-900 dark:text-white">Zero Sign-Up:</strong> Open directly without accounts or watermarks.
+          </div>
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+          <Lock className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+          <div className="text-xs text-slate-700 dark:text-slate-300">
+            <strong className="text-slate-900 dark:text-white">Honest Disclosures:</strong> Network tools clearly state when external fetches occur.
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <button
+          onClick={onScrollToTools}
+          className="text-xs font-mono font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
+        >
+          {t('browseAllBelow')} ↓
+        </button>
       </div>
     </section>
   );

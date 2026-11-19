@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   UploadCloud,
   Download,
@@ -15,7 +15,13 @@ import {
   ChevronDown,
   ChevronUp,
   FileCheck,
-  Zap
+  Zap,
+  AlertTriangle,
+  Copy,
+  Check,
+  BookOpen,
+  Calendar,
+  ArrowRight
 } from 'lucide-react';
 import { ToolDefinition, ConvertedFile, ConversionSettings } from '../types';
 import {
@@ -32,7 +38,45 @@ import {
   convertPdfMonochrome,
   applyAdvancedImageFilter
 } from '../services/converterEngine';
+import {
+  convertPdfToMarkdown,
+  convertPdfToJson,
+  convertPdfToHtml,
+  convertPdfToWordRtf,
+  convertPdfToCsv,
+  convertPdfToBase64,
+  createTwoUpPdf,
+  convertMarkdownToPdf,
+  convertHtmlToPdf,
+  convertTxtToPdf,
+  convertCsvToPdf,
+  convertJsonToPdf,
+  convertRasterOrSvgToPdf,
+  convertJsonToCsv,
+  convertCsvToJson,
+  convertHtmlToMarkdown
+} from '../services/extraConvertersEngine';
+import { formatFileSize } from '../services/advancedToolsEngine';
 import { getTranslation, getLocalizedTool } from '../data/languages';
+import { TOOL_DEEP_GUIDES } from '../data/toolDeepContent';
+import { EDITORIAL_IMAGES } from '../data/editorialAssets';
+import { PRE_SEEDED_BLOG_POSTS } from '../data/blogData';
+import { SmartAssistantTool } from './tools/SmartAssistantTool';
+import { WebsiteImageAuditTool } from './tools/WebsiteImageAuditTool';
+import { ImageOptimizationStudio } from './tools/ImageOptimizationStudio';
+import { ImageCompressTargetTool } from './tools/ImageCompressTargetTool';
+import { SocialMediaResizerTool } from './tools/SocialMediaResizerTool';
+import { ExifViewerRemoverTool } from './tools/ExifViewerRemoverTool';
+import { QrCodeTool } from './tools/QrCodeTool';
+import { ColorPaletteTool } from './tools/ColorPaletteTool';
+import { SvgOptimizerTool } from './tools/SvgOptimizerTool';
+import { ImageToBase64Tool } from './tools/ImageToBase64Tool';
+import { FaviconAppIconTool } from './tools/FaviconAppIconTool';
+import { GifToolsStudio } from './tools/GifToolsStudio';
+import { ImageUpscalerTool } from './tools/ImageUpscalerTool';
+import { OcrExtractTool } from './tools/OcrExtractTool';
+import { PdfCompressTool } from './tools/PdfCompressTool';
+import { PdfOrganizerTool } from './tools/PdfOrganizerTool';
 
 interface DedicatedToolPageProps {
   tool: ToolDefinition;
@@ -40,14 +84,42 @@ interface DedicatedToolPageProps {
   currentLang: string;
   onBack: () => void;
   onSelectTool: (tool: ToolDefinition) => void;
+  onSelectToolSlug: (slug: string) => void;
+  onSelectBlogPost?: (slug: string) => void;
 }
+
+const SPECIALIZED_TOOL_IDS = new Set([
+  'smart-assistant',
+  'website-image-audit',
+  'optimization-studio',
+  'compress-image-to-100kb',
+  'resize-image-for-instagram',
+  'remove-image-metadata',
+  'image-exif-stripper',
+  'qr-code-generator',
+  'color-palette-generator',
+  'image-color-extractor',
+  'svg-optimizer',
+  'image-to-base64',
+  'favicon-generator',
+  'png-to-ico',
+  'app-icon-generator',
+  'gif-maker',
+  'gif-compressor',
+  'image-upscaler',
+  'ocr-extract-text',
+  'pdf-compress',
+  'pdf-organizer'
+]);
 
 export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   tool,
   allTools,
   currentLang,
   onBack,
-  onSelectTool
+  onSelectTool,
+  onSelectToolSlug,
+  onSelectBlogPost
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
@@ -57,6 +129,122 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   const [isZipping, setIsZipping] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [matrixTextArt, setMatrixTextArt] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [copiedAscii, setCopiedAscii] = useState(false);
+
+  const deepGuide = TOOL_DEEP_GUIDES[tool.id];
+  const linkedBlogPosts = deepGuide
+    ? deepGuide.relatedBlogSlugs
+        .map((s) => PRE_SEEDED_BLOG_POSTS.find((p) => p.slug === s))
+        .filter((p): p is NonNullable<typeof p> => Boolean(p))
+    : [];
+
+  useEffect(() => {
+    setFiles([]);
+    setConvertedResults([]);
+    setMatrixTextArt('');
+    setErrorMsg(null);
+    setProgress(0);
+    setProgressMsg('');
+
+    const prevTitle = document.title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const prevDesc = metaDesc?.getAttribute('content') || '';
+
+    document.title = deepGuide ? deepGuide.seoTitle : `${tool.name} – Free Browser Tool | Mimage`;
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        deepGuide ? deepGuide.metaDescription : tool.shortDescription
+      );
+    }
+
+    const scriptId = 'mimage-tool-schema-jsonld';
+    let scriptEl = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!scriptEl) {
+      scriptEl = document.createElement('script');
+      scriptEl.id = scriptId;
+      scriptEl.type = 'application/ld+json';
+      document.head.appendChild(scriptEl);
+    }
+
+    const toolUrl = `https://mimage.netlify.app/tool/${tool.slug}`;
+    const graph: any[] = [
+      {
+        '@type': 'SoftwareApplication',
+        '@id': `${toolUrl}#app`,
+        name: tool.name,
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'Any (Browser-Based)',
+        url: toolUrl,
+        description: deepGuide ? deepGuide.metaDescription : tool.longDescription,
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD'
+        },
+        author: {
+          '@type': 'Person',
+          name: 'Naveed Afzal',
+          jobTitle: 'Administrator, Founder & Lead Writer at Mimage'
+        }
+      },
+      {
+        '@type': 'HowTo',
+        name: `How to Convert ${tool.fromFormat} to ${tool.toFormat} with ${tool.name}`,
+        step: tool.steps.map((st) => ({
+          '@type': 'HowToStep',
+          position: st.step,
+          name: st.title,
+          text: st.description
+        }))
+      }
+    ];
+
+    if (tool.faq.length > 0) {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: tool.faq.map((q) => ({
+          '@type': 'Question',
+          name: q.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: q.answer
+          }
+        }))
+      });
+    }
+
+    if (deepGuide) {
+      graph.push({
+        '@type': 'TechArticle',
+        headline: deepGuide.editorialTitle,
+        description: deepGuide.llmSummary,
+        datePublished: deepGuide.publishedDate,
+        dateModified: deepGuide.updatedDate,
+        keywords: [deepGuide.primaryKeyword, ...deepGuide.longTailKeywords].join(', '),
+        author: {
+          '@type': 'Person',
+          name: 'Naveed Afzal',
+          jobTitle: 'Administrator, Founder & Lead Writer at Mimage'
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Mimage',
+          url: 'https://mimage.netlify.app/'
+        }
+      });
+    }
+
+    scriptEl.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+
+    return () => {
+      document.title = prevTitle;
+      if (metaDesc && prevDesc) metaDesc.setAttribute('content', prevDesc);
+      const el = document.getElementById(scriptId);
+      if (el) el.remove();
+    };
+  }, [tool, deepGuide]);
 
   const [settings, setSettings] = useState<ConversionSettings>({
     dpi: 150,
@@ -80,6 +268,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       setFiles(Array.from(e.target.files));
       setConvertedResults([]);
       setMatrixTextArt('');
+      setErrorMsg(null);
     }
   };
 
@@ -89,70 +278,166 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       setFiles(Array.from(e.dataTransfer.files));
       setConvertedResults([]);
       setMatrixTextArt('');
+      setErrorMsg(null);
     }
   };
 
-  // Execute Conversion
   const handleConvert = async () => {
     if (files.length === 0) return;
     setIsConverting(true);
     setProgress(15);
     setProgressMsg(t('converting'));
     setConvertedResults([]);
+    setErrorMsg(null);
 
     try {
       const allResults: ConvertedFile[] = [];
 
-      // Special Case 1: Merge multiple images to a single PDF
       if (tool.id === 'image-to-pdf') {
         setProgress(50);
         setProgressMsg('Compiling images into PDF document...');
         const mergedPdf = await mergeImagesToPdf(files);
         allResults.push(mergedPdf);
-      }
-      // Special Case 2A: PDF Metadata Editor & Sanitizer
-      else if (tool.id === 'pdf-metadata-editor') {
+      } else if (tool.id === 'webp-to-pdf' || tool.id === 'svg-to-pdf') {
+        setProgress(50);
+        setProgressMsg(`Compiling ${tool.fromFormat} artwork into PDF pages...`);
+        const builtPdf = await convertRasterOrSvgToPdf(files, tool.id === 'svg-to-pdf');
+        allResults.push(builtPdf);
+      } else if (tool.id === 'pdf-2-up-handout') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Creating 2-up landscape sheets for ${files[i].name}...`);
+          const res = await createTwoUpPdf(files[i]);
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-markdown') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await convertPdfToMarkdown(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-json') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await convertPdfToJson(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-html') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await convertPdfToHtml(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-word-rtf') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await convertPdfToWordRtf(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-csv') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await convertPdfToCsv(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'pdf-to-base64') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Encoding ${files[i].name} to Base64 Data URI...`);
+          allResults.push(await convertPdfToBase64(files[i]));
+        }
+      } else if (tool.id === 'markdown-to-pdf') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Rendering Markdown headings & blocks for ${files[i].name}...`);
+          allResults.push(await convertMarkdownToPdf(files[i]));
+        }
+      } else if (tool.id === 'html-to-pdf') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Sanitizing & paginating ${files[i].name}...`);
+          allResults.push(await convertHtmlToPdf(files[i]));
+        }
+      } else if (tool.id === 'txt-to-pdf') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Wrapping text pages for ${files[i].name}...`);
+          allResults.push(await convertTxtToPdf(files[i]));
+        }
+      } else if (tool.id === 'csv-to-pdf') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Formatting table grid for ${files[i].name}...`);
+          allResults.push(await convertCsvToPdf(files[i]));
+        }
+      } else if (tool.id === 'json-to-pdf') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Pretty-printing JSON to PDF for ${files[i].name}...`);
+          allResults.push(await convertJsonToPdf(files[i]));
+        }
+      } else if (tool.id === 'json-to-csv') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Flattening JSON schema to CSV for ${files[i].name}...`);
+          allResults.push(await convertJsonToCsv(files[i]));
+        }
+      } else if (tool.id === 'csv-to-json') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Parsing RFC 4180 CSV into JSON for ${files[i].name}...`);
+          allResults.push(await convertCsvToJson(files[i]));
+        }
+      } else if (tool.id === 'html-to-markdown') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Converting semantic HTML to Markdown for ${files[i].name}...`);
+          allResults.push(await convertHtmlToMarkdown(files[i]));
+        }
+      } else if (tool.id === 'pdf-metadata-editor') {
         for (let i = 0; i < files.length; i++) {
           setProgress(Math.round(30 + (i / files.length) * 60));
           setProgressMsg(`Sanitizing metadata for ${files[i].name}...`);
           const res = await editPdfMetadata(files[i], {
             title: files[i].name.replace(/\.[^/.]+$/, ''),
-            author: 'MatrixConvert Verified',
-            subject: 'Optimized Document',
-            keywords: 'pdf, optimized, secure, private'
+            author: 'Mimage Local Engine',
+            subject: 'Cleaned Document',
+            keywords: 'pdf, cleaned, local'
           });
           allResults.push(res);
         }
-      }
-      // Special Case 2B: PDF Page Numberer
-      else if (tool.id === 'pdf-page-numberer') {
+      } else if (tool.id === 'pdf-page-numberer') {
         for (let i = 0; i < files.length; i++) {
           setProgress(Math.round(30 + (i / files.length) * 60));
           setProgressMsg(`Applying Bates page numbers to ${files[i].name}...`);
           const res = await numberPdfPages(files[i], 'bottom-center');
           allResults.push(res);
         }
-      }
-      // Special Case 2C: PDF Form & Annotation Flattening
-      else if (tool.id === 'pdf-flatten') {
+      } else if (tool.id === 'pdf-flatten') {
         for (let i = 0; i < files.length; i++) {
           setProgress(Math.round(30 + (i / files.length) * 60));
           setProgressMsg(`Flattening form fields & annotations for ${files[i].name}...`);
           const res = await flattenPdf(files[i]);
           allResults.push(res);
         }
-      }
-      // Special Case 2D: PDF Page Reorder / Reverse
-      else if (tool.id === 'pdf-page-reorder') {
+      } else if (tool.id === 'pdf-page-reorder') {
         for (let i = 0; i < files.length; i++) {
           setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Inverting & reorganizing pages for ${files[i].name}...`);
+          setProgressMsg(`Reversing page order for ${files[i].name}...`);
           const res = await reorderPdfPages(files[i], 'reverse');
           allResults.push(res);
         }
-      }
-      // Special Case 2E: PDF Grayscale & Invert
-      else if (tool.id === 'pdf-grayscale') {
+      } else if (tool.id === 'pdf-grayscale') {
         for (let i = 0; i < files.length; i++) {
           setProgressMsg(`Converting ${files[i].name} to monochrome grayscale...`);
           const res = await convertPdfMonochrome(files[i], 'grayscale', (pct) => setProgress(pct));
@@ -160,18 +445,21 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         }
       } else if (tool.id === 'pdf-invert-colors') {
         for (let i = 0; i < files.length; i++) {
-          setProgressMsg(`Generating dark-mode inverted PDF for ${files[i].name}...`);
+          setProgressMsg(`Generating inverted PDF for ${files[i].name}...`);
           const res = await convertPdfMonochrome(files[i], 'invert', (pct) => setProgress(pct));
           allResults.push(res);
         }
-      }
-      // Special Case 2F: Convert PDF to PNG / SVG / JPG
-      else if (tool.fromFormat === 'PDF') {
-        const targetFmt =
-          tool.toFormat.toLowerCase() === 'svg'
+      } else if (tool.fromFormat === 'PDF') {
+        const toFmtLower = tool.toFormat.toLowerCase();
+        const targetFmt: 'png' | 'jpg' | 'svg' | 'webp' | 'bmp' =
+          toFmtLower === 'svg'
             ? 'svg'
-            : tool.toFormat.toLowerCase() === 'jpg' || tool.toFormat.toLowerCase() === 'jpeg'
+            : toFmtLower === 'jpg' || toFmtLower === 'jpeg'
             ? 'jpg'
+            : toFmtLower === 'webp'
+            ? 'webp'
+            : toFmtLower === 'bmp'
+            ? 'bmp'
             : 'png';
 
         for (let i = 0; i < files.length; i++) {
@@ -182,17 +470,13 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           });
           allResults.push(...pdfPages);
         }
-      }
-      // Special Case 3: Matrix Rain / ASCII Art
-      else if (tool.id === 'image-matrix-art') {
+      } else if (tool.id === 'image-matrix-art') {
         for (const file of files) {
           const art = await generateMatrixAsciiArt(file, settings.matrixDensity, settings.matrixCharSet);
           setMatrixTextArt(art.textArt);
           allResults.push(art.renderedImage);
         }
-      }
-      // Special Case 4: Image Filters (Grayscale, Rotate, Crop)
-      else if (tool.id === 'image-grayscale') {
+      } else if (tool.id === 'image-grayscale') {
         for (const file of files) {
           const filtered = await applyImageFilter(file, 'grayscale');
           allResults.push(filtered);
@@ -207,11 +491,8 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           const cropped = await applyImageFilter(file, 'crop-center');
           allResults.push(cropped);
         }
-      }
-      // Special Case 5: 20 Advanced Image Tools
-      else if (
+      } else if (
         [
-          'image-exif-stripper',
           'image-aspect-ratio-padder',
           'image-color-inverter',
           'image-sepia-vintage',
@@ -237,9 +518,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           });
           allResults.push(converted);
         }
-      }
-      // Special Case 6: Standard Raster & Vector Converters (PNG, JPG, WebP, SVG, AVIF, BMP, ICO, Compress)
-      else {
+      } else {
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
           setProgress(Math.round(20 + (i / files.length) * 70));
@@ -248,35 +527,37 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         }
       }
 
+      const firstTextResult = allResults.find((r) => typeof r.textContent === 'string' && r.textContent.length > 0);
+      if (firstTextResult?.textContent && tool.id !== 'image-matrix-art') {
+        const txt = firstTextResult.textContent;
+        setMatrixTextArt(txt.length > 120000 ? `${txt.slice(0, 120000)}\n\n... [Preview truncated at 120 KB — click Download to save complete file]` : txt);
+      }
+
       setProgress(100);
-      setProgressMsg('Completed!');
+      setProgressMsg('Completed');
       setConvertedResults(allResults);
     } catch (err: any) {
       console.error('Conversion failed:', err);
-      alert(`Conversion encountered an issue: ${err.message || 'Unknown error'}`);
+      setErrorMsg(
+        err?.message ||
+          'Conversion could not complete. Please verify that your file is valid and matches the accepted format.'
+      );
     } finally {
       setIsConverting(false);
     }
   };
 
-  // Safe Download Single File using local Blob URL
   const handleDownloadSingle = (file: ConvertedFile) => {
-    try {
-      const url = URL.createObjectURL(file.blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.convertedName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 4000);
-    } catch (e) {
-      console.error('Download error:', e);
-      window.open(file.dataUrl, '_blank');
-    }
+    const url = URL.createObjectURL(file.blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = file.convertedName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
   };
 
-  // Download All as ZIP
   const handleDownloadAllZip = async () => {
     if (convertedResults.length === 0) return;
     setIsZipping(true);
@@ -290,463 +571,555 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       link.click();
       document.body.removeChild(link);
       setTimeout(() => URL.revokeObjectURL(zipUrl), 4000);
-    } catch (err) {
-      console.error('Failed to create ZIP:', err);
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Failed to package ZIP archive.');
     } finally {
       setIsZipping(false);
     }
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  const renderSpecializedStudio = () => {
+    switch (tool.id) {
+      case 'smart-assistant':
+        return <SmartAssistantTool onSelectToolSlug={onSelectToolSlug} />;
+      case 'website-image-audit':
+        return <WebsiteImageAuditTool onSelectToolSlug={onSelectToolSlug} />;
+      case 'optimization-studio':
+        return <ImageOptimizationStudio />;
+      case 'compress-image-to-100kb':
+        return <ImageCompressTargetTool />;
+      case 'resize-image-for-instagram':
+        return <SocialMediaResizerTool />;
+      case 'remove-image-metadata':
+      case 'image-exif-stripper':
+        return <ExifViewerRemoverTool />;
+      case 'qr-code-generator':
+        return <QrCodeTool />;
+      case 'color-palette-generator':
+      case 'image-color-extractor':
+        return <ColorPaletteTool />;
+      case 'svg-optimizer':
+        return <SvgOptimizerTool />;
+      case 'image-to-base64':
+        return <ImageToBase64Tool />;
+      case 'favicon-generator':
+      case 'png-to-ico':
+        return <FaviconAppIconTool initialMode="favicon" />;
+      case 'app-icon-generator':
+        return <FaviconAppIconTool initialMode="app-icons" />;
+      case 'gif-maker':
+        return <GifToolsStudio initialMode="maker" />;
+      case 'gif-compressor':
+        return <GifToolsStudio initialMode="compressor" />;
+      case 'image-upscaler':
+        return <ImageUpscalerTool />;
+      case 'ocr-extract-text':
+        return <OcrExtractTool />;
+      case 'pdf-compress':
+        return <PdfCompressTool />;
+      case 'pdf-organizer':
+        return <PdfOrganizerTool />;
+      default:
+        return null;
+    }
   };
 
   const relatedTools = allTools
-    .filter((t) => t.id !== tool.id && (t.fromFormat === tool.fromFormat || t.toFormat === tool.toFormat))
+    .filter((x) => x.id !== tool.id && (x.fromFormat === tool.fromFormat || x.toFormat === tool.toFormat || x.category === tool.category))
     .slice(0, 3);
+
+  const processingLabel =
+    tool.processingMode === 'network-fetch' || tool.processingMode === 'optional-network'
+      ? 'Network URL Fetch (SSRF-Protected)'
+      : tool.processingMode === 'browser-local-plus-cdn'
+      ? 'Local WASM + Language Dictionary Fetch'
+      : 'Browser-Local (Zero Upload)';
 
   return (
     <article className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs font-mono text-sky-300 mb-6">
+      <nav className="flex flex-wrap items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400 mb-6">
         <button
           onClick={onBack}
-          className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer bg-sky-900/40 px-2.5 py-1 rounded-md border border-sky-400/40"
+          className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs"
         >
-          <ArrowLeft className="w-3.5 h-3.5 text-sky-400" />
+          <ArrowLeft className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
           <span>{t('backToAll')}</span>
         </button>
-        <span className="text-sky-500">/</span>
-        <span className="text-sky-200">{tool.categoryName}</span>
-        <span className="text-sky-500">/</span>
-        <span className="text-white font-bold">{localized.name}</span>
+        <span>/</span>
+        <span>{tool.categoryName}</span>
+        <span>/</span>
+        <span className="text-slate-900 dark:text-white font-semibold">{localized.name}</span>
       </nav>
 
-      {/* Main Tool Header Banner */}
-      <header className="mb-8 p-6 rounded-2xl bg-sky-950/80 border-2 border-sky-400/40 backdrop-blur-md shadow-xl">
-        <div className="flex flex-wrap items-center gap-3 mb-3">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+      {/* Main Tool Header */}
+      <header className="mb-8 p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {localized.name}
           </h1>
-          {tool.badge && (
-            <span className="rounded-full border border-sky-300 bg-sky-400 text-slate-950 font-mono text-xs font-bold px-3 py-1 shadow-sm">
-              {tool.badge}
-            </span>
-          )}
-        </div>
-        <p className="text-sm sm:text-base text-sky-100 max-w-3xl leading-relaxed">
-          {tool.longDescription}
-        </p>
-
-        <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-sky-300 mt-4 pt-3 border-t border-sky-800">
-          <span className="bg-sky-900 px-2 py-0.5 rounded border border-sky-500/50">Input: {tool.fromFormat}</span>
-          <span>•</span>
-          <span className="bg-sky-900 px-2 py-0.5 rounded border border-sky-500/50">Output: {tool.toFormat}</span>
-          <span>•</span>
-          <span className="text-sky-200 font-semibold">{t('clientSideNotice')}</span>
-        </div>
-      </header>
-
-      {/* =========================================================================
-          LIGHT SKY BLUE CONVERSION STUDIO (Prominent, High-Contrast Workspace)
-         ========================================================================= */}
-      <section className="rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] p-6 sm:p-8 shadow-2xl mb-12 text-slate-900">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-sky-200">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 font-mono">
-            <Zap className="w-5 h-5 text-sky-600" />
-            <span>Interactive Conversion Studio</span>
-          </h2>
-          <span className="text-xs font-mono font-semibold text-sky-800 bg-sky-100 px-2.5 py-1 rounded-md border border-sky-300">
-            Free & In-Browser
+          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>{processingLabel}</span>
           </span>
         </div>
 
-        {/* Dropzone with Light Sky Blue Surface */}
-        <div
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className="rounded-xl border-2 border-dashed border-sky-400 bg-white/90 p-8 text-center hover:border-sky-600 hover:bg-sky-50 transition-all cursor-pointer group mb-6 shadow-sm"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept={tool.acceptedFileTypes.join(',')}
-            onChange={handleFileChange}
-            className="hidden"
-          />
-          <div className="flex flex-col items-center justify-center gap-2">
-            <div className="w-14 h-14 rounded-2xl bg-sky-500 text-white flex items-center justify-center group-hover:scale-110 shadow-md transition-transform">
-              <UploadCloud className="w-7 h-7" />
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-900">
-              {files.length === 0 ? t('dropTitle') : `${files.length} file(s) selected`}
-            </h3>
-            <p className="text-xs text-slate-600 font-mono">
-              Accepted: {tool.acceptedFileTypes.join(', ')} • Max size: Unlimited (Client RAM)
-            </p>
-          </div>
-        </div>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+          {tool.longDescription}
+        </p>
 
-        {/* Selected Files List in Light Sky Blue */}
-        {files.length > 0 && (
-          <div className="mb-6 space-y-2">
-            <div className="flex items-center justify-between text-xs font-mono font-bold text-sky-900 pb-1 border-b border-sky-200">
-              <span>{t('inputQueue')} ({files.length})</span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFiles([]);
-                  setConvertedResults([]);
-                }}
-                className="text-red-600 hover:text-red-800 cursor-pointer"
-              >
-                {t('clearQueue')}
-              </button>
-            </div>
-            {files.map((f, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-3 rounded-xl bg-white border border-sky-200 text-xs font-mono text-slate-800 shadow-sm"
-              >
-                <div className="flex items-center gap-2 truncate">
-                  <FileText className="w-4 h-4 text-sky-600 shrink-0" />
-                  <span className="truncate font-semibold">{f.name}</span>
-                </div>
-                <span className="text-slate-500 shrink-0 ml-4 font-bold">{formatFileSize(f.size)}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Tailored Options Panel in Light Sky Blue */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 rounded-xl bg-sky-100/70 border border-sky-300 mb-6 text-xs font-mono">
-          {tool.options.supportsDpi && (
-            <div className="space-y-1.5">
-              <label className="text-slate-800 flex items-center gap-1.5 font-bold">
-                <Sliders className="w-3.5 h-3.5 text-sky-700" />
-                <span>{t('dpi')}:</span>
-              </label>
-              <div className="grid grid-cols-3 gap-1">
-                {[
-                  { label: '72 (Web)', val: 72 },
-                  { label: '150 (Med)', val: 150 },
-                  { label: '300 (Print)', val: 300 }
-                ].map((dpiOpt) => (
-                  <button
-                    key={dpiOpt.val}
-                    type="button"
-                    onClick={() => setSettings({ ...settings, dpi: dpiOpt.val })}
-                    className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
-                      settings.dpi === dpiOpt.val
-                        ? 'bg-sky-600 text-white font-bold shadow'
-                        : 'bg-white text-slate-700 hover:bg-sky-200 border border-sky-200'
-                    }`}
-                  >
-                    {dpiOpt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {tool.options.supportsBackground && (
-            <div className="space-y-1.5">
-              <label className="text-slate-800 flex items-center gap-1.5 font-bold">
-                <Layers className="w-3.5 h-3.5 text-sky-700" />
-                <span>{t('background')}:</span>
-              </label>
-              <div className="grid grid-cols-2 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setSettings({ ...settings, backgroundColor: 'transparent' })}
-                  className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
-                    settings.backgroundColor === 'transparent'
-                      ? 'bg-sky-600 text-white font-bold shadow'
-                      : 'bg-white text-slate-700 hover:bg-sky-200 border border-sky-200'
-                  }`}
-                >
-                  {t('transparent')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSettings({ ...settings, backgroundColor: 'white' })}
-                  className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
-                    settings.backgroundColor === 'white'
-                      ? 'bg-sky-600 text-white font-bold shadow'
-                      : 'bg-white text-slate-700 hover:bg-sky-200 border border-sky-200'
-                  }`}
-                >
-                  {t('white')}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {tool.options.supportsQuality && (
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-slate-800">
-                <label className="flex items-center gap-1.5 font-bold">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-700" />
-                  <span>{t('quality')}:</span>
-                </label>
-                <span className="text-sky-700 font-bold">{settings.quality}%</span>
-              </div>
-              <input
-                type="range"
-                min="30"
-                max="100"
-                step="5"
-                value={settings.quality}
-                onChange={(e) => setSettings({ ...settings, quality: parseInt(e.target.value) })}
-                className="w-full accent-sky-600 cursor-pointer"
-              />
-            </div>
+        <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 dark:text-slate-400 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <span>
+            Input: <strong className="text-slate-900 dark:text-white">{tool.fromFormat}</strong>
+          </span>
+          <span>·</span>
+          <span>
+            Output: <strong className="text-blue-600 dark:text-sky-400">{tool.toFormat}</strong>
+          </span>
+          {tool.maxRecommendedSizeMb && (
+            <>
+              <span>·</span>
+              <span>Recommended max: {tool.maxRecommendedSizeMb} MB per batch</span>
+            </>
           )}
         </div>
+      </header>
 
-        {/* Primary Convert Button */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs font-mono text-slate-600 font-medium">
-            <span>✓ No server upload • 100% Client-side sandbox</span>
-          </div>
+      {/* Interactive Tool Workspace */}
+      <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-md mb-12 text-slate-900 dark:text-slate-100">
+        {SPECIALIZED_TOOL_IDS.has(tool.id) ? (
+          renderSpecializedStudio()
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Zap className="w-4 h-4 text-blue-600 dark:text-sky-400" />
+                <span>Interactive Conversion Studio</span>
+              </h2>
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                Free · Client-Side
+              </span>
+            </div>
 
-          <button
-            onClick={handleConvert}
-            disabled={files.length === 0 || isConverting}
-            className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-mono text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
-              files.length === 0 || isConverting
-                ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white hover:from-sky-600 hover:to-blue-700 shadow-sky-500/30'
-            }`}
-          >
-            {isConverting ? (
-              <>
-                <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                <span>{progressMsg || t('converting')}</span>
-              </>
-            ) : (
-              <>
-                <Zap className="w-4 h-4 text-white" />
-                <span>{t('convertNow')}</span>
-              </>
+            {errorMsg && (
+              <div className="mb-5 p-3.5 rounded-xl border border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-700 dark:text-rose-200 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{errorMsg}</span>
+              </div>
             )}
-          </button>
-        </div>
 
-        {/* Progress Bar */}
-        {isConverting && (
-          <div className="mt-4 space-y-1">
-            <div className="w-full bg-sky-200 rounded-full h-2.5 overflow-hidden border border-sky-300">
-              <div
-                className="bg-sky-600 h-2.5 transition-all duration-300"
-                style={{ width: `${progress}%` }}
+            {/* Dropzone */}
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-xl border-2 border-dashed border-blue-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950/60 p-8 text-center hover:border-blue-500 transition-all cursor-pointer group mb-6"
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept={tool.acceptedFileTypes.join(',')}
+                onChange={handleFileChange}
+                className="hidden"
               />
-            </div>
-            <div className="flex justify-between text-[11px] font-mono text-slate-600 font-bold">
-              <span>{progressMsg}</span>
-              <span>{progress}%</span>
-            </div>
-          </div>
-        )}
-
-        {/* Converted Results & Download Hub */}
-        {convertedResults.length > 0 && (
-          <div className="mt-8 pt-8 border-t border-sky-200">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <div>
-                <h4 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-sky-600" />
-                  <span>{t('readyForDownload')} ({convertedResults.length} files)</span>
-                </h4>
-                <p className="text-xs text-slate-600 font-mono mt-0.5">
-                  High-fidelity output generated inside your browser
+              <div className="flex flex-col items-center justify-center gap-2">
+                <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <UploadCloud className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {files.length === 0 ? t('dropTitle') : `${files.length} file(s) selected`}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                  Accepted: {tool.acceptedFileTypes.join(', ')}
                 </p>
               </div>
-
-              {convertedResults.length > 1 && (
-                <button
-                  onClick={handleDownloadAllZip}
-                  disabled={isZipping}
-                  className="flex items-center gap-1.5 rounded-xl bg-sky-600 text-white px-5 py-2.5 font-mono text-xs font-bold hover:bg-sky-700 transition-all cursor-pointer shadow-md"
-                >
-                  <Archive className="w-4 h-4" />
-                  <span>{isZipping ? 'Packaging ZIP...' : t('downloadAllZip')}</span>
-                </button>
-              )}
             </div>
 
-            {/* Results Grid in Light Sky Blue Style */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {convertedResults.map((res) => (
-                <div
-                  key={res.id}
-                  className="rounded-xl border-2 border-sky-300 bg-white p-3.5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="relative aspect-video rounded-lg bg-sky-50 overflow-hidden mb-3 border border-sky-200 flex items-center justify-center p-1">
-                    <img
-                      src={res.previewUrl}
-                      alt={res.convertedName}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                    {res.pageNumber && (
-                      <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-sky-900 text-white font-mono text-[10px] font-bold">
-                        Page {res.pageNumber}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <div className="font-mono text-xs text-slate-900 truncate font-bold mb-1">
-                      {res.convertedName}
-                    </div>
-                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-3 font-semibold">
-                      <span>{formatFileSize(res.convertedSize)}</span>
-                      {res.width && res.height && (
-                        <span>{res.width} × {res.height} px</span>
-                      )}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleDownloadSingle(res)}
-                    className="w-full py-2.5 rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>{t('download')}</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* ASCII Text Art Preview */}
-            {matrixTextArt && (
-              <div className="mt-6 p-4 rounded-xl bg-slate-900 border-2 border-sky-400">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-mono text-[#00ff66] font-bold">
-                    Terminal ASCII Text Art Stream:
+            {/* File Queue */}
+            {files.length > 0 && (
+              <div className="mb-6 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 pb-1 border-b border-slate-100 dark:border-slate-800">
+                  <span>
+                    {t('inputQueue')} ({files.length})
                   </span>
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(matrixTextArt);
-                      alert('ASCII Text copied to clipboard!');
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFiles([]);
+                      setConvertedResults([]);
                     }}
-                    className="text-xs font-mono text-[#00ff66] underline hover:text-white cursor-pointer"
+                    className="text-rose-600 hover:underline cursor-pointer"
                   >
-                    Copy ASCII Text
+                    {t('clearQueue')}
                   </button>
                 </div>
-                <pre className="text-[6px] sm:text-[8px] font-mono text-[#00ff66] overflow-x-auto max-h-48 p-2 bg-black/60 rounded border border-[#00ff66]/20 leading-tight">
-                  {matrixTextArt}
-                </pre>
+                {files.map((f, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <FileText className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+                      <span className="truncate font-semibold text-slate-800 dark:text-slate-200">{f.name}</span>
+                    </div>
+                    <span className="text-slate-500 shrink-0 ml-4 tabular-nums">{formatFileSize(f.size)}</span>
+                  </div>
+                ))}
               </div>
             )}
-          </div>
+
+            {/* Tool Options */}
+            {(tool.options.supportsDpi || tool.options.supportsBackground || tool.options.supportsQuality) && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 mb-6 text-xs font-mono">
+                {tool.options.supportsDpi && (
+                  <div className="space-y-1.5">
+                    <label className="text-slate-800 dark:text-slate-200 flex items-center gap-1.5 font-semibold">
+                      <Sliders className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
+                      <span>{t('dpi')}:</span>
+                    </label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {[
+                        { label: '72 (Web)', val: 72 },
+                        { label: '150 (Med)', val: 150 },
+                        { label: '300 (Print)', val: 300 }
+                      ].map((dpiOpt) => (
+                        <button
+                          key={dpiOpt.val}
+                          type="button"
+                          onClick={() => setSettings({ ...settings, dpi: dpiOpt.val })}
+                          className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
+                            settings.dpi === dpiOpt.val
+                              ? 'bg-blue-600 text-white font-bold'
+                              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          {dpiOpt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {tool.options.supportsBackground && (
+                  <div className="space-y-1.5">
+                    <label className="text-slate-800 dark:text-slate-200 flex items-center gap-1.5 font-semibold">
+                      <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
+                      <span>{t('background')}:</span>
+                    </label>
+                    <div className="grid grid-cols-2 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setSettings({ ...settings, backgroundColor: 'transparent' })}
+                        className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
+                          settings.backgroundColor === 'transparent'
+                            ? 'bg-blue-600 text-white font-bold'
+                            : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                        }`}
+                      >
+                        {t('transparent')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSettings({ ...settings, backgroundColor: 'white' })}
+                        className={`p-1.5 rounded-lg text-center transition-colors cursor-pointer ${
+                          settings.backgroundColor === 'white'
+                            ? 'bg-blue-600 text-white font-bold'
+                            : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                        }`}
+                      >
+                        {t('white')}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {tool.options.supportsQuality && (
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-slate-800 dark:text-slate-200">
+                      <label className="flex items-center gap-1.5 font-semibold">
+                        <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
+                        <span>{t('quality')}:</span>
+                      </label>
+                      <span className="text-blue-600 dark:text-sky-400 font-bold tabular-nums">
+                        {settings.quality}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="30"
+                      max="100"
+                      step="5"
+                      value={settings.quality}
+                      onChange={(e) => setSettings({ ...settings, quality: parseInt(e.target.value, 10) })}
+                      className="w-full accent-blue-600 cursor-pointer"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Action Row */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                Processed locally inside browser memory
+              </span>
+
+              <button
+                onClick={handleConvert}
+                disabled={files.length === 0 || isConverting}
+                className={`w-full sm:w-auto px-7 py-3 rounded-xl font-mono text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
+                  files.length === 0 || isConverting
+                    ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm'
+                }`}
+              >
+                {isConverting ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>{progressMsg || t('converting')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4" />
+                    <span>{t('convertNow')}</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {isConverting && (
+              <div className="mt-4 space-y-1">
+                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                  <div className="bg-blue-600 h-2 transition-all duration-300" style={{ width: `${progress}%` }} />
+                </div>
+                <div className="flex justify-between text-[11px] font-mono text-slate-500">
+                  <span>{progressMsg}</span>
+                  <span className="tabular-nums">{progress}%</span>
+                </div>
+              </div>
+            )}
+
+            {/* Results */}
+            {convertedResults.length > 0 && (
+              <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+                  <div>
+                    <h4 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      <span>
+                        {t('readyForDownload')} ({convertedResults.length})
+                      </span>
+                    </h4>
+                  </div>
+
+                  {convertedResults.length > 1 && (
+                    <button
+                      onClick={handleDownloadAllZip}
+                      disabled={isZipping}
+                      className="flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-mono text-xs font-semibold cursor-pointer"
+                    >
+                      <Archive className="w-4 h-4" />
+                      <span>{isZipping ? 'Packaging ZIP...' : t('downloadAllZip')}</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {convertedResults.map((res) => (
+                    <div
+                      key={res.id}
+                      className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-3.5 flex flex-col justify-between"
+                    >
+                      <div className="relative aspect-video rounded-lg bg-white dark:bg-slate-900 overflow-hidden mb-3 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-1">
+                        <img src={res.previewUrl} alt={res.convertedName} className="max-h-full max-w-full object-contain" />
+                        {res.pageNumber && (
+                          <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-slate-900/80 text-white font-mono text-[10px]">
+                            Page {res.pageNumber}
+                          </span>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="font-mono text-xs text-slate-900 dark:text-white truncate font-semibold mb-1">
+                          {res.convertedName}
+                        </div>
+                        <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-3 tabular-nums">
+                          <span>{formatFileSize(res.convertedSize)}</span>
+                          {res.width && res.height && (
+                            <span>
+                              {res.width} × {res.height} px
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleDownloadSingle(res)}
+                        className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>{t('download')}</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {matrixTextArt && (
+                  <div className="mt-6 p-4 rounded-xl bg-slate-900 border border-slate-700">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono text-emerald-400 font-bold">
+                        {tool.id === 'image-matrix-art'
+                          ? 'Terminal ASCII Text Art'
+                          : `Extracted ${tool.toFormat} Output Preview`}
+                      </span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(matrixTextArt);
+                          setCopiedAscii(true);
+                          setTimeout(() => setCopiedAscii(false), 2000);
+                        }}
+                        className="text-xs font-mono text-emerald-300 inline-flex items-center gap-1 hover:text-white cursor-pointer"
+                      >
+                        {copiedAscii ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>
+                          {copiedAscii ? 'Copied' : tool.id === 'image-matrix-art' ? 'Copy ASCII' : 'Copy Output'}
+                        </span>
+                      </button>
+                    </div>
+                    <pre
+                      className={`${
+                        tool.id === 'image-matrix-art' ? 'text-[7px] leading-tight' : 'text-xs leading-relaxed whitespace-pre-wrap break-words'
+                      } font-mono text-emerald-300 overflow-x-auto max-h-72 p-3 bg-black/60 rounded`}
+                    >
+                      {matrixTextArt}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </section>
 
-      {/* =========================================================================
-          LIGHT SKY BLUE EDUCATIONAL & EEAT GUIDE SECTIONS
-         ========================================================================= */}
+      {/* Honest Limitations & Troubleshooting Disclosures */}
+      {(tool.limitations?.length || tool.troubleshooting?.length) && (
+        <section className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+          {tool.limitations && tool.limitations.length > 0 && (
+            <div className="p-5 rounded-2xl border border-amber-200 dark:border-amber-800/40 bg-amber-50/70 dark:bg-amber-950/20">
+              <h2 className="text-sm font-bold text-amber-900 dark:text-amber-200 mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>Known Limitations</span>
+              </h2>
+              <ul className="space-y-1.5 text-xs text-amber-900/90 dark:text-amber-200/90 list-disc pl-4 leading-relaxed">
+                {tool.limitations.map((lim, i) => (
+                  <li key={i}>{lim}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-      {/* Section 1: Who Can Use This Tool? */}
+          {tool.troubleshooting && tool.troubleshooting.length > 0 && (
+            <div className="p-5 rounded-2xl border border-blue-200 dark:border-slate-800 bg-blue-50/70 dark:bg-slate-900">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <Info className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+                <span>Troubleshooting Tips</span>
+              </h2>
+              <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc pl-4 leading-relaxed">
+                {tool.troubleshooting.map((tip, i) => (
+                  <li key={i}>
+                    {typeof tip === 'string' ? (
+                      tip
+                    ) : (
+                      <>
+                        <strong>{tip.issue}:</strong> {tip.fix}
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Who Can Use */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Info className="w-5 h-5 text-sky-400" />
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <Info className="w-5 h-5 text-blue-600 dark:text-sky-400" />
           <span>{t('whoCanUse')}</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {tool.whoCanUse.map((item, idx) => (
             <div
               key={idx}
-              className="p-5 rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] shadow-md text-slate-800"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs"
             >
-              <h3 className="text-sm font-bold text-sky-800 font-mono mb-1.5">
-                {item.persona}
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {item.useCase}
-              </p>
+              <h3 className="text-sm font-bold text-blue-700 dark:text-sky-400 mb-1.5">{item.persona}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{item.useCase}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Section 2: Where & When To Use This Conversion? */}
+      {/* Where To Use */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <FileCheck className="w-5 h-5 text-sky-400" />
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <FileCheck className="w-5 h-5 text-blue-600 dark:text-sky-400" />
           <span>{t('whereToUse')}</span>
         </h2>
         <div className="space-y-3">
           {tool.whereToUse.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-xl border-2 border-sky-300 bg-[#f0f9ff] flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm text-slate-800"
+              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
             >
-              <div className="font-bold text-sm text-slate-900">
-                {item.scenario}
-              </div>
-              <div className="text-xs text-slate-600 sm:max-w-md sm:text-right font-medium">
-                {item.benefit}
-              </div>
+              <div className="font-semibold text-sm text-slate-900 dark:text-white">{item.scenario}</div>
+              <div className="text-xs text-slate-600 dark:text-slate-400 sm:max-w-md sm:text-right">{item.benefit}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Section 3: Step-by-Step How-To Guide */}
+      {/* Steps */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
           {t('howToConvert')}: {tool.fromFormat} → {tool.toFormat}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {tool.steps.map((st) => (
             <div
               key={st.step}
-              className="p-6 rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] flex flex-col justify-between shadow-md text-slate-800"
+              className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs"
             >
-              <div>
-                <div className="w-9 h-9 rounded-xl bg-sky-600 text-white font-mono font-bold flex items-center justify-center text-sm mb-4 shadow">
-                  0{st.step}
-                </div>
-                <h3 className="text-sm font-bold text-slate-900 mb-2">
-                  {st.title}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {st.description}
-                </p>
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">
+                0{st.step}
               </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">{st.title}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{st.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Section 4: Technical Format Comparison Table */}
+      {/* Format Comparison */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
-          {t('formatComparison')}
-        </h2>
-        <div className="overflow-x-auto rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] shadow-md">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('formatComparison')}</h2>
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-sky-300 bg-sky-200/90 text-sky-950 font-bold">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-bold">
                 <th className="p-3.5">Feature</th>
                 <th className="p-3.5">Source: {tool.fromFormat}</th>
                 <th className="p-3.5">Target: {tool.toFormat}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-sky-200 text-slate-800">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
               {tool.formatComparison.map((row, idx) => (
-                <tr key={idx} className="hover:bg-sky-100/60 transition-colors">
-                  <td className="p-3.5 font-bold text-slate-900">{row.feature}</td>
-                  <td className="p-3.5 text-slate-600">{row.fromVal}</td>
-                  <td className="p-3.5 text-sky-700 font-bold">{row.toVal}</td>
+                <tr key={idx}>
+                  <td className="p-3.5 font-semibold text-slate-900 dark:text-white">{row.feature}</td>
+                  <td className="p-3.5">{row.fromVal}</td>
+                  <td className="p-3.5 text-blue-600 dark:text-sky-400 font-semibold">{row.toVal}</td>
                 </tr>
               ))}
             </tbody>
@@ -754,32 +1127,30 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         </div>
       </section>
 
-      {/* Section 5: Frequently Asked Questions */}
+      {/* FAQ */}
       <section className="mb-10">
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">
-          {t('faqTitle')}
-        </h2>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('faqTitle')}</h2>
         <div className="space-y-3">
           {tool.faq.map((item, idx) => {
             const isOpen = expandedFaq === idx;
             return (
               <div
                 key={idx}
-                className="rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] overflow-hidden shadow-sm"
+                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
               >
                 <button
                   onClick={() => setExpandedFaq(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-bold text-sm text-slate-900 hover:text-sky-700 transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-sm text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-sky-400 cursor-pointer"
                 >
                   <span>{item.question}</span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-sky-600 shrink-0" />
+                    <ChevronUp className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
                   ) : (
                     <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-xs text-slate-600 leading-relaxed border-t border-sky-200 pt-3">
+                  <div className="px-4 pb-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
                     {item.answer}
                   </div>
                 )}
@@ -789,12 +1160,134 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         </div>
       </section>
 
-      {/* Related Converters */}
+      {/* Deep E-E-A-T, SEO & LLM Reference Guide */}
+      {deepGuide && (
+        <section
+          aria-label="In-Depth Technical Documentation"
+          className="mb-12 rounded-2xl border border-emerald-500/25 bg-slate-900/95 p-6 sm:p-8 shadow-md space-y-6"
+        >
+          {/* E-E-A-T Author & Review Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+            <div className="flex items-center gap-3.5">
+              <img
+                src={EDITORIAL_IMAGES.authorAvatar}
+                alt="Naveed Afzal — Administrator, Founder & Lead Writer at Mimage"
+                className="w-12 h-12 rounded-full object-cover border border-emerald-400/50 shrink-0"
+              />
+              <div>
+                <div className="text-sm font-bold text-white flex flex-wrap items-center gap-2">
+                  <span>Naveed Afzal</span>
+                  <span className="text-[11px] font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                    Verified Technical Guide
+                  </span>
+                </div>
+                <div className="text-xs text-slate-400">
+                  Administrator, Founder &amp; Lead Writer at Mimage
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs font-mono text-slate-400 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Updated: {deepGuide.updatedDate}</span>
+              </span>
+              <span>·</span>
+              <span className="text-emerald-400">{deepGuide.primaryKeyword}</span>
+            </div>
+          </div>
+
+          {/* LLM / AI Overview Direct Summary & Key Takeaways */}
+          <div className="rounded-xl border border-emerald-500/30 bg-slate-950/80 p-5 space-y-3">
+            <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-2">
+              <BookOpen className="w-4 h-4" />
+              <span>Quick Technical Reference &amp; Summary</span>
+            </div>
+            <p className="text-sm text-slate-200 leading-relaxed font-medium">
+              {deepGuide.llmSummary}
+            </p>
+            <div className="pt-2 border-t border-slate-800/80">
+              <div className="text-xs font-mono text-slate-400 mb-2">Key Technical Takeaways:</div>
+              <ul className="space-y-1.5 text-xs text-slate-300 list-disc pl-5 leading-relaxed">
+                {deepGuide.keyTakeaways.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Full 750+ Word Deep Editorial Body */}
+          <div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight mb-4">
+              {deepGuide.editorialTitle}
+            </h2>
+            <div
+              className="space-y-4 text-sm text-slate-300 leading-relaxed [&_h2]:text-lg [&_h2]:sm:text-xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-7 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-bold [&_h3]:text-emerald-300 [&_h3]:mt-5 [&_p]:leading-relaxed [&_strong]:text-white [&_code]:font-mono [&_code]:text-xs [&_code]:bg-slate-950 [&_code]:text-emerald-300 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded"
+              dangerouslySetInnerHTML={{ __html: deepGuide.content }}
+            />
+          </div>
+
+          {/* Review Verification & Long-Tail Topic Tags */}
+          <div className="pt-5 border-t border-slate-800 space-y-3">
+            <div className="text-xs text-slate-400 font-mono">
+              <strong className="text-emerald-400">Verification Note:</strong> {deepGuide.reviewerNote}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {deepGuide.longTailKeywords.map((kw, i) => (
+                <span
+                  key={i}
+                  className="text-[11px] font-mono text-slate-300 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-md"
+                >
+                  {kw}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommended E-E-A-T Blog Guides */}
+          {linkedBlogPosts.length > 0 && (
+            <div className="pt-5 border-t border-slate-800">
+              <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-emerald-400" />
+                <span>Recommended Engineering &amp; Privacy Guides on Mimage Blog</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {linkedBlogPosts.map((bp) => (
+                  <button
+                    key={bp.slug}
+                    type="button"
+                    onClick={() => {
+                      if (onSelectBlogPost) {
+                        onSelectBlogPost(bp.slug);
+                      } else {
+                        window.history.pushState({}, '', `/blog/${bp.slug}`);
+                        window.dispatchEvent(new PopStateEvent('popstate'));
+                      }
+                    }}
+                    className="text-left p-4 rounded-xl border border-slate-800 bg-slate-950/80 hover:border-emerald-500/50 transition-colors cursor-pointer group flex flex-col justify-between gap-2"
+                  >
+                    <div>
+                      <div className="text-[11px] font-mono text-emerald-400 mb-1">{bp.readTime}</div>
+                      <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
+                        {bp.title}
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400">
+                      <span>Read full guide</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Related Tools */}
       {relatedTools.length > 0 && (
-        <section className="pt-6 border-t border-sky-400/30">
-          <h2 className="text-lg font-bold text-white mb-4">
-            {t('relatedTools')}
-          </h2>
+        <section className="pt-6 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">{t('relatedTools')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedTools.map((rt) => {
               const rLocalized = getLocalizedTool(rt, currentLang);
@@ -802,15 +1295,15 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                 <div
                   key={rt.id}
                   onClick={() => onSelectTool(rt)}
-                  className="p-4 rounded-2xl border-2 border-sky-300 bg-[#f0f9ff] hover:border-sky-500 hover:bg-sky-50 transition-all cursor-pointer group shadow-sm"
+                  className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 transition-colors cursor-pointer group"
                 >
-                  <div className="font-mono text-xs text-sky-700 font-bold mb-1">
+                  <div className="font-mono text-xs text-blue-600 dark:text-sky-400 font-bold mb-1">
                     {rt.fromFormat} → {rt.toFormat}
                   </div>
-                  <div className="font-bold text-sm text-slate-900 group-hover:text-sky-700 transition-colors line-clamp-1">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors line-clamp-1">
                     {rLocalized.name}
                   </div>
-                  <p className="text-xs text-slate-600 line-clamp-2 mt-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">
                     {rLocalized.shortDescription}
                   </p>
                 </div>

@@ -7,7 +7,8 @@ import {
   RefreshCw,
   ShieldCheck,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  AlertCircle
 } from 'lucide-react';
 import { rotatePdfPages, renderPdfThumbnails } from '../../services/pdfAdvancedEngine';
 
@@ -23,17 +24,19 @@ export const PdfRotateTool: React.FC<PdfRotateToolProps> = ({ onBack }) => {
   const [applyToAll, setApplyToAll] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isRotating, setIsRotating] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleFile = async (selectedFile: File) => {
     setFile(selectedFile);
     setIsLoading(true);
+    setErrorMsg(null);
     try {
       const rendered = await renderPdfThumbnails(selectedFile, 30, 0.9);
       setPages(rendered);
       setCurrentPage(1);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('Could not render PDF document.');
+      setErrorMsg(e?.message || 'Could not render PDF document.');
     } finally {
       setIsLoading(false);
     }
@@ -42,6 +45,7 @@ export const PdfRotateTool: React.FC<PdfRotateToolProps> = ({ onBack }) => {
   const handleExecuteRotate = async () => {
     if (!file) return;
     setIsRotating(true);
+    setErrorMsg(null);
     try {
       const rotatedBlob = await rotatePdfPages(file, rotationAngle, applyToAll, currentPage);
       const url = URL.createObjectURL(rotatedBlob);
@@ -55,7 +59,7 @@ export const PdfRotateTool: React.FC<PdfRotateToolProps> = ({ onBack }) => {
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     } catch (err: any) {
       console.error('Rotate failed:', err);
-      alert(`Could not rotate PDF: ${err.message || 'Unknown error'}`);
+      setErrorMsg(`Could not rotate PDF: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsRotating(false);
     }
@@ -68,30 +72,33 @@ export const PdfRotateTool: React.FC<PdfRotateToolProps> = ({ onBack }) => {
       <div className="flex items-center justify-between gap-4 mb-6">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm font-mono text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to All Tools</span>
         </button>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-sky-500/10 border border-sky-400/30 text-sky-300">
-          <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-          <span>100% Client-Side PDF Orientation Fix</span>
+        <span className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>Browser-Local Orientation Fix</span>
         </span>
       </div>
 
-      <div className="rounded-2xl border border-sky-400/30 bg-[#06141c]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm">
         <div className="text-center max-w-xl mx-auto mb-8">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 flex items-center justify-center gap-2">
-            <span>Rotate PDF Pages</span>
-            <span className="text-xs font-mono font-normal uppercase px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">
-              90° / 180° / 270°
-            </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+            Rotate PDF Pages
           </h1>
-          <p className="text-sm text-slate-300">
-            Permanently straighten upside-down scans and sideways documents without losing original resolution or text
-            layers.
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            Permanently straighten upside-down scans or sideways pages without re-compressing text layers.
           </p>
         </div>
+
+        {errorMsg && (
+          <div className="mb-4 p-3.5 rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
         {!file && (
           <div

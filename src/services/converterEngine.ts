@@ -9,7 +9,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 let pdfjsLib: any = null;
 
-async function getPdfjs() {
+export async function getPdfjs() {
   if (pdfjsLib) return pdfjsLib;
   try {
     // @ts-ignore
@@ -37,11 +37,11 @@ async function getPdfjs() {
 }
 
 /**
- * Convert PDF to PNG, JPG, or SVG
+ * Convert PDF to PNG, JPG, SVG, WebP, or BMP
  */
 export async function convertPdf(
   file: File,
-  targetFormat: 'png' | 'jpg' | 'svg',
+  targetFormat: 'png' | 'jpg' | 'svg' | 'webp' | 'bmp',
   settings: Partial<ConversionSettings> = {},
   onProgress?: (progress: number, page: number, total: number) => void
 ): Promise<ConvertedFile[]> {
@@ -71,7 +71,11 @@ export async function convertPdf(
     canvas.height = Math.round(viewport.height);
 
     // Background fill
-    if (targetFormat === 'jpg' || settings.backgroundColor === 'white') {
+    if (
+      targetFormat === 'jpg' ||
+      targetFormat === 'bmp' ||
+      settings.backgroundColor === 'white'
+    ) {
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else if (settings.backgroundColor === 'black') {
@@ -94,7 +98,7 @@ export async function convertPdf(
       const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   viewBox="0 0 ${canvas.width} ${canvas.height}" width="${canvas.width}" height="${canvas.height}">
-  <!-- Converted by MatrixConvert Vector Engine -->
+  <!-- Converted by Mimage Vector Engine -->
   <rect width="100%" height="100%" fill="${settings.backgroundColor === 'white' ? '#ffffff' : 'none'}" />
   <image href="${pngData}" width="${canvas.width}" height="${canvas.height}" />
 </svg>`;
@@ -115,15 +119,39 @@ export async function convertPdf(
         height: canvas.height,
         pageNumber: pageNum
       });
+    } else if (targetFormat === 'bmp') {
+      const bmpBlob = generateBmpBlob(canvas);
+      const bmpUrl = URL.createObjectURL(bmpBlob);
+      const pngPreview = canvas.toDataURL('image/png');
+      const convertedName = `${baseName}${pageSuffix}.bmp`;
+
+      results.push({
+        id: `${file.name}-${pageNum}-${Date.now()}`,
+        originalName: file.name,
+        convertedName,
+        originalSize: file.size,
+        convertedSize: bmpBlob.size,
+        dataUrl: bmpUrl,
+        blob: bmpBlob,
+        previewUrl: pngPreview,
+        width: canvas.width,
+        height: canvas.height,
+        pageNumber: pageNum
+      });
     } else {
-      const mimeType = targetFormat === 'jpg' ? 'image/jpeg' : 'image/png';
+      const mimeType =
+        targetFormat === 'jpg'
+          ? 'image/jpeg'
+          : targetFormat === 'webp'
+          ? 'image/webp'
+          : 'image/png';
       const quality = settings.quality !== undefined ? settings.quality / 100 : 0.92;
       const dataUrl = canvas.toDataURL(mimeType, quality);
       const blob = await new Promise<Blob>((resolve) =>
         canvas.toBlob((b) => resolve(b || new Blob()), mimeType, quality)
       );
 
-      const ext = targetFormat === 'jpg' ? 'jpg' : 'png';
+      const ext = targetFormat === 'jpg' ? 'jpg' : targetFormat === 'webp' ? 'webp' : 'png';
       const convertedName = `${baseName}${pageSuffix}.${ext}`;
 
       results.push({
@@ -178,8 +206,8 @@ export async function convertRasterImage(
     fmt = originalExt === 'jpeg' ? 'jpg' : originalExt;
   }
 
-  // Background fill
-  if (fmt === 'jpg' || fmt === 'jpeg' || settings.backgroundColor === 'white') {
+  // Background fill (flatten transparency cleanly for JPG and BMP)
+  if (fmt === 'jpg' || fmt === 'jpeg' || fmt === 'bmp' || settings.backgroundColor === 'white') {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, targetWidth, targetHeight);
   } else if (settings.backgroundColor === 'black') {
@@ -233,7 +261,7 @@ export async function convertRasterImage(
     const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   viewBox="0 0 ${targetWidth} ${targetHeight}" width="${targetWidth}" height="${targetHeight}">
-  <!-- Converted by MatrixConvert Free Tool -->
+  <!-- Converted by Mimage Free Tool -->
   <image href="${pngData}" width="${targetWidth}" height="${targetHeight}" />
 </svg>`;
     const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
@@ -268,10 +296,18 @@ export async function convertRasterImage(
   }
 
   const quality = settings.quality !== undefined ? settings.quality / 100 : 0.9;
-  const dataUrl = canvas.toDataURL(mimeType, quality);
   const blob = await new Promise<Blob>((resolve) => {
     canvas.toBlob((b) => resolve(b || new Blob()), mimeType, quality);
   });
+
+  if (fmt === 'avif' && blob.type !== 'image/avif') {
+    throw new Error(
+      'Your current browser does not support client-side AVIF encoding via Canvas (falling back to PNG was blocked to ensure accurate file output). Try WebP or use the Image Optimization Studio in a Chromium-based desktop browser.'
+    );
+  }
+
+  const dataUrl = URL.createObjectURL(blob);
+  const previewUrl = canvas.toDataURL(fmt === 'jpg' ? 'image/jpeg' : 'image/png', 0.9);
 
   return {
     id: `${file.name}-${Date.now()}`,
@@ -281,7 +317,7 @@ export async function convertRasterImage(
     convertedSize: blob.size,
     dataUrl,
     blob,
-    previewUrl: dataUrl,
+    previewUrl,
     width: targetWidth,
     height: targetHeight
   };
@@ -422,7 +458,8 @@ export async function mergeImagesToPdf(files: File[]): Promise<ConvertedFile> {
 export async function generateMatrixAsciiArt(
   file: File,
   density: number = 80,
-  charSetType: 'katakana-binary' | 'ascii' | 'hex' = 'katakana-binary'
+  charSetType: 'katakana-binary' | 'ascii' | 'hex' = 'katakana-binary',
+  accentHex: string = '#00ff66'
 ): Promise<{ textArt: string; renderedImage: ConvertedFile }> {
   const img = await loadImageFromFile(file);
 
@@ -494,9 +531,9 @@ export async function generateMatrixAsciiArt(
       const px = 20 + x * charW;
       const py = 20 + y * charH;
 
-      rCtx.shadowColor = '#00ff66';
+      rCtx.shadowColor = accentHex;
       rCtx.shadowBlur = 8;
-      rCtx.fillStyle = Math.random() > 0.9 ? '#ffffff' : '#00ff66';
+      rCtx.fillStyle = Math.random() > 0.9 ? '#ffffff' : accentHex;
       rCtx.fillText(ch, px, py);
     }
   }
@@ -538,7 +575,7 @@ export async function createZipBundle(files: ConvertedFile[]): Promise<Blob> {
   });
 }
 
-function loadImageFromFile(file: File): Promise<HTMLImageElement> {
+export function loadImageFromFile(file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
@@ -549,7 +586,16 @@ function loadImageFromFile(file: File): Promise<HTMLImageElement> {
     };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error(`Could not load image: ${file.name}`));
+      const lower = file.name.toLowerCase();
+      if (lower.endsWith('.heic') || lower.endsWith('.heif')) {
+        reject(
+          new Error(
+            `This browser could not decode HEIC file "${file.name}". Safari and macOS/iOS browsers decode HEIC natively; on Chrome/Windows, export as JPG/PNG from Photos or use an OS codec.`
+          )
+        );
+      } else {
+        reject(new Error(`Could not decode image: ${file.name}`));
+      }
     };
     img.src = url;
   });
@@ -606,7 +652,7 @@ async function generateIcoBlob(sourceCanvas: HTMLCanvasElement): Promise<Blob> {
   return new Blob([icoBuffer], { type: 'image/x-icon' });
 }
 
-function generateBmpBlob(canvas: HTMLCanvasElement): Blob {
+export function generateBmpBlob(canvas: HTMLCanvasElement): Blob {
   const width = canvas.width;
   const height = canvas.height;
   const ctx = canvas.getContext('2d')!;
@@ -677,8 +723,8 @@ export async function editPdfMetadata(
   if (meta.keywords !== undefined) {
     pdfDoc.setKeywords(meta.keywords.split(',').map((k) => k.trim()));
   }
-  pdfDoc.setProducer('MatrixConvert Client-Side Architecture');
-  pdfDoc.setCreator('MatrixConvert (https://mimage.netlify.app/)');
+  pdfDoc.setProducer('Mimage Client-Side Architecture');
+  pdfDoc.setCreator('Mimage (https://mimage.netlify.app/)');
   pdfDoc.setModificationDate(new Date());
 
   const savedBytes = await pdfDoc.save();

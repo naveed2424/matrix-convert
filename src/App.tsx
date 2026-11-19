@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MatrixBackground } from './components/MatrixBackground';
 import { Navbar } from './components/Navbar';
 import { LanguageBanner } from './components/LanguageBanner';
@@ -17,10 +17,10 @@ import { LegalPagesModal, LegalPageType } from './components/LegalPagesModal';
 import { CompanyPages, CompanyPageType } from './components/CompanyPages';
 import { BlogHub } from './components/BlogHub';
 import { BlogPostView } from './components/BlogPostView';
-import { ClientReviewsPage } from './components/ClientReviewsPage';
+import { MethodologyFeedbackPage } from './components/MethodologyFeedbackPage';
 import { Footer } from './components/Footer';
-import { TOOLS_DATA } from './data/toolsData';
-import { PRE_SEEDED_BLOG_POSTS, BlogPost } from './data/blogData';
+import { TOOLS_DATA, TOOL_CATEGORIES } from './data/toolsData';
+import { PRE_SEEDED_BLOG_POSTS } from './data/blogData';
 import { ToolDefinition } from './types';
 import { PdfSignTool } from './components/tools/PdfSignTool';
 import { PdfCropTool } from './components/tools/PdfCropTool';
@@ -31,6 +31,8 @@ import { PdfRotateTool } from './components/tools/PdfRotateTool';
 import { PdfWatermarkTool } from './components/tools/PdfWatermarkTool';
 import { PdfToTextTool } from './components/tools/PdfToTextTool';
 import { initAutoTranslate, applySiteLanguage, getSavedLanguage } from './services/autoTranslation';
+import { updatePageSeo } from './services/seoManager';
+import { ArrowLeft } from 'lucide-react';
 
 export type AppView =
   | 'home'
@@ -38,7 +40,32 @@ export type AppView =
   | 'blog'
   | 'blog-post'
   | 'company-page'
-  | 'reviews';
+  | 'methodology'
+  | 'not-found';
+
+const DIRECT_TOOL_PATHS = new Set([
+  'smart-assistant',
+  'website-image-audit',
+  'optimization-studio',
+  'compress-image-to-100kb',
+  'heic-to-jpg',
+  'bulk-image-converter',
+  'remove-image-metadata',
+  'resize-image-for-instagram',
+  'pdf-to-jpg',
+  'merge-pdf'
+]);
+
+const COMPANY_PAGE_PATHS = new Set<CompanyPageType>([
+  'about',
+  'terms',
+  'disclaimer',
+  'privacy',
+  'privacy-center',
+  'cookies',
+  'contact',
+  'sitemap'
+]);
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<string>(() => getSavedLanguage());
@@ -50,7 +77,16 @@ export default function App() {
   const [showAutoDetectModal, setShowAutoDetectModal] = useState<boolean>(false);
   const [legalModalType, setLegalModalType] = useState<LegalPageType | null>(null);
 
-  // Initialize automated Google Translate full-page engine on mount
+  const [activeView, setActiveView] = useState<AppView>('home');
+  const [activePostSlug, setActivePostSlug] = useState<string | null>(null);
+  const [companyPageType, setCompanyPageType] = useState<CompanyPageType>('about');
+
+  // Lock dark Matrix class on document root without client-side theme switching
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  // Initialize Google Translate auto-detection engine on mount
   useEffect(() => {
     initAutoTranslate((detected) => {
       setCurrentLang(detected);
@@ -62,95 +98,6 @@ export default function App() {
     applySiteLanguage(code);
   };
 
-  // Dynamic View & Blog state
-  const [activeView, setActiveView] = useState<AppView>('home');
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(PRE_SEEDED_BLOG_POSTS);
-  const [activePostSlug, setActivePostSlug] = useState<string | null>(null);
-  const [companyPageType, setCompanyPageType] = useState<CompanyPageType>('about');
-
-  // Synchronize routing state with URL Hash
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-
-      if (hash.startsWith('#/tool/')) {
-        const slug = hash.replace('#/tool/', '');
-        const found = TOOLS_DATA.find((t) => t.slug === slug || t.id === slug);
-        if (found) {
-          setActiveTool(found);
-          setActiveView('tool');
-          setLegalModalType(null);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          trackPageView(hash);
-          return;
-        }
-      } else if (hash.startsWith('#/blog/')) {
-        const slug = hash.replace('#/blog/', '');
-        setActivePostSlug(slug);
-        setActiveView('blog-post');
-        setActiveTool(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
-        return;
-      } else if (hash === '#/blog' || hash === '#/articles') {
-        setActiveView('blog');
-        setActiveTool(null);
-        setActivePostSlug(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
-        return;
-      } else if (
-        hash === '#/reviews' ||
-        hash === '#/avis' ||
-        hash === '#/testimonials' ||
-        hash === '#/ratings' ||
-        hash === '#reviews'
-      ) {
-        setActiveView('reviews');
-        setActiveTool(null);
-        setActivePostSlug(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
-        return;
-      } else if (hash === '#/blog-studio' || hash === '#/studio' || hash === '#/seo-studio') {
-        // Third-party blog generation is disabled; redirect to editorial blog hub
-        window.location.hash = '#/blog';
-        return;
-      } else if (
-        hash === '#/about' ||
-        hash === '#/terms' ||
-        hash === '#/disclaimer' ||
-        hash === '#/privacy' ||
-        hash === '#/contact' ||
-        hash === '#/sitemap'
-      ) {
-        const pType = hash.replace('#/', '') as CompanyPageType;
-        setCompanyPageType(pType);
-        setActiveView('company-page');
-        setActiveTool(null);
-        setLegalModalType(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        trackPageView(hash);
-        return;
-      }
-
-      if (hash === '' || hash === '#' || hash === '#/') {
-        setActiveView('home');
-        setActiveTool(null);
-        setActivePostSlug(null);
-        setLegalModalType(null);
-        trackPageView('/');
-      }
-    };
-
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
   const trackPageView = (path: string) => {
     if (typeof (window as any).gtag === 'function') {
       (window as any).gtag('config', 'G-ZM8R2JF6WT', {
@@ -159,11 +106,217 @@ export default function App() {
     }
   };
 
-  const handleSelectTool = (tool: ToolDefinition) => {
-    setActiveTool(tool);
-    setActiveView('tool');
-    window.location.hash = `#/tool/${tool.slug}`;
+  const resolveRouteFromUrl = useCallback(() => {
+    // Normalize legacy hash URLs (e.g. #/tool/pdf-to-png) into clean pathnames
+    const rawHash = window.location.hash;
+    if (rawHash.startsWith('#/')) {
+      const cleanPath = rawHash.slice(1) || '/';
+      window.history.replaceState({}, '', cleanPath);
+    }
+
+    const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+    const segments = pathname.split('/').filter(Boolean);
+
+    setLegalModalType(null);
+
+    // Home or Tools Directory
+    if (pathname === '/' || pathname === '/tools') {
+      setActiveView('home');
+      setActiveTool(null);
+      setActivePostSlug(null);
+      updatePageSeo({
+        title: 'Mimage — Free Online File & Image Tools | Private, Fast, No Sign-Up',
+        description:
+          'Free browser-local image compression, resizing, format conversion, EXIF metadata removal, PDF tools, OCR extraction, and website image auditing.',
+        canonicalPath: pathname
+      });
+      trackPageView(pathname);
+      if (pathname === '/tools') {
+        setTimeout(() => document.getElementById('tools-section')?.scrollIntoView({ behavior: 'smooth' }), 80);
+      }
+      return;
+    }
+
+    // Category direct links: /category/image-tools
+    if (segments[0] === 'category' && segments[1]) {
+      const cat = TOOL_CATEGORIES.find((c) => c.id === segments[1]);
+      if (cat) {
+        setActiveCategory(cat.id);
+        setActiveView('home');
+        setActiveTool(null);
+        updatePageSeo({
+          title: `${cat.name} | Mimage Free Online File Tools`,
+          description: `Browse ${cat.count} browser-local ${cat.name.toLowerCase()} on Mimage. Private, fast, no sign-up required.`,
+          canonicalPath: pathname
+        });
+        trackPageView(pathname);
+        setTimeout(() => document.getElementById('tools-section')?.scrollIntoView({ behavior: 'smooth' }), 80);
+        return;
+      }
+    }
+
+    // Direct top-level tool paths (/smart-assistant, /compress-image-to-100kb, etc.)
+    if (segments.length === 1 && DIRECT_TOOL_PATHS.has(segments[0])) {
+      const found = TOOLS_DATA.find((t) => t.slug === segments[0] || t.id === segments[0]);
+      if (found) {
+        setActiveTool(found);
+        setActiveView('tool');
+        updatePageSeo({
+          title: `${found.name} | Mimage`,
+          description: found.shortDescription,
+          canonicalPath: `/${found.slug}`,
+          breadcrumbs: [
+            { name: 'Home', url: '/' },
+            { name: found.categoryName, url: `/category/${found.category}` },
+            { name: found.name, url: `/${found.slug}` }
+          ],
+          softwareApp: {
+            name: found.name,
+            description: found.shortDescription,
+            category: found.categoryName
+          }
+        });
+        trackPageView(pathname);
+        return;
+      }
+    }
+
+    // Standard /tool/:slug route
+    if (segments[0] === 'tool' && segments[1]) {
+      const slug = segments[1];
+      const found = TOOLS_DATA.find((t) => t.slug === slug || t.id === slug);
+      if (found) {
+        setActiveTool(found);
+        setActiveView('tool');
+        updatePageSeo({
+          title: `${found.name} | Mimage`,
+          description: found.shortDescription,
+          canonicalPath: `/tool/${found.slug}`,
+          breadcrumbs: [
+            { name: 'Home', url: '/' },
+            { name: found.categoryName, url: `/category/${found.category}` },
+            { name: found.name, url: `/tool/${found.slug}` }
+          ],
+          softwareApp: {
+            name: found.name,
+            description: found.shortDescription,
+            category: found.categoryName
+          }
+        });
+        trackPageView(pathname);
+        return;
+      }
+    }
+
+    // Blog hub
+    if (pathname === '/blog' || pathname === '/articles' || pathname === '/guides') {
+      setActiveView('blog');
+      setActiveTool(null);
+      setActivePostSlug(null);
+      updatePageSeo({
+        title: 'Guides & Educational Articles | Mimage',
+        description: 'Practical guides on image optimization, PDF workflows, format comparisons, and browser privacy.',
+        canonicalPath: '/blog'
+      });
+      trackPageView('/blog');
+      return;
+    }
+
+    // Single Blog post (/blog/:slug)
+    if (segments[0] === 'blog' && segments[1]) {
+      const post = PRE_SEEDED_BLOG_POSTS.find((p) => p.slug === segments[1]);
+      if (post) {
+        setActivePostSlug(post.slug);
+        setActiveView('blog-post');
+        setActiveTool(null);
+        updatePageSeo({
+          title: `${post.metaTitle || post.title} | Mimage`,
+          description: post.metaDescription,
+          canonicalPath: `/blog/${post.slug}`,
+          type: 'article',
+          breadcrumbs: [
+            { name: 'Home', url: '/' },
+            { name: 'Guides', url: '/blog' },
+            { name: post.title, url: `/blog/${post.slug}` }
+          ]
+        });
+        trackPageView(pathname);
+        return;
+      }
+    }
+
+    // Diagnostics & Methodology / Feedback
+    if (pathname === '/methodology' || pathname === '/feedback' || pathname === '/diagnostics') {
+      setActiveView('methodology');
+      setActiveTool(null);
+      updatePageSeo({
+        title: 'Testing Methodology, Browser Diagnostics & Feedback | Mimage',
+        description: 'Live browser capability probes, verification methodology, and feedback submission for Mimage.',
+        canonicalPath: pathname
+      });
+      trackPageView(pathname);
+      return;
+    }
+
+    // Company & Legal routes
+    const singleSeg = segments[0] as CompanyPageType;
+    if (segments.length === 1 && COMPANY_PAGE_PATHS.has(singleSeg)) {
+      setCompanyPageType(singleSeg);
+      setActiveView('company-page');
+      setActiveTool(null);
+      const titles: Record<CompanyPageType, string> = {
+        about: 'About Mimage | Free Online File & Image Tools',
+        terms: 'Terms of Service | Mimage',
+        disclaimer: 'Disclaimer | Mimage',
+        privacy: 'Privacy Policy | Mimage',
+        'privacy-center': 'Privacy Center — Local vs Network Processing | Mimage',
+        cookies: 'Cookie Policy | Mimage',
+        contact: 'Contact & Support | Mimage',
+        sitemap: 'HTML Sitemap Directory | Mimage'
+      };
+      updatePageSeo({
+        title: titles[singleSeg],
+        description: 'Transparency, privacy architecture, terms, and support information for Mimage.',
+        canonicalPath: `/${singleSeg}`
+      });
+      trackPageView(pathname);
+      return;
+    }
+
+    // Fallback 404
+    setActiveView('not-found');
+    setActiveTool(null);
+    setActivePostSlug(null);
+    updatePageSeo({
+      title: 'Page Not Found | Mimage',
+      description: 'The requested page could not be found on Mimage.',
+      canonicalPath: '/'
+    });
+  }, []);
+
+  useEffect(() => {
+    resolveRouteFromUrl();
+    const handlePopOrHash = () => resolveRouteFromUrl();
+    window.addEventListener('popstate', handlePopOrHash);
+    window.addEventListener('hashchange', handlePopOrHash);
+    return () => {
+      window.removeEventListener('popstate', handlePopOrHash);
+      window.removeEventListener('hashchange', handlePopOrHash);
+    };
+  }, [resolveRouteFromUrl]);
+
+  const navigateTo = (path: string) => {
+    const clean = path.startsWith('/') ? path : `/${path}`;
+    if (window.location.pathname !== clean || window.location.hash) {
+      window.history.pushState({}, '', clean);
+    }
+    resolveRouteFromUrl();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectTool = (tool: ToolDefinition) => {
+    const path = DIRECT_TOOL_PATHS.has(tool.slug) ? `/${tool.slug}` : `/tool/${tool.slug}`;
+    navigateTo(path);
   };
 
   const handleSelectToolBySlug = (slug: string) => {
@@ -174,31 +327,17 @@ export default function App() {
   };
 
   const handleBackToAllTools = () => {
-    setActiveTool(null);
-    setActiveView('home');
-    window.location.hash = '#/';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateTo('/');
   };
 
   const handleFileDropped = (fileList: FileList) => {
-    const fileArray = Array.from(fileList);
-    setDroppedFiles(fileArray);
+    setDroppedFiles(Array.from(fileList));
     setShowAutoDetectModal(true);
   };
 
-  const handleSelectToolForFiles = (tool: ToolDefinition, files: File[]) => {
+  const handleSelectToolForFiles = (tool: ToolDefinition) => {
     setShowAutoDetectModal(false);
     handleSelectTool(tool);
-  };
-
-  const handleOpenLegalPage = (type: LegalPageType) => {
-    setCompanyPageType(type as CompanyPageType);
-    setActiveView('company-page');
-    window.location.hash = `#/${type}`;
-  };
-
-  const handlePublishNewArticle = (newPost: BlogPost) => {
-    setBlogPosts((prev) => [newPost, ...prev]);
   };
 
   const scrollToTools = () => {
@@ -208,22 +347,20 @@ export default function App() {
     }
   };
 
-  const activePost = activePostSlug ? blogPosts.find((p) => p.slug === activePostSlug) || blogPosts[0] : null;
+  const activePost = activePostSlug
+    ? PRE_SEEDED_BLOG_POSTS.find((p) => p.slug === activePostSlug) || null
+    : null;
 
   return (
-    <div className="min-h-screen bg-[#050807] text-[#e0e6e3] relative selection:bg-sky-500/30 selection:text-sky-300">
-      {/* Falling Matrix Digital Rain Background */}
-      <MatrixBackground opacity={0.42} speedMultiplier={1.0} />
+    <div className="min-h-screen bg-[#050807] text-[#e0e6e3] relative selection:bg-emerald-500/30 selection:text-emerald-300">
+      {/* Classic Falling Matrix Digital Rain Background */}
+      <MatrixBackground />
 
-      {/* Main Content Wrap */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Hidden Anchor for Google Translate Web Element */}
         <div id="google_translate_element" className="hidden" aria-hidden="true" />
 
-        {/* Smart International Banner */}
         <LanguageBanner currentLang={currentLang} onSelectLang={handleSelectLang} />
 
-        {/* Top Navbar */}
         <Navbar
           currentLang={currentLang}
           onSelectLang={handleSelectLang}
@@ -231,26 +368,26 @@ export default function App() {
           onNavigateCategory={(catId) => {
             setActiveCategory(catId);
             if (activeView !== 'home') {
-              handleBackToAllTools();
+              navigateTo('/');
             }
-            setTimeout(scrollToTools, 100);
+            setTimeout(scrollToTools, 120);
           }}
           onSelectToolBySlug={handleSelectToolBySlug}
           onOpenMatrixArt={() => setShowMatrixArtStudio(true)}
-          onNavigateBlog={() => {
-            window.location.hash = '#/blog';
-          }}
-          onNavigateAbout={() => {
-            window.location.hash = '#/about';
-          }}
-          onNavigateReviews={() => {
-            window.location.hash = '#/reviews';
+          onNavigateBlog={() => navigateTo('/blog')}
+          onNavigatePrivacyCenter={() => navigateTo('/privacy-center')}
+          onNavigateMethodology={() => navigateTo('/methodology')}
+          onSearchInDirectory={(q) => {
+            setSearchQuery(q);
+            setActiveCategory('all');
+            if (activeView !== 'home') {
+              navigateTo('/');
+            }
+            setTimeout(scrollToTools, 120);
           }}
         />
 
-        {/* Dynamic Route View */}
         <main className="flex-1">
-          {/* View 1: Specialized & Dedicated Tool Studios */}
           {activeView === 'tool' && activeTool && (
             <>
               {activeTool.id === 'pdf-sign' ? (
@@ -276,38 +413,32 @@ export default function App() {
                   currentLang={currentLang}
                   onBack={handleBackToAllTools}
                   onSelectTool={handleSelectTool}
+                  onSelectToolSlug={handleSelectToolBySlug}
+                  onSelectBlogPost={(slug) => navigateTo(`/blog/${slug}`)}
                 />
               )}
             </>
           )}
 
-          {/* View 3: Blog Hub */}
           {activeView === 'blog' && (
             <BlogHub
-              posts={blogPosts}
-              onSelectPost={(slug) => {
-                window.location.hash = `#/blog/${slug}`;
-              }}
-              onSelectTool={handleSelectToolBySlug}
+              posts={PRE_SEEDED_BLOG_POSTS}
+              onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
+              onNavigateHome={handleBackToAllTools}
             />
           )}
 
-          {/* View 4: Full Blog Post View */}
           {activeView === 'blog-post' && activePost && (
             <BlogPostView
               post={activePost}
-              allPosts={blogPosts}
-              onBackToBlog={() => {
-                window.location.hash = '#/blog';
-              }}
-              onSelectPost={(slug) => {
-                window.location.hash = `#/blog/${slug}`;
-              }}
+              allPosts={PRE_SEEDED_BLOG_POSTS}
+              onBackToBlog={() => navigateTo('/blog')}
+              onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
               onSelectTool={handleSelectToolBySlug}
+              onNavigatePath={navigateTo}
             />
           )}
 
-          {/* View 5: Dedicated Company & Legal Pages (About, Terms, Privacy, Disclaimer, Contact, Sitemap) */}
           {activeView === 'company-page' && (
             <CompanyPages
               pageType={companyPageType}
@@ -316,67 +447,70 @@ export default function App() {
             />
           )}
 
-          {/* View 6: Client Reviews & Star Ratings Graph (4.8★ Satisfaction) */}
-          {activeView === 'reviews' && (
-            <ClientReviewsPage
+          {activeView === 'methodology' && (
+            <MethodologyFeedbackPage
               onBackToHome={handleBackToAllTools}
-              onSelectTool={handleSelectToolBySlug}
+              onNavigatePrivacyCenter={() => navigateTo('/privacy-center')}
             />
           )}
 
-          {/* View 7: Home View (Hero + Tools Grid + How-To Guides) */}
+          {activeView === 'not-found' && (
+            <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+              <div className="text-4xl font-extrabold text-blue-600 dark:text-sky-400 font-mono">404</div>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Page Not Found</h1>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                The page or tool link you opened does not exist on Mimage. Return to the full directory to launch any utility.
+              </p>
+              <button
+                onClick={handleBackToAllTools}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Return to Mimage Home</span>
+              </button>
+            </div>
+          )}
+
           {activeView === 'home' && (
             <>
-              {/* Terminal Hero Section */}
               <HeroSection
                 currentLang={currentLang}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
                 onFileDropped={handleFileDropped}
                 onSelectTool={handleSelectTool}
+                onSelectToolSlug={handleSelectToolBySlug}
                 allTools={TOOLS_DATA}
                 onScrollToTools={scrollToTools}
               />
 
-              {/* Categorized Tools Directory Grid with Light Sky Blue Cards */}
               <ToolsGrid
                 tools={TOOLS_DATA}
                 activeCategory={activeCategory}
                 onSelectCategory={setActiveCategory}
                 onSelectTool={handleSelectTool}
+                onSelectToolSlug={handleSelectToolBySlug}
                 currentLang={currentLang}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
               />
 
-              {/* Step-by-Step How-To Guides */}
-              <HowToGuidesSection
-                onSelectToolBySlug={handleSelectToolBySlug}
-                currentLang={currentLang}
-              />
+              <HowToGuidesSection onSelectToolBySlug={handleSelectToolBySlug} currentLang={currentLang} />
             </>
           )}
         </main>
 
-        {/* Global Footer */}
         <Footer
           onSelectTool={handleSelectTool}
           onSelectLang={handleSelectLang}
-          onOpenLegalPage={handleOpenLegalPage}
-          onNavigateBlog={() => {
-            window.location.hash = '#/blog';
-          }}
-          onNavigateReviews={() => {
-            window.location.hash = '#/reviews';
-          }}
+          onNavigateCompanyPage={(type) => navigateTo(`/${type}`)}
+          onNavigateBlog={() => navigateTo('/blog')}
+          onNavigateMethodology={() => navigateTo('/methodology')}
           currentLang={currentLang}
         />
 
-        {/* Matrix Art Studio Modal */}
-        <MatrixArtStudio
-          isOpen={showMatrixArtStudio}
-          onClose={() => setShowMatrixArtStudio(false)}
-        />
+        <MatrixArtStudio isOpen={showMatrixArtStudio} onClose={() => setShowMatrixArtStudio(false)} />
 
-        {/* Auto-Detection Modal for Dropped Files */}
         <AutoDetectionModal
           files={droppedFiles}
           isOpen={showAutoDetectModal}
@@ -386,7 +520,6 @@ export default function App() {
           currentLang={currentLang}
         />
 
-        {/* Modal for Legal Pages if requested */}
         <LegalPagesModal
           pageType={legalModalType}
           onClose={() => setLegalModalType(null)}

@@ -1,7 +1,7 @@
 /**
- * MatrixConvert Automatic Translation Service
- * Enables full-page, real-time client-side translation across 100+ languages
- * via Google Translate Engine with automated browser locale detection.
+ * Mimage Automatic Translation Service
+ * Enables client-side UI translation across 16+ supported languages
+ * with browser locale detection.
  */
 
 export interface SupportedLang {
