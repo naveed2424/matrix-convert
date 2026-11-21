@@ -13,13 +13,20 @@ import {
   Cookie,
   Cpu,
   Globe,
-  Lock
+  Lock,
+  ChevronRight,
+  Code2,
+  BookOpen,
+  User
 } from 'lucide-react';
-import { TOOLS_DATA } from '../data/toolsData';
+import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
+import { PRE_SEEDED_BLOG_POSTS } from '../data/blogData';
+import { SUPPORTED_LANGUAGES } from '../data/languages';
 import { EDITORIAL_IMAGES } from '../data/editorialAssets';
 
 export type CompanyPageType =
   | 'about'
+  | 'portfolio'
   | 'terms'
   | 'disclaimer'
   | 'privacy'
@@ -32,12 +39,18 @@ interface CompanyPagesProps {
   pageType: CompanyPageType;
   onBackToHome: () => void;
   onSelectTool: (slug: string) => void;
+  onSelectPost?: (slug: string) => void;
+  onNavigateBlog?: () => void;
+  onNavigateCompanyPage?: (type: CompanyPageType) => void;
 }
 
 export const CompanyPages: React.FC<CompanyPagesProps> = ({
   pageType,
   onBackToHome,
-  onSelectTool
+  onSelectTool,
+  onSelectPost,
+  onNavigateBlog,
+  onNavigateCompanyPage
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -188,12 +201,300 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     Administrator, software developer, and technical writer focused on lightweight browser-local utilities, accessible web workflows, and transparent engineering standards.
                   </p>
-                  <div className="text-xs font-mono pt-1">
+                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono pt-1">
                     <a href="mailto:Afzal460@gmail.com" className="text-blue-600 dark:text-sky-400 hover:underline font-semibold">
                       Afzal460@gmail.com
                     </a>
+                    {onNavigateCompanyPage && (
+                      <>
+                        <span aria-hidden="true" className="text-slate-400">·</span>
+                        <button
+                          onClick={() => onNavigateCompanyPage('portfolio')}
+                          className="text-emerald-600 dark:text-emerald-400 hover:underline font-semibold cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <span>View Founder Portfolio</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* FOUNDER PORTFOLIO (/portfolio) */}
+        {pageType === 'portfolio' && (
+          <div className="space-y-10">
+            {/* Hero Split */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+              <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                    <span>Naveed Afzal</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Administrator, Founder &amp; Lead Technical Writer</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                    Browser-First Software Engineering &amp; Technical Documentation
+                  </h1>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Creator and maintainer of <strong>Mimage</strong> (
+                    <a
+                      href="https://mimage.netlify.app/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 dark:text-sky-400 underline underline-offset-2"
+                    >
+                      mimage.netlify.app
+                    </a>
+                    ), building client-side WebAssembly, HTML5 Canvas, PDF engineering, and web-standards utilities alongside reproducible technical documentation designed for clarity, zero account friction, and transparent privacy disclosures.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    onClick={onBackToHome}
+                    className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs inline-flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap shrink-0"
+                  >
+                    <span>Explore {TOOLS_DATA.length} Tools</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <a
+                    href="mailto:Afzal460@gmail.com"
+                    className="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 hover:border-emerald-500 text-xs font-semibold inline-flex items-center gap-2 transition-colors whitespace-nowrap shrink-0"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Afzal460@gmail.com</span>
+                  </a>
+                  {onNavigateBlog && (
+                    <button
+                      onClick={onNavigateBlog}
+                      className="px-4 py-2.5 text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>Read {PRE_SEEDED_BLOG_POSTS.length} Guides</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="lg:col-span-5">
+                <div className="h-64 sm:h-80 lg:h-full rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950">
+                  <img
+                    src={EDITORIAL_IMAGES.authorAvatar}
+                    alt="Naveed Afzal working in modern multi-display technical workspace"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Full-Width Verified Platform Metrics Strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-slate-200 dark:border-slate-800">
+              <div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono tabular-nums text-emerald-500">
+                  {TOOLS_DATA.length}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Browser-local &amp; client utilities
+                </div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono tabular-nums text-slate-900 dark:text-white">
+                  {TOOL_CATEGORIES.length}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Functional tool categories
+                </div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono tabular-nums text-slate-900 dark:text-white">
+                  {PRE_SEEDED_BLOG_POSTS.length}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Authored technical guides
+                </div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono tabular-nums text-slate-900 dark:text-white">
+                  {SUPPORTED_LANGUAGES.length}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Supported languages (incl. RTL)
+                </div>
+              </div>
+            </div>
+
+            {/* 01. Engineering Focus & Technical Stack */}
+            <div className="space-y-5">
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                  01. Core Engineering Domains
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Capabilities shipped directly inside the live Mimage application runtime.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                    <Cpu className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Canvas &amp; Raster Pipelines</span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    HTML5 Canvas pixel transforms, exact-KB binary search JPEG/WebP convergence, EXIF orientation preservation, metadata scrubbing, and batch ZIP bundling via JSZip.
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                    <Code2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>WebAssembly PDF &amp; OCR</span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Multi-DPI vector rasterization with <code>pdfjs-dist</code>, binary PDF assembly and flattening with <code>pdf-lib</code>, structured extraction to Markdown/CSV/JSON, and Web Worker Tesseract OCR.
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                    <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Security &amp; Web Standards</span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Binary magic-byte file inspection, DOM-based SVG XSS payload removal, SSRF hostname/RFC1918 guardrails on web image audits, and ISO/IEC 18004 QR synthesis.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 02. Selected Live Systems Built on Mimage */}
+            <div className="space-y-5">
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                  02. Selected Live Systems Built
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Interactive browser utilities available live on Mimage—click any system to launch.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  {
+                    slug: 'smart-assistant',
+                    meta: 'Format Forensics · Magic Bytes',
+                    title: 'Smart File Assistant',
+                    summary:
+                      'Reads raw binary file signatures locally in ArrayBuffer memory rather than trusting extensions, identifying mismatched files and routing to verified actions.'
+                  },
+                  {
+                    slug: 'optimization-studio',
+                    meta: 'Batch Pipeline · WebP / AVIF / EXIF',
+                    title: 'Image Optimization Studio',
+                    summary:
+                      'Multi-file browser pipeline combining proportional resizing, EXIF stripping, WebP/AVIF transcoding, exact savings reporting, and clean ZIP packaging.'
+                  },
+                  {
+                    slug: 'website-image-audit',
+                    meta: 'Web Performance · SSRF Guarded',
+                    title: 'Website Image Audit',
+                    summary:
+                      'Inspects public URL or pasted HTML media payloads, surfacing missing alt text, dimension attributes, lazy-loading flags, and measured vs. estimated savings.'
+                  },
+                  {
+                    slug: 'pdf-to-png',
+                    meta: 'WebAssembly · pdfjs-dist & pdf-lib',
+                    title: 'PDF Conversion & Organization Suite',
+                    summary:
+                      'Covers multi-page PNG/JPG/WebP rendering at 72–300 DPI alongside page merging, splitting, margin trimming, grayscale conversion, compression, and Markdown export.'
+                  },
+                  {
+                    slug: 'svg-optimizer',
+                    meta: 'OWASP Hygiene · Vector XML',
+                    title: 'SVG Optimizer & Security Sanitizer',
+                    summary:
+                      'Scrubs active script nodes, inline onload handlers, and editor metadata bloat from SVG markup while preserving responsive viewBox geometry.'
+                  },
+                  {
+                    slug: 'qr-code-generator',
+                    meta: 'ISO/IEC 18004 · Print SVG & PNG',
+                    title: 'QR Code Engineering Generator',
+                    summary:
+                      'Synthesizes direct payload QR matrices (URLs, Wi-Fi WPA3, vCard 3.0) with selectable ECC levels and clean quiet-zone vector exports—zero intermediary tracking.'
+                  }
+                ].map((project) => (
+                  <button
+                    key={project.slug}
+                    onClick={() => onSelectTool(project.slug)}
+                    className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-emerald-500 transition-colors text-left flex flex-col justify-between space-y-3 cursor-pointer group"
+                  >
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                        {project.meta}
+                      </div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {project.summary}
+                      </p>
+                    </div>
+                    <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 inline-flex items-center gap-1 pt-1">
+                      <span>Launch Tool</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 03. Technical Publications & Guides */}
+            <div className="space-y-5 pt-2 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                    03. Selected Technical Writing
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Long-form engineering references documenting browser codecs, PDF compression, SVG sanitization, and Core Web Vitals.
+                  </p>
+                </div>
+                {onNavigateBlog && (
+                  <button
+                    onClick={onNavigateBlog}
+                    className="text-xs font-mono text-emerald-500 hover:underline inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    <span>View All {PRE_SEEDED_BLOG_POSTS.length} Guides</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="divide-y divide-slate-200 dark:divide-slate-800 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                {PRE_SEEDED_BLOG_POSTS.slice(0, 6).map((article) => (
+                  <button
+                    key={article.id}
+                    onClick={() => onSelectPost && onSelectPost(article.slug)}
+                    className="w-full p-4 text-left hover:bg-slate-900/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer group"
+                  >
+                    <div className="space-y-1">
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                        <span>{article.primaryKeyword}</span>
+                        <span aria-hidden="true"> · </span>
+                        <span className="tabular-nums">{article.readTime}</span>
+                      </div>
+                      <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors">
+                        {article.title}
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 shrink-0" />
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -321,6 +622,15 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                   <a href="mailto:Afzal460@gmail.com" className="text-blue-600 dark:text-sky-400 font-mono font-bold hover:underline block">
                     Afzal460@gmail.com
                   </a>
+                  {onNavigateCompanyPage && (
+                    <button
+                      onClick={() => onNavigateCompanyPage('portfolio')}
+                      className="text-emerald-600 dark:text-emerald-400 font-mono text-[11px] hover:underline inline-flex items-center gap-1 pt-1 cursor-pointer"
+                    >
+                      <User className="w-3 h-3" />
+                      <span>Open Founder Portfolio</span>
+                    </button>
+                  )}
                 </div>
 
                 <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-1.5">

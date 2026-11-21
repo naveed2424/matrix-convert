@@ -58,6 +58,7 @@ const DIRECT_TOOL_PATHS = new Set([
 
 const COMPANY_PAGE_PATHS = new Set<CompanyPageType>([
   'about',
+  'portfolio',
   'terms',
   'disclaimer',
   'privacy',
@@ -266,6 +267,7 @@ export default function App() {
       setActiveTool(null);
       const titles: Record<CompanyPageType, string> = {
         about: 'About Mimage | Free Online File & Image Tools',
+        portfolio: 'Naveed Afzal — Founder & Developer Portfolio | Mimage',
         terms: 'Terms of Service | Mimage',
         disclaimer: 'Disclaimer | Mimage',
         privacy: 'Privacy Policy | Mimage',
@@ -276,7 +278,10 @@ export default function App() {
       };
       updatePageSeo({
         title: titles[singleSeg],
-        description: 'Transparency, privacy architecture, terms, and support information for Mimage.',
+        description:
+          singleSeg === 'portfolio'
+            ? 'Founder portfolio of Naveed Afzal, creator and lead writer at Mimage — browser-local WebAssembly PDF, Canvas image optimization, and web security tools.'
+            : 'Transparency, privacy architecture, terms, and support information for Mimage.',
         canonicalPath: `/${singleSeg}`
       });
       trackPageView(pathname);
@@ -444,6 +449,9 @@ export default function App() {
               pageType={companyPageType}
               onBackToHome={handleBackToAllTools}
               onSelectTool={handleSelectToolBySlug}
+              onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
+              onNavigateBlog={() => navigateTo('/blog')}
+              onNavigateCompanyPage={(type) => navigateTo(`/${type}`)}
             />
           )}
 

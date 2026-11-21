@@ -180,10 +180,20 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
         <img
           src={post.author.avatar}
           alt={post.author.name}
-          className="w-12 h-12 rounded-full object-cover border border-slate-200 dark:border-slate-700 shrink-0"
+          referrerPolicy="no-referrer"
+          className="w-12 h-12 rounded-full object-cover object-top border border-slate-200 dark:border-slate-700 shrink-0"
         />
         <div className="text-xs">
-          <div className="font-bold text-slate-900 dark:text-white text-sm">{post.author.name}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-bold text-slate-900 dark:text-white text-sm">{post.author.name}</span>
+            <span aria-hidden="true" className="text-slate-400">·</span>
+            <button
+              onClick={() => onNavigatePath('/portfolio')}
+              className="text-blue-600 dark:text-sky-400 hover:underline font-mono text-[11px] font-semibold cursor-pointer"
+            >
+              Founder Portfolio
+            </button>
+          </div>
           <div className="text-blue-600 dark:text-sky-400 font-mono text-[11px] mb-1">{post.author.role}</div>
           <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{post.author.bio}</p>
         </div>
@@ -213,9 +223,24 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
         </ul>
       </div>
 
-      {/* Article Body */}
+      {/* Article Body with SPA link interception for /tool/ and /blog/ internal routes */}
       <div
-        className="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-sm sm:text-base leading-relaxed space-y-6 [&>h2]:text-xl sm:[&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-slate-900 dark:[&>h2]:text-white [&>h2]:pt-6 [&>h2]:border-t [&>h2]:border-slate-200 dark:[&>h2]:border-slate-800 [&>h3]:text-base sm:[&>h3]:text-lg [&>h3]:font-bold [&>p]:leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
+        onClick={(e) => {
+          const anchor = (e.target as HTMLElement).closest('a');
+          if (!anchor) return;
+          const rawHref = anchor.getAttribute('href') || '';
+          if (rawHref.startsWith('/tool/')) {
+            e.preventDefault();
+            onSelectTool(rawHref.slice(6));
+          } else if (rawHref.startsWith('/blog/')) {
+            e.preventDefault();
+            onSelectPost(rawHref.slice(6));
+          } else if (rawHref.startsWith('/') && !rawHref.startsWith('//')) {
+            e.preventDefault();
+            onNavigatePath(rawHref);
+          }
+        }}
+        className="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-sm sm:text-base leading-relaxed space-y-6 [&>h2]:text-xl sm:[&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-slate-900 dark:[&>h2]:text-white [&>h2]:pt-6 [&>h2]:border-t [&>h2]:border-slate-200 dark:[&>h2]:border-slate-800 [&>h3]:text-base sm:[&>h3]:text-lg [&>h3]:font-bold [&>p]:leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&_a]:text-emerald-400 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-emerald-300"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
@@ -302,9 +327,71 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               Privacy Policy
             </button>
             <span>·</span>
+            <button onClick={() => onNavigatePath('/portfolio')} className="hover:text-blue-600 underline cursor-pointer">
+              Founder Portfolio
+            </button>
+            <span>·</span>
             <button onClick={() => onNavigatePath('/contact')} className="hover:text-blue-600 underline cursor-pointer">
               Contact
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Cite & Reference (Ready Backlink Snippets) */}
+      <div className="my-10 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h4 className="text-slate-500 font-mono font-bold uppercase text-[11px]">
+            Cite &amp; Reference This Guide
+          </h4>
+          <span className="text-[11px] font-mono text-slate-400">
+            Canonical Backlink Snippets
+          </span>
+        </div>
+        <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Referencing this benchmark or linking directly to the utility from documentation, a README, or a blog post? Copy a clean semantic backlink below:
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 font-mono">
+          <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">HTML Backlink</span>
+              <button
+                onClick={() => {
+                  const html = `<a href="https://mimage.netlify.app/blog/${post.slug}">${post.title}</a> — powered by <a href="https://mimage.netlify.app${post.ctaLink || '/'}">${post.ctaText}</a>`;
+                  navigator.clipboard.writeText(html);
+                  setCopiedKey('html-backlink');
+                  setTimeout(() => setCopiedKey(null), 2000);
+                }}
+                className="text-[11px] text-blue-600 dark:text-sky-400 inline-flex items-center gap-1 cursor-pointer hover:underline"
+              >
+                {copiedKey === 'html-backlink' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedKey === 'html-backlink' ? 'Copied' : 'Copy HTML'}</span>
+              </button>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
+              &lt;a href=&quot;https://mimage.netlify.app/blog/{post.slug}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Markdown Citation</span>
+              <button
+                onClick={() => {
+                  const md = `[${post.title}](https://mimage.netlify.app/blog/${post.slug}) ([Launch Tool](https://mimage.netlify.app${post.ctaLink || '/'}))`;
+                  navigator.clipboard.writeText(md);
+                  setCopiedKey('md-backlink');
+                  setTimeout(() => setCopiedKey(null), 2000);
+                }}
+                className="text-[11px] text-blue-600 dark:text-sky-400 inline-flex items-center gap-1 cursor-pointer hover:underline"
+              >
+                {copiedKey === 'md-backlink' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedKey === 'md-backlink' ? 'Copied' : 'Copy Markdown'}</span>
+              </button>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
+              [{post.primaryKeyword}](https://mimage.netlify.app/blog/{post.slug})
+            </div>
           </div>
         </div>
       </div>

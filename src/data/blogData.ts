@@ -111,8 +111,12 @@ export const BLOG_CATEGORIES: BlogCategoryInfo[] = [
 import { FOUR_NEW_MASTER_BLOG_POSTS } from './newBlogPosts';
 import { SIX_QR_CODE_BLOG_POSTS } from './qrBlogPosts';
 import { DEDICATED_TOOL_BLOG_POSTS } from './toolBlogPosts';
+import { DEDICATED_TOOL_BLOG_POSTS_2A } from './toolBlogPostsBatch2A';
+import { DEDICATED_TOOL_BLOG_POSTS_2B } from './toolBlogPostsBatch2B';
 
 export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
+  ...DEDICATED_TOOL_BLOG_POSTS_2A,
+  ...DEDICATED_TOOL_BLOG_POSTS_2B,
   ...DEDICATED_TOOL_BLOG_POSTS,
   ...SIX_QR_CODE_BLOG_POSTS,
   ...FOUR_NEW_MASTER_BLOG_POSTS,

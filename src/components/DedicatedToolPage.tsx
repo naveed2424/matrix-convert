@@ -133,11 +133,24 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   const [copiedAscii, setCopiedAscii] = useState(false);
 
   const deepGuide = TOOL_DEEP_GUIDES[tool.id];
-  const linkedBlogPosts = deepGuide
+  const explicitBlogPosts = deepGuide
     ? deepGuide.relatedBlogSlugs
         .map((s) => PRE_SEEDED_BLOG_POSTS.find((p) => p.slug === s))
         .filter((p): p is NonNullable<typeof p> => Boolean(p))
     : [];
+  const autoMatchedBlogPosts = PRE_SEEDED_BLOG_POSTS.filter(
+    (p) =>
+      p.ctaLink === `/tool/${tool.slug}` ||
+      p.ctaLink === `/${tool.slug}` ||
+      p.ctaLink === `/tool/${tool.id}` ||
+      p.internalLinks.some(
+        (l) => l.url === `/tool/${tool.slug}` || l.url === `/${tool.slug}` || l.url === `/tool/${tool.id}`
+      )
+  );
+  const linkedBlogPosts = [
+    ...explicitBlogPosts,
+    ...autoMatchedBlogPosts.filter((p) => !explicitBlogPosts.some((e) => e.slug === p.slug))
+  ].slice(0, 3);
 
   useEffect(() => {
     setFiles([]);
@@ -1244,43 +1257,44 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
             </div>
           </div>
 
-          {/* Recommended E-E-A-T Blog Guides */}
-          {linkedBlogPosts.length > 0 && (
-            <div className="pt-5 border-t border-slate-800">
-              <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-emerald-400" />
-                <span>Recommended Engineering &amp; Privacy Guides on Mimage Blog</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {linkedBlogPosts.map((bp) => (
-                  <button
-                    key={bp.slug}
-                    type="button"
-                    onClick={() => {
-                      if (onSelectBlogPost) {
-                        onSelectBlogPost(bp.slug);
-                      } else {
-                        window.history.pushState({}, '', `/blog/${bp.slug}`);
-                        window.dispatchEvent(new PopStateEvent('popstate'));
-                      }
-                    }}
-                    className="text-left p-4 rounded-xl border border-slate-800 bg-slate-950/80 hover:border-emerald-500/50 transition-colors cursor-pointer group flex flex-col justify-between gap-2"
-                  >
-                    <div>
-                      <div className="text-[11px] font-mono text-emerald-400 mb-1">{bp.readTime}</div>
-                      <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
-                        {bp.title}
-                      </div>
-                    </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400">
-                      <span>Read full guide</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+        </section>
+      )}
+
+      {/* Recommended E-E-A-T Blog Guides (bidirectional internal link bridge) */}
+      {linkedBlogPosts.length > 0 && (
+        <section className="mb-10 p-6 rounded-2xl border border-slate-800 bg-slate-900/70">
+          <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-emerald-400" />
+            <span>Recommended Engineering &amp; Privacy Guides on Mimage Blog</span>
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {linkedBlogPosts.map((bp) => (
+              <button
+                key={bp.slug}
+                type="button"
+                onClick={() => {
+                  if (onSelectBlogPost) {
+                    onSelectBlogPost(bp.slug);
+                  } else {
+                    window.history.pushState({}, '', `/blog/${bp.slug}`);
+                    window.dispatchEvent(new PopStateEvent('popstate'));
+                  }
+                }}
+                className="text-left p-4 rounded-xl border border-slate-800 bg-slate-950/80 hover:border-emerald-500/50 transition-colors cursor-pointer group flex flex-col justify-between gap-2"
+              >
+                <div>
+                  <div className="text-[11px] font-mono text-emerald-400 mb-1 tabular-nums">{bp.readTime}</div>
+                  <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
+                    {bp.title}
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400">
+                  <span>Read full guide</span>
+                  <ArrowRight className="w-3 h-3" />
+                </span>
+              </button>
+            ))}
+          </div>
         </section>
       )}
 

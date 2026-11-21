@@ -151,6 +151,14 @@ export const Footer: React.FC<FooterProps> = ({
             </li>
             <li>
               <button
+                onClick={() => onNavigateCompanyPage('portfolio')}
+                className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer text-left"
+              >
+                Founder Portfolio
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => onNavigateCompanyPage('privacy')}
                 className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer text-left"
               >
