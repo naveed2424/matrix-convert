@@ -201,7 +201,12 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Hero Figure */}
       <figure className="mb-10 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-        <img src={post.heroImage.url} alt={post.heroImage.alt} className="w-full h-72 sm:h-96 object-cover" />
+        <img
+          src={post.heroImage.url}
+          alt={post.heroImage.alt}
+          referrerPolicy="no-referrer"
+          className="w-full h-72 sm:h-96 object-cover"
+        />
         <figcaption className="p-3 text-xs font-mono text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
           {post.heroImage.caption}
         </figcaption>
@@ -256,7 +261,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                 key={idx}
                 className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
               >
-                <img src={img.url} alt={img.alt} className="w-full h-44 object-cover" />
+                <img src={img.url} alt={img.alt} referrerPolicy="no-referrer" className="w-full h-44 object-cover" />
                 <div className="p-3 text-xs space-y-1">
                   <div className="font-mono text-[11px] text-blue-600 dark:text-sky-400 font-bold">
                     Figure {idx + 2} · {img.placement}

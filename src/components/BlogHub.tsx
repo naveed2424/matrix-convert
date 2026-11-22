@@ -146,7 +146,8 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
                   <img
                     src={featuredPost.author.avatar}
                     alt={featuredPost.author.name}
-                    className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                    referrerPolicy="no-referrer"
+                    className="w-9 h-9 rounded-full object-cover object-top border border-slate-200 dark:border-slate-700"
                   />
                   <div className="text-xs">
                     <span className="font-bold text-slate-900 dark:text-white block">{featuredPost.author.name}</span>
@@ -171,6 +172,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
               <img
                 src={featuredPost.heroImage.url}
                 alt={featuredPost.heroImage.alt}
+                referrerPolicy="no-referrer"
                 className="w-full h-64 sm:h-72 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
@@ -192,6 +194,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
                   <img
                     src={post.heroImage.url}
                     alt={post.heroImage.alt}
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>

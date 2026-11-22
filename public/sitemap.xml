@@ -366,6 +366,56 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://mimage.netlify.app/blog/smart-file-assistant-magic-bytes-fix-wrong-file-extension-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/images-to-pdf-combine-photos-receipts-clean-a4-layout-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/image-optimization-studio-batch-resize-strip-exif-webp-avif-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/privacy-blur-face-redactor-irreversible-pixelation-security-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/gif-maker-and-compressor-palette-colors-fps-file-size-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/image-upscaler-enlarge-low-res-photos-edge-sharpen-print-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/color-palette-generator-extract-brand-hex-rgb-wcag-contrast-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/png-to-svg-vectorizer-trace-logos-signatures-clean-paths-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/pdf-organizer-reorder-rotate-delete-pages-privately-in-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/csv-to-json-parser-rfc4180-clean-api-fixtures-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://mimage.netlify.app/portfolio</loc>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
