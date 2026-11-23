@@ -1,5 +1,9 @@
 import React from 'react';
-import { SUPPORTED_LANGUAGES } from '../data/languages';
+import {
+  SUPPORTED_LANGUAGES,
+  getNavTranslation,
+  normalizeUiLangCode
+} from '../data/languages';
 import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDefinition } from '../types';
 import { ShieldCheck, ExternalLink } from 'lucide-react';
@@ -22,23 +26,26 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateMethodology,
   currentLang
 }) => {
+  const normLang = normalizeUiLangCode(currentLang);
+  const navT = getNavTranslation(normLang);
+
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 pt-14 pb-12 px-4 sm:px-6 lg:px-8 text-xs">
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
         {/* Col 1: Brand */}
         <div className="col-span-2 lg:col-span-1 space-y-3">
-          <div className="flex items-center gap-2 font-bold text-base text-slate-900 dark:text-white">
+          <div className="flex items-center gap-2 font-bold text-base text-slate-900 dark:text-white notranslate" translate="no">
             <span className="w-7 h-7 rounded-lg bg-blue-600 text-white font-mono text-xs font-extrabold flex items-center justify-center">
               M
             </span>
             <span>Mimage</span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Free Online File &amp; Image Tools — Private, Fast, No Sign-Up.
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed notranslate" translate="no">
+            {navT.footerTagline}
           </p>
-          <div className="pt-1 flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-medium">
+          <div className="pt-1 flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-medium notranslate" translate="no">
             <ShieldCheck className="w-4 h-4 shrink-0" />
-            <span>Browser-Local First</span>
+            <span>{navT.browserLocal}</span>
           </div>
           <div className="pt-1">
             <a
@@ -55,8 +62,8 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 2: Signature & Creator Tools */}
         <div>
-          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Signature Tools
+          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px] notranslate" translate="no">
+            {navT.signatureHeading}
           </h4>
           <ul className="space-y-2">
             {[
@@ -84,8 +91,8 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 3: PDF & Converters */}
         <div>
-          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            PDF &amp; Converters
+          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px] notranslate" translate="no">
+            {navT.pdfConvertersHeading}
           </h4>
           <ul className="space-y-2">
             {[
@@ -113,8 +120,8 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 4: Trust & Policies */}
         <div>
-          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Trust &amp; Policies
+          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px] notranslate" translate="no">
+            {navT.trustPolicies}
           </h4>
           <ul className="space-y-2">
             <li>
@@ -202,17 +209,18 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 5: Global Languages */}
         <div className="col-span-2 md:col-span-1">
-          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px]">
-            Languages
+          <h4 className="text-slate-900 dark:text-white font-bold mb-3 uppercase tracking-wider text-[11px] notranslate" translate="no">
+            {navT.languages}
           </h4>
           <ul className="space-y-1.5 grid grid-cols-2 gap-x-2">
             {SUPPORTED_LANGUAGES.map((l) => (
               <li key={l.code}>
                 <button
                   onClick={() => onSelectLang(l.code)}
-                  className={`hover:text-blue-600 dark:hover:text-sky-400 transition-colors text-left cursor-pointer ${
-                    currentLang === l.code ? 'text-blue-600 dark:text-sky-400 font-bold' : ''
+                  className={`hover:text-blue-600 dark:hover:text-sky-400 transition-colors text-left cursor-pointer notranslate ${
+                    normLang === l.code ? 'text-blue-600 dark:text-sky-400 font-bold' : ''
                   }`}
+                  translate="no"
                 >
                   {l.nativeName}
                 </button>

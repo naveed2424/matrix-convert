@@ -56,8 +56,29 @@ import {
   convertCsvToJson,
   convertHtmlToMarkdown
 } from '../services/extraConvertersEngine';
+import {
+  convertPngToJpg,
+  convertWebpToAvif,
+  convertAvifToWebp,
+  convertGifToPng,
+  vectorizeJpgToSvg,
+  applyRoundedCornersPng,
+  buildImageCollageGrid,
+  removeBlankPdfPages,
+  convertMarkdownToHtml,
+  convertXmlToJson,
+  convertJsonToXml,
+  convertSvgToCssUri
+} from '../services/batch12Engine';
 import { formatFileSize } from '../services/advancedToolsEngine';
-import { getTranslation, getLocalizedTool } from '../data/languages';
+import {
+  getTranslation,
+  getLocalizedTool,
+  TOOL_TRANSLATIONS,
+  normalizeUiLangCode
+} from '../data/languages';
+import { getLocalizedToolCategory } from '../data/blogI18n';
+import { rescanDomTranslation } from '../services/autoTranslation';
 import { TOOL_DEEP_GUIDES } from '../data/toolDeepContent';
 import { EDITORIAL_IMAGES } from '../data/editorialAssets';
 import { PRE_SEEDED_BLOG_POSTS } from '../data/blogData';
@@ -275,6 +296,14 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
 
   const t = (key: string) => getTranslation(currentLang, key);
   const localized = getLocalizedTool(tool, currentLang);
+  const normLang = normalizeUiLangCode(currentLang);
+  const hasNativeToolTranslation = Boolean(TOOL_TRANSLATIONS[normLang]?.[tool.id]);
+
+  useEffect(() => {
+    if (normLang !== 'en') {
+      rescanDomTranslation(currentLang, 180);
+    }
+  }, [tool.id, currentLang, normLang, convertedResults.length]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -531,6 +560,78 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           });
           allResults.push(converted);
         }
+      } else if (tool.id === 'png-to-jpg') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Converting ${files[i].name} to JPG...`);
+          allResults.push(await convertPngToJpg(files[i], settings));
+        }
+      } else if (tool.id === 'webp-to-avif') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Encoding ${files[i].name} to AVIF...`);
+          allResults.push(await convertWebpToAvif(files[i], settings));
+        }
+      } else if (tool.id === 'avif-to-webp') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Converting ${files[i].name} to WebP...`);
+          allResults.push(await convertAvifToWebp(files[i], settings));
+        }
+      } else if (tool.id === 'gif-to-png') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Extracting lossless PNG frame from ${files[i].name}...`);
+          allResults.push(await convertGifToPng(files[i], settings));
+        }
+      } else if (tool.id === 'jpg-to-svg') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Tracing quantized vector paths for ${files[i].name}...`);
+          allResults.push(await vectorizeJpgToSvg(files[i], settings));
+        }
+      } else if (tool.id === 'image-round-corners') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(25 + (i / files.length) * 70));
+          setProgressMsg(`Applying rounded corners alpha mask to ${files[i].name}...`);
+          allResults.push(await applyRoundedCornersPng(files[i], 'rounded'));
+        }
+      } else if (tool.id === 'image-collage-grid') {
+        setProgress(55);
+        setProgressMsg(`Composing ${files.length} image(s) into aligned contact sheet grid...`);
+        allResults.push(await buildImageCollageGrid(files, settings.backgroundColor));
+      } else if (tool.id === 'pdf-blank-page-remover') {
+        for (let i = 0; i < files.length; i++) {
+          const res = await removeBlankPdfPages(files[i], (pct, msg) => {
+            setProgress(pct);
+            setProgressMsg(msg);
+          });
+          allResults.push(res);
+        }
+      } else if (tool.id === 'markdown-to-html') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Compiling Markdown AST to semantic HTML for ${files[i].name}...`);
+          allResults.push(await convertMarkdownToHtml(files[i]));
+        }
+      } else if (tool.id === 'xml-to-json') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Parsing XML nodes to structured JSON for ${files[i].name}...`);
+          allResults.push(await convertXmlToJson(files[i]));
+        }
+      } else if (tool.id === 'json-to-xml') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Serializing JSON structure to XML for ${files[i].name}...`);
+          allResults.push(await convertJsonToXml(files[i]));
+        }
+      } else if (tool.id === 'svg-to-css-uri') {
+        for (let i = 0; i < files.length; i++) {
+          setProgress(Math.round(30 + (i / files.length) * 60));
+          setProgressMsg(`Encoding minified CSS Data URI for ${files[i].name}...`);
+          allResults.push(await convertSvgToCssUri(files[i]));
+        }
       } else {
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
@@ -657,18 +758,28 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
           className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
-          <span>{t('backToAll')}</span>
+          <span className="notranslate" translate="no">{t('backToAll')}</span>
         </button>
         <span>/</span>
-        <span>{tool.categoryName}</span>
+        <span className="notranslate" translate="no">
+          {getLocalizedToolCategory(tool.category, currentLang, tool.categoryName)}
+        </span>
         <span>/</span>
-        <span className="text-slate-900 dark:text-white font-semibold">{localized.name}</span>
+        <span
+          className={`text-slate-900 dark:text-white font-semibold ${hasNativeToolTranslation ? 'notranslate' : ''}`}
+          translate={hasNativeToolTranslation ? 'no' : 'yes'}
+        >
+          {localized.name}
+        </span>
       </nav>
 
       {/* Main Tool Header */}
       <header className="mb-8 p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1
+            className={`text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight ${hasNativeToolTranslation ? 'notranslate' : ''}`}
+            translate={hasNativeToolTranslation ? 'no' : 'yes'}
+          >
             {localized.name}
           </h1>
           <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
@@ -957,7 +1068,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                         <div className="font-mono text-xs text-slate-900 dark:text-white truncate font-semibold mb-1">
                           {res.convertedName}
                         </div>
-                        <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-3 tabular-nums">
+                        <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-2 tabular-nums">
                           <span>{formatFileSize(res.convertedSize)}</span>
                           {res.width && res.height && (
                             <span>
@@ -965,6 +1076,11 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                             </span>
                           )}
                         </div>
+                        {res.note && (
+                          <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 mb-2.5 leading-snug">
+                            {res.note}
+                          </p>
+                        )}
                       </div>
 
                       <button
@@ -972,7 +1088,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                         className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Download className="w-3.5 h-3.5" />
-                        <span>{t('download')}</span>
+                        <span className="notranslate" translate="no">{t('download')}</span>
                       </button>
                     </div>
                   ))}
@@ -1301,10 +1417,11 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       {/* Related Tools */}
       {relatedTools.length > 0 && (
         <section className="pt-6 border-t border-slate-200 dark:border-slate-800">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">{t('relatedTools')}</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4 notranslate" translate="no">{t('relatedTools')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedTools.map((rt) => {
               const rLocalized = getLocalizedTool(rt, currentLang);
+              const hasRelNative = Boolean(TOOL_TRANSLATIONS[normLang]?.[rt.id]);
               return (
                 <div
                   key={rt.id}
@@ -1314,10 +1431,16 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                   <div className="font-mono text-xs text-blue-600 dark:text-sky-400 font-bold mb-1">
                     {rt.fromFormat} → {rt.toFormat}
                   </div>
-                  <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors line-clamp-1">
+                  <div
+                    className={`font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors line-clamp-1 ${hasRelNative ? 'notranslate' : ''}`}
+                    translate={hasRelNative ? 'no' : 'yes'}
+                  >
                     {rLocalized.name}
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">
+                  <p
+                    className={`text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 ${hasRelNative ? 'notranslate' : ''}`}
+                    translate={hasRelNative ? 'no' : 'yes'}
+                  >
                     {rLocalized.shortDescription}
                   </p>
                 </div>

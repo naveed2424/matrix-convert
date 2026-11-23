@@ -241,6 +241,66 @@
     <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://mimage.netlify.app/tool/png-to-jpg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/webp-to-avif</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/avif-to-webp</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/jpg-to-svg</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/gif-to-png</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/image-round-corners</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/image-collage-grid</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/pdf-blank-page-remover</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/markdown-to-html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/xml-to-json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/json-to-xml</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/tool/svg-to-css-uri</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
     <loc>https://mimage.netlify.app/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -412,6 +472,56 @@
   </url>
   <url>
     <loc>https://mimage.netlify.app/blog/csv-to-json-parser-rfc4180-clean-api-fixtures-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/markdown-to-pdf-converter-technical-docs-readme-resume-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/bulk-image-converter-convert-hundreds-photos-webp-jpg-png-zip-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/image-resizer-exact-pixel-dimensions-aspect-ratio-without-blur-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/flatten-pdf-lock-fillable-forms-signatures-prevent-editing-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/pdf-page-numberer-bates-stamping-discovery-exhibits-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/batch-image-watermark-overlay-brand-logo-text-stamps-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/change-image-dpi-72-to-300-600-dpi-for-print-without-quality-loss-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/png-to-avif-converter-transparent-images-85-percent-smaller-web-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/pdf-to-csv-extract-bank-statements-invoices-tables-browser-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://mimage.netlify.app/blog/app-icon-generator-ios-xcode-android-adaptive-mipmap-icons-guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

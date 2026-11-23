@@ -1,6 +1,7 @@
 import { ToolDefinition } from '../types';
 import { NEW_MIMAGE_TOOLS } from './newToolsData';
 import { EXTRA_CONVERTER_TOOLS } from './extraConverterToolsData';
+import { BATCH12_CONVERTER_TOOLS } from './toolsBatch12Data';
 
 const LEGACY_MIMAGE_TOOLS: ToolDefinition[] = [
   // 1. PDF to PNG (Featured / Dedicated Deep Dive)
@@ -1670,7 +1671,8 @@ export const TOOLS_DATA: ToolDefinition[] = [
     processingMode: t.processingMode || ('browser-local' as const)
   })),
   ...NEW_MIMAGE_TOOLS,
-  ...EXTRA_CONVERTER_TOOLS
+  ...EXTRA_CONVERTER_TOOLS,
+  ...BATCH12_CONVERTER_TOOLS
 ];
 
 export const TOOL_CATEGORIES = [

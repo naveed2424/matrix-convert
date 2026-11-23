@@ -10,7 +10,14 @@ import {
   Sparkles,
   Lock
 } from 'lucide-react';
-import { getTranslation, getLocalizedTool } from '../data/languages';
+import {
+  getTranslation,
+  getLocalizedTool,
+  TOOL_TRANSLATIONS,
+  normalizeUiLangCode
+} from '../data/languages';
+import { getLocalizedToolCategory } from '../data/blogI18n';
+import { rescanDomTranslation } from '../services/autoTranslation';
 import { ToolDefinition } from '../types';
 import { searchTools } from '../utils/toolSearch';
 
@@ -39,6 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [highlightedIdx, setHighlightedIdx] = useState(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const normLang = normalizeUiLangCode(currentLang);
   const t = (key: string) => getTranslation(currentLang, key);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -73,7 +81,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   useEffect(() => {
     setHighlightedIdx(0);
-  }, [searchQuery]);
+    if (searchQuery.trim() && normLang !== 'en') {
+      rescanDomTranslation(currentLang, 200);
+    }
+  }, [searchQuery, currentLang, normLang]);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
@@ -107,7 +118,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* Subtitle */}
       <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-        {t('subTagline')} Compress, resize, convert formats, strip hidden camera metadata, and organize PDFs right in your browser.
+        <span className="notranslate" translate="no">{t('subTagline')}</span> Compress, resize, convert formats, strip hidden camera metadata, and organize PDFs right in your browser.
       </p>
 
       {/* Primary Dropzone */}
@@ -136,7 +147,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <UploadCloud className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white notranslate" translate="no">
               {t('dropTitle')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -185,6 +196,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
                 {topResults.map((tool, index) => {
                   const localized = getLocalizedTool(tool, currentLang);
+                  const hasNative = Boolean(TOOL_TRANSLATIONS[normLang]?.[tool.id]);
                   const isHighlighted = index === highlightedIdx;
                   return (
                     <button
@@ -202,14 +214,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       }`}
                     >
                       <div className="min-w-0 pr-2">
-                        <div className="font-semibold text-sm text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors truncate">
+                        <div
+                          className={`font-semibold text-sm text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors truncate ${
+                            hasNative ? 'notranslate' : ''
+                          }`}
+                          translate={hasNative ? 'no' : 'yes'}
+                        >
                           {localized.name}
                         </div>
                         <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
-                          {tool.categoryName} · {localized.shortDescription}
+                          <span className="notranslate" translate="no">
+                            {getLocalizedToolCategory(tool.category, currentLang, tool.categoryName)}
+                          </span>{' '}
+                          ·{' '}
+                          <span className={hasNative ? 'notranslate' : ''} translate={hasNative ? 'no' : 'yes'}>
+                            {localized.shortDescription}
+                          </span>
                         </div>
                       </div>
-                      <span className="font-mono text-xs font-semibold text-emerald-500 shrink-0 ml-2 flex items-center gap-1">
+                      <span className="font-mono text-xs font-semibold text-emerald-500 shrink-0 ml-2 flex items-center gap-1 notranslate" translate="no">
                         <span>{tool.fromFormat} → {tool.toFormat}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </span>
@@ -308,7 +331,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="mt-6">
         <button
           onClick={onScrollToTools}
-          className="text-xs font-mono font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
+          className="text-xs font-mono font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer notranslate"
+          translate="no"
         >
           {t('browseAllBelow')} ↓
         </button>

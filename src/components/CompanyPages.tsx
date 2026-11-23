@@ -23,6 +23,8 @@ import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS } from '../data/blogData';
 import { SUPPORTED_LANGUAGES } from '../data/languages';
 import { EDITORIAL_IMAGES } from '../data/editorialAssets';
+import { SitemapGeneratorPanel } from './SitemapGeneratorPanel';
+import { SitemapEntry } from '../utils/sitemapGenerator';
 
 export type CompanyPageType =
   | 'about'
@@ -42,6 +44,7 @@ interface CompanyPagesProps {
   onSelectPost?: (slug: string) => void;
   onNavigateBlog?: () => void;
   onNavigateCompanyPage?: (type: CompanyPageType) => void;
+  onNavigatePath?: (path: string) => void;
 }
 
 export const CompanyPages: React.FC<CompanyPagesProps> = ({
@@ -50,7 +53,8 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
   onSelectTool,
   onSelectPost,
   onNavigateBlog,
-  onNavigateCompanyPage
+  onNavigateCompanyPage,
+  onNavigatePath
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -717,34 +721,86 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
 
         {/* SITEMAP */}
         {pageType === 'sitemap' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3">
               <span className="p-2.5 rounded-xl bg-blue-100 dark:bg-sky-950/60 text-blue-600 dark:text-sky-400">
                 <Map className="w-6 h-6" />
               </span>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                  Mimage HTML Sitemap Directory
+                  Mimage HTML Sitemap &amp; Dynamic XML Generator
                 </h1>
                 <p className="text-xs font-mono text-blue-600 dark:text-sky-400">
-                  Index of all tools &amp; site endpoints
+                  Index of all {TOOLS_DATA.length} tools, {PRE_SEEDED_BLOG_POSTS.length} guides &amp; site endpoints
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {TOOLS_DATA.map((tool) => (
-                <button
-                  key={tool.id}
-                  onClick={() => onSelectTool(tool.slug)}
-                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-blue-400 text-left transition-colors cursor-pointer"
-                >
-                  <div className="text-[10px] font-mono text-blue-600 dark:text-sky-400 font-bold">
-                    {tool.fromFormat} → {tool.toFormat}
-                  </div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate">{tool.name}</div>
-                </button>
-              ))}
+            <SitemapGeneratorPanel
+              onNavigateEntry={(entry: SitemapEntry) => {
+                if (onNavigatePath) {
+                  onNavigatePath(entry.path);
+                  return;
+                }
+                if (entry.section === 'tool') {
+                  const slug = entry.path.replace(/^\/tool\//, '').replace(/^\//, '');
+                  onSelectTool(slug);
+                } else if (entry.section === 'blog' && onSelectPost) {
+                  const slug = entry.path.replace(/^\/blog\//, '');
+                  onSelectPost(slug);
+                } else if (entry.path === '/blog' && onNavigateBlog) {
+                  onNavigateBlog();
+                } else if (entry.path === '/' || entry.path === '/tools') {
+                  onBackToHome();
+                } else if (entry.section === 'company' && onNavigateCompanyPage) {
+                  const slug = entry.path.replace(/^\//, '') as CompanyPageType;
+                  if (slug) onNavigateCompanyPage(slug);
+                }
+              }}
+            />
+
+            {/* All Tools HTML Links */}
+            <div className="space-y-3">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                <span>All Converter &amp; Utility Pages ({TOOLS_DATA.length})</span>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {TOOLS_DATA.map((tool) => (
+                  <button
+                    key={tool.id}
+                    onClick={() => onSelectTool(tool.slug)}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-blue-400 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="text-[10px] font-mono text-blue-600 dark:text-sky-400 font-bold">
+                      {tool.fromFormat} → {tool.toFormat}
+                    </div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white truncate">{tool.name}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* All Blog Guides HTML Links */}
+            <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                All Educational Guides &amp; Blog Posts ({PRE_SEEDED_BLOG_POSTS.length})
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {PRE_SEEDED_BLOG_POSTS.map((post) => (
+                  <button
+                    key={post.id}
+                    onClick={() => onSelectPost && onSelectPost(post.slug)}
+                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-emerald-500 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="text-[10px] font-mono text-emerald-500 font-semibold mb-0.5">
+                      /blog/{post.slug}
+                    </div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
+                      {post.title}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}

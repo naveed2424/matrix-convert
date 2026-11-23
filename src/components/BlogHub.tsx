@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BlogPost, BLOG_CATEGORIES } from '../data/blogData';
 import { REGISTERED_EDITORIAL_FRAMEWORK } from '../data/editorialFramework';
+import { getBlogTranslation, getLocalizedBlogCategory } from '../data/blogI18n';
+import { rescanDomTranslation } from '../services/autoTranslation';
 import { Search, Calendar, Clock, ArrowRight, ShieldCheck, BookOpen, X, CheckCircle2 } from 'lucide-react';
 
 interface BlogHubProps {
   posts: BlogPost[];
+  currentLang?: string;
   onSelectPost: (slug: string) => void;
   onNavigateHome: () => void;
 }
 
-export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigateHome }) => {
+export const BlogHub: React.FC<BlogHubProps> = ({
+  posts,
+  currentLang = 'en',
+  onSelectPost,
+  onNavigateHome
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showFrameworkModal, setShowFrameworkModal] = useState<boolean>(false);
+
+  const tb = (key: Parameters<typeof getBlogTranslation>[1]) => getBlogTranslation(currentLang, key);
+
+  useEffect(() => {
+    if (currentLang !== 'en') {
+      rescanDomTranslation(currentLang, 260);
+    }
+  }, [selectedCategory, searchQuery, currentLang]);
 
   const filteredPosts = posts.filter((post) => {
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
@@ -29,23 +45,23 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans text-slate-800 dark:text-slate-200">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border border-blue-200 dark:border-slate-800 bg-blue-50 dark:bg-slate-900 text-blue-700 dark:text-sky-400 text-xs font-mono font-semibold">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border border-blue-200 dark:border-slate-800 bg-blue-50 dark:bg-slate-900 text-blue-700 dark:text-sky-400 text-xs font-mono font-semibold notranslate" translate="no">
           <BookOpen className="w-3.5 h-3.5" />
-          <span>Mimage Guides &amp; Educational Library</span>
+          <span>{tb('libraryBadge')}</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          File Formats, Optimization &amp; Privacy Guides
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight notranslate" translate="no">
+          {tb('hubTitle')}
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          Practical guides and workflow walkthroughs authored by Naveed Afzal, Mimage Administrator &amp; Writer.
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed notranslate" translate="no">
+          {tb('hubSubtitle')}
         </p>
 
-        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3 notranslate" translate="no">
           <button
             onClick={onNavigateHome}
             className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs inline-flex items-center gap-2 cursor-pointer shadow-sm"
           >
-            <span>Explore All Tools</span>
+            <span>{tb('exploreAllTools')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
           <button
@@ -53,19 +69,19 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
             className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:border-blue-400 transition-colors inline-flex items-center gap-2 cursor-pointer"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Editorial Standards</span>
+            <span>{tb('editorialStandards')}</span>
           </button>
         </div>
       </div>
 
       {/* Category Filter Tabs */}
-      <div className="mb-8">
+      <div className="mb-8 notranslate" translate="no">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold">
-            Filter by Topic
+            {tb('filterByTopic')}
           </span>
           <span className="text-xs font-mono text-blue-600 dark:text-sky-400 tabular-nums">
-            {posts.length} guides available
+            {posts.length} {tb('guidesAvailable')}
           </span>
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
@@ -77,7 +93,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
                 : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
             }`}
           >
-            All Guides ({posts.length})
+            {tb('allGuides')} ({posts.length})
           </button>
           {BLOG_CATEGORIES.map((cat) => {
             const count = posts.filter((p) => p.category === cat.key).length;
@@ -92,7 +108,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <span>{cat.title}</span>
+                <span>{getLocalizedBlogCategory(cat.key, currentLang)}</span>
                 <span className="text-[11px] opacity-75 tabular-nums">({count})</span>
               </button>
             );
@@ -107,15 +123,16 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search guides by format or keyword..."
+          placeholder={tb('searchPlaceholder')}
           className="w-full pl-11 pr-16 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-3 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+            className="absolute right-3 top-3 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer notranslate"
+            translate="no"
           >
-            Clear
+            {tb('clear')}
           </button>
         )}
       </div>
@@ -126,8 +143,8 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
               <div className="flex items-center gap-3 text-xs font-mono">
-                <span className="text-blue-600 dark:text-sky-400 font-bold uppercase tracking-wider">
-                  Featured Guide
+                <span className="text-blue-600 dark:text-sky-400 font-bold uppercase tracking-wider notranslate" translate="no">
+                  {tb('featuredGuide')}
                 </span>
                 <span className="text-slate-400">·</span>
                 <span className="text-slate-500">{featuredPost.readTime}</span>
@@ -157,9 +174,10 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
 
                 <button
                   onClick={() => onSelectPost(featuredPost.slug)}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold inline-flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold inline-flex items-center gap-2 cursor-pointer notranslate"
+                  translate="no"
                 >
-                  <span>Read Guide</span>
+                  <span>{tb('readGuide')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -201,7 +219,9 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
 
                 <div className="p-5 space-y-2.5">
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                    <span className="text-blue-600 dark:text-sky-400 font-semibold">{cat.title}</span>
+                    <span className="text-blue-600 dark:text-sky-400 font-semibold notranslate" translate="no">
+                      {getLocalizedBlogCategory(cat.key, currentLang)}
+                    </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {post.readTime}
@@ -229,9 +249,10 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
 
                 <button
                   onClick={() => onSelectPost(post.slug)}
-                  className="font-mono font-semibold text-blue-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  className="font-mono font-semibold text-blue-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1 cursor-pointer notranslate"
+                  translate="no"
                 >
-                  <span>Read</span>
+                  <span>{tb('read')}</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
@@ -242,15 +263,18 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, onNavigat
 
       {filteredPosts.length === 0 && (
         <div className="text-center py-14 space-y-3">
-          <p className="text-slate-500 text-sm font-mono">No articles matching "{searchQuery}".</p>
+          <p className="text-slate-500 text-sm font-mono">
+            <span className="notranslate" translate="no">{tb('noMatches')}</span> &ldquo;{searchQuery}&rdquo;.
+          </p>
           <button
             onClick={() => {
               setSearchQuery('');
               setSelectedCategory('all');
             }}
-            className="px-4 py-2 rounded-xl bg-blue-600 text-white font-mono text-xs font-semibold cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-blue-600 text-white font-mono text-xs font-semibold cursor-pointer notranslate"
+            translate="no"
           >
-            Reset Filters
+            {tb('resetFilters')}
           </button>
         </div>
       )}

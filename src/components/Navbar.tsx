@@ -11,7 +11,14 @@ import {
   Search,
   ArrowRight
 } from 'lucide-react';
-import { SUPPORTED_LANGUAGES, getLocalizedTool } from '../data/languages';
+import {
+  SUPPORTED_LANGUAGES,
+  getLocalizedTool,
+  getNavTranslation,
+  normalizeUiLangCode,
+  TOOL_TRANSLATIONS
+} from '../data/languages';
+import { getLocalizedToolCategory } from '../data/blogI18n';
 import { TOOL_CATEGORIES, TOOLS_DATA } from '../data/toolsData';
 import { searchTools } from '../utils/toolSearch';
 
@@ -52,8 +59,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   const desktopSearchInputRef = useRef<HTMLInputElement | null>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
 
+  const normLang = normalizeUiLangCode(currentLang);
+  const navT = getNavTranslation(normLang);
   const activeLanguage =
-    SUPPORTED_LANGUAGES.find((l) => l.code === currentLang) || SUPPORTED_LANGUAGES[0];
+    SUPPORTED_LANGUAGES.find((l) => l.code === normLang) || SUPPORTED_LANGUAGES[0];
 
   const matchingTools = useMemo(() => {
     if (!headerQuery.trim()) return [];
@@ -157,10 +166,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={onNavigateHome}
           className="flex items-center gap-2.5 text-left font-bold text-lg tracking-tight text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-sky-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
         >
-          <span className="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono text-sm font-extrabold flex items-center justify-center shadow-xs">
+          <span className="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono text-sm font-extrabold flex items-center justify-center shadow-xs notranslate" translate="no">
             M
           </span>
-          <span>Mimage</span>
+          <span className="notranslate" translate="no">Mimage</span>
         </button>
 
         {/* Center Zone: Single-Row Navigation */}
@@ -174,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 font-semibold'
               }`}
             >
-              <span>Tools</span>
+              <span className="notranslate" translate="no">{navT.tools}</span>
               <ChevronDown
                 className={`w-3.5 h-3.5 transition-transform ${toolsDropdownOpen ? 'rotate-180' : ''}`}
               />
@@ -186,22 +195,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onMouseLeave={() => setToolsDropdownOpen(false)}
               >
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-800">
-                  <span className="text-xs font-semibold text-slate-900 dark:text-white">
-                    Mimage Tool Directory ({TOOLS_DATA.length} Utilities)
+                  <span className="text-xs font-semibold text-slate-900 dark:text-white notranslate" translate="no">
+                    {navT.allDirectory} ({TOOLS_DATA.length})
                   </span>
                   <button
                     onClick={() => handleCategoryClick('all')}
-                    className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer"
+                    className="text-xs font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer notranslate"
+                    translate="no"
                   >
-                    View All Tools
+                    {navT.viewAll}
                   </button>
                 </div>
 
                 <div className="grid grid-cols-3 gap-6 text-xs">
                   {/* Column 1: Signature Workflows */}
                   <div className="space-y-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-sky-400 block">
-                      Signature Workspaces
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-sky-400 block notranslate" translate="no">
+                      {navT.signatureTools}
                     </span>
                     <ul className="space-y-2 text-slate-700 dark:text-slate-300">
                       <li>
@@ -248,8 +258,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   {/* Column 2: 7 Categories */}
                   <div className="space-y-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                      7 Categories
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block notranslate" translate="no">
+                      {navT.categoriesTitle}
                     </span>
                     <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
                       {TOOL_CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
@@ -258,7 +268,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onClick={() => handleCategoryClick(cat.id)}
                             className="hover:text-blue-600 dark:hover:text-sky-400 flex items-center justify-between w-full text-left py-0.5 cursor-pointer"
                           >
-                            <span>{cat.name}</span>
+                            <span className="notranslate" translate="no">
+                              {getLocalizedToolCategory(cat.id, currentLang, cat.name)}
+                            </span>
                             <span className="text-[11px] font-mono text-slate-400 tabular-nums">{cat.count}</span>
                           </button>
                         </li>
@@ -268,8 +280,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   {/* Column 3: Popular Tasks */}
                   <div className="space-y-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                      Popular Shortcuts
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block notranslate" translate="no">
+                      {navT.popularShortcuts}
                     </span>
                     <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
                       {[
@@ -299,45 +311,51 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => handleToolClick('smart-assistant')}
-            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
-            Assistant
+            {navT.assistant}
           </button>
 
           <button
             onClick={() => handleToolClick('optimization-studio')}
-            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
-            Studio
+            {navT.studio}
           </button>
 
           <button
             onClick={() => handleToolClick('website-image-audit')}
-            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
-            Audit
+            {navT.audit}
           </button>
 
           <button
             onClick={onNavigateBlog}
-            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
-            Guides
+            {navT.guides}
           </button>
 
           <button
             onClick={onNavigatePrivacyCenter}
-            className="flex items-center gap-1 px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="flex items-center gap-1 px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Privacy</span>
+            <span>{navT.privacy}</span>
           </button>
 
           <button
             onClick={onNavigateMethodology}
-            className="hidden xl:inline-flex px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap"
+            className="hidden xl:inline-flex px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer whitespace-nowrap notranslate"
+            translate="no"
           >
-            Diagnostics
+            {navT.diagnostics}
           </button>
         </nav>
 
@@ -405,6 +423,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="py-1 space-y-0.5">
                     {topMatches.map((tool, index) => {
                       const localized = getLocalizedTool(tool, currentLang);
+                      const hasNative = Boolean(TOOL_TRANSLATIONS[normLang]?.[tool.id]);
                       const isHighlighted = index === highlightedIdx;
                       return (
                         <button
@@ -422,12 +441,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                         >
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              <span
+                                className={`text-xs font-bold text-slate-900 dark:text-white truncate ${hasNative ? 'notranslate' : ''}`}
+                                translate={hasNative ? 'no' : 'yes'}
+                              >
                                 {localized.name}
                               </span>
                             </div>
                             <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                              {tool.categoryName} · {localized.shortDescription}
+                              <span className="notranslate" translate="no">
+                                {getLocalizedToolCategory(tool.category, currentLang, tool.categoryName)}
+                              </span>{' '}
+                              ·{' '}
+                              <span className={hasNative ? 'notranslate' : ''} translate={hasNative ? 'no' : 'yes'}>
+                                {localized.shortDescription}
+                              </span>
                             </div>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0 font-mono text-[11px] font-semibold text-emerald-500">
@@ -476,28 +504,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="Select website language"
             >
               <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
-              <span className="hidden sm:inline font-semibold">{activeLanguage.nativeName}</span>
-              <span className="sm:hidden font-semibold">{activeLanguage.code.toUpperCase()}</span>
+              <span className="hidden sm:inline font-semibold notranslate" translate="no">{activeLanguage.nativeName}</span>
+              <span className="sm:hidden font-semibold notranslate" translate="no">{activeLanguage.code.toUpperCase()}</span>
               <ChevronDown className="w-3 h-3 text-slate-400" />
             </button>
 
             {langMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2 shadow-2xl z-50 max-h-80 overflow-y-auto"
+                className="absolute right-0 mt-2 w-60 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2 shadow-2xl z-50 max-h-80 overflow-y-auto"
                 onMouseLeave={() => setLangMenuOpen(false)}
               >
-                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
-                  Translate Interface
+                <div className="px-3.5 py-1.5 text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800 notranslate" translate="no">
+                  {navT.translateUi}
                 </div>
-                {currentLang !== 'en' && (
+                {normLang !== 'en' && (
                   <button
                     onClick={() => {
                       onSelectLang('en');
                       setLangMenuOpen(false);
                     }}
-                    className="flex items-center justify-between w-full px-3.5 py-2 text-xs text-left bg-blue-50 dark:bg-sky-950/50 text-blue-700 dark:text-sky-300 font-semibold border-b border-slate-100 dark:border-slate-800 cursor-pointer"
+                    className="flex items-center justify-between w-full px-3.5 py-2 text-xs text-left bg-blue-50 dark:bg-sky-950/50 text-blue-700 dark:text-sky-300 font-semibold border-b border-slate-100 dark:border-slate-800 cursor-pointer notranslate"
+                    translate="no"
                   >
-                    <span>Reset to English</span>
+                    <span>{navT.resetEn}</span>
                     <span>🇺🇸</span>
                   </button>
                 )}
@@ -508,11 +537,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onSelectLang(lang.code);
                       setLangMenuOpen(false);
                     }}
-                    className={`flex items-center justify-between w-full px-3.5 py-2 text-xs text-left transition-colors cursor-pointer ${
-                      currentLang === lang.code
+                    className={`flex items-center justify-between w-full px-3.5 py-2 text-xs text-left transition-colors cursor-pointer notranslate ${
+                      normLang === lang.code
                         ? 'bg-blue-600 text-white font-semibold'
                         : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
+                    translate="no"
                   >
                     <span>
                       {lang.nativeName} ({lang.name})
@@ -627,36 +657,40 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2 text-slate-700 dark:text-slate-300 font-medium">
             <button
               onClick={() => handleCategoryClick('all')}
-              className="block w-full py-1.5 text-left font-semibold text-blue-600 dark:text-sky-400 cursor-pointer"
+              className="block w-full py-1.5 text-left font-semibold text-blue-600 dark:text-sky-400 cursor-pointer notranslate"
+              translate="no"
             >
-              All Tools Directory
+              {navT.allDirectory}
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onNavigateBlog();
               }}
-              className="block w-full py-1.5 text-left cursor-pointer"
+              className="block w-full py-1.5 text-left cursor-pointer notranslate"
+              translate="no"
             >
-              Guides & Articles
+              {navT.guides}
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onNavigatePrivacyCenter();
               }}
-              className="block w-full py-1.5 text-left cursor-pointer"
+              className="block w-full py-1.5 text-left cursor-pointer notranslate"
+              translate="no"
             >
-              Privacy Center
+              {navT.privacy}
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onNavigateMethodology();
               }}
-              className="block w-full py-1.5 text-left cursor-pointer"
+              className="block w-full py-1.5 text-left cursor-pointer notranslate"
+              translate="no"
             >
-              Diagnostics & Feedback
+              {navT.diagnostics}
             </button>
           </div>
         </div>

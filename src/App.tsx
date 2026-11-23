@@ -30,7 +30,7 @@ import { PdfDeletePagesTool } from './components/tools/PdfDeletePagesTool';
 import { PdfRotateTool } from './components/tools/PdfRotateTool';
 import { PdfWatermarkTool } from './components/tools/PdfWatermarkTool';
 import { PdfToTextTool } from './components/tools/PdfToTextTool';
-import { initAutoTranslate, applySiteLanguage, getSavedLanguage } from './services/autoTranslation';
+import { initAutoTranslate, applySiteLanguage, getSavedLanguage, rescanDomTranslation } from './services/autoTranslation';
 import { updatePageSeo } from './services/seoManager';
 import { ArrowLeft } from 'lucide-react';
 
@@ -98,6 +98,13 @@ export default function App() {
     setCurrentLang(code);
     applySiteLanguage(code);
   };
+
+  // Trigger Google Translate DOM rescan whenever SPA route or language changes
+  useEffect(() => {
+    if (currentLang !== 'en') {
+      rescanDomTranslation(currentLang, 160);
+    }
+  }, [currentLang, activeView, activePostSlug, activeTool?.id, companyPageType]);
 
   const trackPageView = (path: string) => {
     if (typeof (window as any).gtag === 'function') {
@@ -362,7 +369,11 @@ export default function App() {
       <MatrixBackground />
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <div id="google_translate_element" className="hidden" aria-hidden="true" />
+        <div
+          id="google_translate_element"
+          className="fixed -left-[9999px] top-0 w-px h-px overflow-hidden opacity-0 pointer-events-none"
+          aria-hidden="true"
+        />
 
         <LanguageBanner currentLang={currentLang} onSelectLang={handleSelectLang} />
 
@@ -427,7 +438,9 @@ export default function App() {
 
           {activeView === 'blog' && (
             <BlogHub
+              key={`${currentLang}-blog-hub`}
               posts={PRE_SEEDED_BLOG_POSTS}
+              currentLang={currentLang}
               onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
               onNavigateHome={handleBackToAllTools}
             />
@@ -435,8 +448,10 @@ export default function App() {
 
           {activeView === 'blog-post' && activePost && (
             <BlogPostView
+              key={`${currentLang}-blog-${activePost.slug}`}
               post={activePost}
               allPosts={PRE_SEEDED_BLOG_POSTS}
+              currentLang={currentLang}
               onBackToBlog={() => navigateTo('/blog')}
               onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
               onSelectTool={handleSelectToolBySlug}
@@ -446,17 +461,20 @@ export default function App() {
 
           {activeView === 'company-page' && (
             <CompanyPages
+              key={`${currentLang}-company-${companyPageType}`}
               pageType={companyPageType}
               onBackToHome={handleBackToAllTools}
               onSelectTool={handleSelectToolBySlug}
               onSelectPost={(slug) => navigateTo(`/blog/${slug}`)}
               onNavigateBlog={() => navigateTo('/blog')}
               onNavigateCompanyPage={(type) => navigateTo(`/${type}`)}
+              onNavigatePath={navigateTo}
             />
           )}
 
           {activeView === 'methodology' && (
             <MethodologyFeedbackPage
+              key={`${currentLang}-methodology`}
               onBackToHome={handleBackToAllTools}
               onNavigatePrivacyCenter={() => navigateTo('/privacy-center')}
             />

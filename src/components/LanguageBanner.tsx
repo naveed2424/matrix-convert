@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, X, Check } from 'lucide-react';
-import { AUTO_TRANSLATE_LANGUAGES, detectBrowserLanguage } from '../services/autoTranslation';
+import { AUTO_TRANSLATE_LANGUAGES, detectBrowserLanguage, fromGoogleLangCode } from '../services/autoTranslation';
 
 interface LanguageBannerProps {
   currentLang: string;
@@ -17,13 +17,14 @@ export const LanguageBanner: React.FC<LanguageBannerProps> = ({ currentLang, onS
 
   if (dismissed) return null;
 
+  const normalizedCurrent = fromGoogleLangCode(currentLang);
   const detectedObj =
     AUTO_TRANSLATE_LANGUAGES.find((l) => l.code === browserLang) || AUTO_TRANSLATE_LANGUAGES[0];
-  const isTranslated = currentLang !== 'en';
+  const isTranslated = normalizedCurrent !== 'en';
   const currentLangObj =
-    AUTO_TRANSLATE_LANGUAGES.find((l) => l.code === currentLang) || AUTO_TRANSLATE_LANGUAGES[0];
+    AUTO_TRANSLATE_LANGUAGES.find((l) => l.code === normalizedCurrent) || AUTO_TRANSLATE_LANGUAGES[0];
 
-  if (currentLang === 'en' && browserLang === 'en') {
+  if (normalizedCurrent === 'en' && browserLang === 'en') {
     return null;
   }
 
@@ -35,30 +36,31 @@ export const LanguageBanner: React.FC<LanguageBannerProps> = ({ currentLang, onS
 
           {isTranslated ? (
             <div className="flex items-center gap-2">
-              <span className="text-emerald-700 dark:text-emerald-300 flex items-center gap-1 font-medium">
+              <span className="text-emerald-700 dark:text-emerald-300 flex items-center gap-1 font-medium notranslate" translate="no">
                 <Check className="w-3.5 h-3.5" />
                 <span>
-                  Translated to {currentLangObj.nativeName} ({currentLangObj.flag})
+                  {currentLangObj.nativeName} ({currentLangObj.flag})
                 </span>
               </span>
               <span>·</span>
               <button
                 onClick={() => onSelectLang('en')}
-                className="text-blue-600 dark:text-sky-400 underline font-medium cursor-pointer"
+                className="text-blue-600 dark:text-sky-400 underline font-medium cursor-pointer notranslate"
+                translate="no"
               >
-                Switch back to English
+                English
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <span>
-                Browser language detected: <strong>{detectedObj.nativeName} {detectedObj.flag}</strong>
+                Browser language detected: <strong className="notranslate" translate="no">{detectedObj.nativeName} {detectedObj.flag}</strong>
               </span>
               <button
                 onClick={() => onSelectLang(browserLang)}
                 className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors cursor-pointer text-[11px]"
               >
-                <span>Translate to {detectedObj.nativeName}</span>
+                <span>Translate to <span className="notranslate" translate="no">{detectedObj.nativeName}</span></span>
               </button>
             </div>
           )}

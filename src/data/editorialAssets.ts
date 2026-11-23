@@ -15,6 +15,26 @@ import imgColorPalette from '../assets/images/blog_color_palette_swatches_179537
 import imgPngToSvg from '../assets/images/blog_png_svg_vector_curves_1795370553181.jpg';
 import imgPdfOrganizer from '../assets/images/blog_pdf_organizer_layout_1795370553434.jpg';
 import imgCsvToJson from '../assets/images/blog_csv_json_structured_data_1795370553838.jpg';
+import imgMdPdfHero from '../assets/images/md_pdf_hero_1795465090470.jpg';
+import imgMdPdfWorkflow from '../assets/images/md_pdf_workflow_1795465090581.jpg';
+import imgBulkConvHero from '../assets/images/bulk_conv_hero_1795465091153.jpg';
+import imgBulkConvWorkflow from '../assets/images/bulk_conv_workflow_1795465091240.jpg';
+import imgResizeHero from '../assets/images/img_resize_hero_1795465092704.jpg';
+import imgResizeWorkflow from '../assets/images/img_resize_workflow_1795465093584.jpg';
+import imgPdfFlattenHero from '../assets/images/pdf_flatten_hero_1795465093660.jpg';
+import imgPdfFlattenWorkflow from '../assets/images/pdf_flatten_workflow_1795465093646.jpg';
+import imgPdfBatesHero from '../assets/images/pdf_bates_hero_1795465094104.jpg';
+import imgPdfBatesWorkflow from '../assets/images/pdf_bates_workflow_1795465094416.jpg';
+import imgWatermarkHero from '../assets/images/watermark_hero_1795465095871.jpg';
+import imgWatermarkWorkflow from '../assets/images/watermark_workflow_1795465097165.jpg';
+import imgDpiPrintHero from '../assets/images/dpi_print_hero_1795465201001.jpg';
+import imgDpiPrintWorkflow from '../assets/images/dpi_print_workflow_1795465201002.jpg';
+import imgPngAvifHero from '../assets/images/png_avif_hero_1795465201003.jpg';
+import imgPngAvifWorkflow from '../assets/images/png_avif_workflow_1795465201004.jpg';
+import imgPdfCsvHero from '../assets/images/pdf_csv_hero_1795465201005.jpg';
+import imgPdfCsvWorkflow from '../assets/images/pdf_csv_workflow_1795465201006.jpg';
+import imgAppIconHero from '../assets/images/app_icon_hero_1795465201007.jpg';
+import imgAppIconWorkflow from '../assets/images/app_icon_workflow_1795465201008.jpg';
 
 export const EDITORIAL_IMAGES = {
   compression: imgCompression,
@@ -35,5 +55,25 @@ export const EDITORIAL_IMAGES = {
   colorPalette: imgColorPalette,
   pngToSvg: imgPngToSvg,
   pdfOrganizer: imgPdfOrganizer,
-  csvToJson: imgCsvToJson
+  csvToJson: imgCsvToJson,
+  mdPdfHero: imgMdPdfHero,
+  mdPdfWorkflow: imgMdPdfWorkflow,
+  bulkConvHero: imgBulkConvHero,
+  bulkConvWorkflow: imgBulkConvWorkflow,
+  imgResizeHero: imgResizeHero,
+  imgResizeWorkflow: imgResizeWorkflow,
+  pdfFlattenHero: imgPdfFlattenHero,
+  pdfFlattenWorkflow: imgPdfFlattenWorkflow,
+  pdfBatesHero: imgPdfBatesHero,
+  pdfBatesWorkflow: imgPdfBatesWorkflow,
+  watermarkHero: imgWatermarkHero,
+  watermarkWorkflow: imgWatermarkWorkflow,
+  dpiPrintHero: imgDpiPrintHero,
+  dpiPrintWorkflow: imgDpiPrintWorkflow,
+  pngAvifHero: imgPngAvifHero,
+  pngAvifWorkflow: imgPngAvifWorkflow,
+  pdfCsvHero: imgPdfCsvHero,
+  pdfCsvWorkflow: imgPdfCsvWorkflow,
+  appIconHero: imgAppIconHero,
+  appIconWorkflow: imgAppIconWorkflow
 };

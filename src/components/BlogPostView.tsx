@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BlogPost, BLOG_CATEGORIES } from '../data/blogData';
 import { generateSocialDistributionPack } from '../data/editorialFramework';
+import { getBlogTranslation, getLocalizedBlogCategory } from '../data/blogI18n';
 import {
   Calendar,
   Clock,
@@ -19,6 +20,7 @@ import {
 interface BlogPostViewProps {
   post: BlogPost;
   allPosts: BlogPost[];
+  currentLang?: string;
   onBackToBlog: () => void;
   onSelectPost: (slug: string) => void;
   onSelectTool: (slug: string) => void;
@@ -28,6 +30,7 @@ interface BlogPostViewProps {
 export const BlogPostView: React.FC<BlogPostViewProps> = ({
   post,
   allPosts,
+  currentLang = 'en',
   onBackToBlog,
   onSelectPost,
   onSelectTool,
@@ -37,72 +40,125 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [sharedToast, setSharedToast] = useState(false);
 
+  const tb = (key: Parameters<typeof getBlogTranslation>[1]) => getBlogTranslation(currentLang, key);
   const categoryInfo = BLOG_CATEGORIES.find((c) => c.key === post.category) || BLOG_CATEGORIES[0];
   const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
   const distributionPack = generateSocialDistributionPack(post);
 
   useEffect(() => {
-    const scriptId = 'blog-schema-jsonld';
-    let scriptEl = document.getElementById(scriptId) as HTMLScriptElement | null;
-    if (!scriptEl) {
-      scriptEl = document.createElement('script');
-      scriptEl.id = scriptId;
-      scriptEl.type = 'application/ld+json';
-      document.head.appendChild(scriptEl);
+    const blogScriptId = 'blog-schema-jsonld';
+    const faqScriptId = 'blog-faq-schema-jsonld';
+    const articleUrl = `https://mimage.netlify.app/blog/${post.slug}`;
+    const toolUrl = `https://mimage.netlify.app${post.ctaLink || '/'}`;
+
+    let blogScriptEl = document.getElementById(blogScriptId) as HTMLScriptElement | null;
+    if (!blogScriptEl) {
+      blogScriptEl = document.createElement('script');
+      blogScriptEl.id = blogScriptId;
+      blogScriptEl.type = 'application/ld+json';
+      document.head.appendChild(blogScriptEl);
     }
 
-    const articleUrl = `https://mimage.netlify.app/blog/${post.slug}`;
-
-    const schemaData = {
+    const articleSchema = {
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'BlogPosting',
-          '@id': `${articleUrl}#article`,
-          isPartOf: {
-            '@type': 'WebSite',
-            '@id': 'https://mimage.netlify.app/#website',
-            name: 'Mimage',
-            url: 'https://mimage.netlify.app/'
-          },
-          headline: post.title,
-          description: post.metaDescription,
-          datePublished: post.publishedDate,
-          dateModified: post.publishedDate,
-          mainEntityOfPage: articleUrl,
-          image: [post.heroImage.url, ...post.inContentImages.map((img) => img.url)],
-          author: {
-            '@type': 'Person',
-            name: post.author.name,
-            jobTitle: post.author.role
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Mimage',
-            url: 'https://mimage.netlify.app/'
-          },
-          keywords: [post.primaryKeyword, ...post.secondaryKeywords].join(', ')
-        },
-        {
-          '@type': 'FAQPage',
-          '@id': `${articleUrl}#faq`,
-          mainEntity: post.faq.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer
-            }
-          }))
-        }
-      ]
+      '@type': 'BlogPosting',
+      '@id': `${articleUrl}#article`,
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': 'https://mimage.netlify.app/#website',
+        name: 'Mimage',
+        url: 'https://mimage.netlify.app/'
+      },
+      headline: post.title,
+      description: post.metaDescription,
+      datePublished: post.publishedDate,
+      dateModified: post.publishedDate,
+      mainEntityOfPage: articleUrl,
+      image: [post.heroImage.url, ...post.inContentImages.map((img) => img.url)],
+      author: {
+        '@type': 'Person',
+        name: post.author.name,
+        jobTitle: post.author.role,
+        url: 'https://mimage.netlify.app/portfolio'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Mimage',
+        url: 'https://mimage.netlify.app/'
+      },
+      about: {
+        '@type': 'SoftwareApplication',
+        name: post.ctaText,
+        url: toolUrl,
+        applicationCategory: 'UtilitiesApplication',
+        operatingSystem: 'All'
+      },
+      keywords: [post.primaryKeyword, ...post.secondaryKeywords].join(', ')
+    };
+    blogScriptEl.textContent = JSON.stringify(articleSchema);
+
+    // Standalone FAQPage JSON-LD script for reliable search engine Rich Results parsing
+    const existingFaqEl = document.getElementById(faqScriptId) as HTMLScriptElement | null;
+    if (post.faq && post.faq.length > 0) {
+      const faqScriptEl = existingFaqEl || document.createElement('script');
+      faqScriptEl.id = faqScriptId;
+      faqScriptEl.type = 'application/ld+json';
+      if (!existingFaqEl) {
+        document.head.appendChild(faqScriptEl);
+      }
+      const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${articleUrl}#faq`,
+        url: articleUrl,
+        name: `${post.title} — Frequently Asked Questions`,
+        mainEntity: post.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer
+          }
+        }))
+      };
+      faqScriptEl.textContent = JSON.stringify(faqSchema);
+    } else if (existingFaqEl) {
+      existingFaqEl.remove();
+    }
+
+    // Dynamic page SEO & social meta sync
+    const prevTitle = document.title;
+    document.title = post.metaTitle || `${post.title} | Mimage`;
+
+    const metaUpdates: Array<{ selector: string; attr: 'content' | 'href'; value: string; prev: string | null }> = [];
+    const syncHeadTag = (selector: string, attr: 'content' | 'href', value: string) => {
+      const el = document.head.querySelector(selector);
+      if (el) {
+        metaUpdates.push({ selector, attr, value, prev: el.getAttribute(attr) });
+        el.setAttribute(attr, value);
+      }
     };
 
-    scriptEl.textContent = JSON.stringify(schemaData);
+    syncHeadTag('meta[name="description"]', 'content', post.metaDescription);
+    syncHeadTag('meta[property="og:title"]', 'content', post.metaTitle || post.title);
+    syncHeadTag('meta[property="og:description"]', 'content', post.metaDescription);
+    syncHeadTag('meta[property="og:url"]', 'content', articleUrl);
+    syncHeadTag('meta[name="twitter:title"]', 'content', post.metaTitle || post.title);
+    syncHeadTag('meta[name="twitter:description"]', 'content', post.metaDescription);
+    syncHeadTag('link[rel="canonical"]', 'href', articleUrl);
 
     return () => {
-      const el = document.getElementById(scriptId);
-      if (el) el.remove();
+      const elBlog = document.getElementById(blogScriptId);
+      if (elBlog) elBlog.remove();
+      const elFaq = document.getElementById(faqScriptId);
+      if (elFaq) elFaq.remove();
+      document.title = prevTitle;
+      metaUpdates.forEach(({ selector, attr, prev }) => {
+        const el = document.head.querySelector(selector);
+        if (el && prev !== null) {
+          el.setAttribute(attr, prev);
+        }
+      });
     };
   }, [post]);
 
@@ -128,22 +184,26 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
       <nav className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
         <button
           onClick={onBackToBlog}
-          className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+          className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer notranslate"
+          translate="no"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to All Guides</span>
+          <span>{tb('backToAllGuides')}</span>
         </button>
 
         <div className="flex items-center gap-2">
           {sharedToast && (
-            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Link copied</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold notranslate" translate="no">
+              {tb('linkCopied')}
+            </span>
           )}
           <button
             onClick={() => setShowDistributionModal(true)}
-            className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-blue-400 cursor-pointer text-xs font-mono flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-blue-400 cursor-pointer text-xs font-mono flex items-center gap-1.5 notranslate"
+            translate="no"
           >
             <Share2 className="w-3.5 h-3.5 text-blue-600 dark:text-sky-400" />
-            <span className="hidden sm:inline">Share Snippet Pack</span>
+            <span className="hidden sm:inline">{tb('shareSnippetPack')}</span>
           </button>
           <button
             onClick={handleShare}
@@ -157,7 +217,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Meta Line */}
       <div className="flex flex-wrap items-center gap-3 mb-4 text-xs font-mono text-slate-500 dark:text-slate-400">
-        <span className="text-blue-600 dark:text-sky-400 font-bold">{categoryInfo.title}</span>
+        <span className="text-blue-600 dark:text-sky-400 font-bold notranslate" translate="no">
+          {getLocalizedBlogCategory(categoryInfo.key, currentLang)}
+        </span>
         <span>·</span>
         <span className="flex items-center gap-1">
           <Calendar className="w-3.5 h-3.5" />
@@ -189,9 +251,10 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
             <span aria-hidden="true" className="text-slate-400">·</span>
             <button
               onClick={() => onNavigatePath('/portfolio')}
-              className="text-blue-600 dark:text-sky-400 hover:underline font-mono text-[11px] font-semibold cursor-pointer"
+              className="text-blue-600 dark:text-sky-400 hover:underline font-mono text-[11px] font-semibold cursor-pointer notranslate"
+              translate="no"
             >
-              Founder Portfolio
+              {tb('founderPortfolio')}
             </button>
           </div>
           <div className="text-blue-600 dark:text-sky-400 font-mono text-[11px] mb-1">{post.author.role}</div>
@@ -214,9 +277,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Takeaways */}
       <div className="p-6 rounded-2xl border border-blue-200 dark:border-slate-800 bg-blue-50/60 dark:bg-slate-900 mb-10">
-        <div className="flex items-center gap-2 text-blue-700 dark:text-sky-400 font-mono text-xs font-bold uppercase tracking-wider mb-3">
+        <div className="flex items-center gap-2 text-blue-700 dark:text-sky-400 font-mono text-xs font-bold uppercase tracking-wider mb-3 notranslate" translate="no">
           <ShieldCheck className="w-4 h-4" />
-          <span>Key Takeaways</span>
+          <span>{tb('keyTakeaways')}</span>
         </div>
         <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
           {post.keyTakeaways.map((takeaway, idx) => (
@@ -252,8 +315,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
       {/* In-Content Illustrations */}
       {post.inContentImages.length > 0 && (
         <div className="my-12 space-y-6">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
-            Workflow Illustrations
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2 notranslate" translate="no">
+            {tb('workflowIllustrations')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {post.inContentImages.map((img, idx) => (
@@ -264,7 +327,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                 <img src={img.url} alt={img.alt} referrerPolicy="no-referrer" className="w-full h-44 object-cover" />
                 <div className="p-3 text-xs space-y-1">
                   <div className="font-mono text-[11px] text-blue-600 dark:text-sky-400 font-bold">
-                    Figure {idx + 2} · {img.placement}
+                    <span className="notranslate" translate="no">{tb('figureLabel')}</span> {idx + 2} · {img.placement}
                   </div>
                   <p className="text-slate-600 dark:text-slate-300">{img.caption}</p>
                 </div>
@@ -276,8 +339,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Recommended Mimage Tools */}
       <div className="my-10 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-sky-400 mb-4">
-          Related Mimage Tools
+        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-sky-400 mb-4 notranslate" translate="no">
+          {tb('relatedMimageTools')}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {post.internalLinks.map((link, idx) => {
@@ -304,8 +367,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                   </span>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">{link.description}</p>
                 </div>
-                <span className="text-[11px] font-mono text-blue-600 dark:text-sky-400 mt-2 inline-flex items-center gap-1">
-                  <span>Open</span>
+                <span className="text-[11px] font-mono text-blue-600 dark:text-sky-400 mt-2 inline-flex items-center gap-1 notranslate" translate="no">
+                  <span>{tb('open')}</span>
                   <ChevronRight className="w-3 h-3" />
                 </span>
               </a>
@@ -313,31 +376,31 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
           })}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-500">
-          <span>Site Pages:</span>
+        <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-500 notranslate" translate="no">
+          <span>{tb('sitePages')}</span>
           <div className="flex flex-wrap items-center gap-3">
             <button onClick={() => onNavigatePath('/privacy-center')} className="hover:text-blue-600 underline cursor-pointer">
-              Privacy Center
+              {tb('privacyCenter')}
             </button>
             <span>·</span>
             <button onClick={() => onNavigatePath('/about')} className="hover:text-blue-600 underline cursor-pointer">
-              About Mimage
+              {tb('aboutMimage')}
             </button>
             <span>·</span>
             <button onClick={() => onNavigatePath('/terms')} className="hover:text-blue-600 underline cursor-pointer">
-              Terms
+              {tb('terms')}
             </button>
             <span>·</span>
             <button onClick={() => onNavigatePath('/privacy')} className="hover:text-blue-600 underline cursor-pointer">
-              Privacy Policy
+              {tb('privacyPolicy')}
             </button>
             <span>·</span>
             <button onClick={() => onNavigatePath('/portfolio')} className="hover:text-blue-600 underline cursor-pointer">
-              Founder Portfolio
+              {tb('founderPortfolio')}
             </button>
             <span>·</span>
             <button onClick={() => onNavigatePath('/contact')} className="hover:text-blue-600 underline cursor-pointer">
-              Contact
+              {tb('contact')}
             </button>
           </div>
         </div>
@@ -345,21 +408,21 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Cite & Reference (Ready Backlink Snippets) */}
       <div className="my-10 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 notranslate" translate="no">
           <h4 className="text-slate-500 font-mono font-bold uppercase text-[11px]">
-            Cite &amp; Reference This Guide
+            {tb('citeGuide')}
           </h4>
           <span className="text-[11px] font-mono text-slate-400">
-            Canonical Backlink Snippets
+            {tb('canonicalSnippets')}
           </span>
         </div>
-        <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-          Referencing this benchmark or linking directly to the utility from documentation, a README, or a blog post? Copy a clean semantic backlink below:
+        <p className="text-slate-600 dark:text-slate-400 leading-relaxed notranslate" translate="no">
+          {tb('citeSubtitle')}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 font-mono">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1 font-mono notranslate" translate="no">
           <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">HTML Backlink</span>
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">HTML Guide + Tool</span>
               <button
                 onClick={() => {
                   const html = `<a href="https://mimage.netlify.app/blog/${post.slug}">${post.title}</a> — powered by <a href="https://mimage.netlify.app${post.ctaLink || '/'}">${post.ctaText}</a>`;
@@ -370,7 +433,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                 className="text-[11px] text-blue-600 dark:text-sky-400 inline-flex items-center gap-1 cursor-pointer hover:underline"
               >
                 {copiedKey === 'html-backlink' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                <span>{copiedKey === 'html-backlink' ? 'Copied' : 'Copy HTML'}</span>
+                <span>{copiedKey === 'html-backlink' ? tb('copied') : `${tb('copy')} HTML`}</span>
               </button>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
@@ -380,7 +443,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
           <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Markdown Citation</span>
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Markdown</span>
               <button
                 onClick={() => {
                   const md = `[${post.title}](https://mimage.netlify.app/blog/${post.slug}) ([Launch Tool](https://mimage.netlify.app${post.ctaLink || '/'}))`;
@@ -391,11 +454,32 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                 className="text-[11px] text-blue-600 dark:text-sky-400 inline-flex items-center gap-1 cursor-pointer hover:underline"
               >
                 {copiedKey === 'md-backlink' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                <span>{copiedKey === 'md-backlink' ? 'Copied' : 'Copy Markdown'}</span>
+                <span>{copiedKey === 'md-backlink' ? tb('copied') : `${tb('copy')} MD`}</span>
               </button>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
               [{post.primaryKeyword}](https://mimage.netlify.app/blog/{post.slug})
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Tool Anchor</span>
+              <button
+                onClick={() => {
+                  const toolAnchor = `<a href="https://mimage.netlify.app${post.ctaLink || '/'}">${post.primaryKeyword} — Free Browser Tool on Mimage</a>`;
+                  navigator.clipboard.writeText(toolAnchor);
+                  setCopiedKey('tool-backlink');
+                  setTimeout(() => setCopiedKey(null), 2000);
+                }}
+                className="text-[11px] text-blue-600 dark:text-sky-400 inline-flex items-center gap-1 cursor-pointer hover:underline"
+              >
+                {copiedKey === 'tool-backlink' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedKey === 'tool-backlink' ? tb('copied') : tb('copy')}</span>
+              </button>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
+              &lt;a href=&quot;https://mimage.netlify.app{post.ctaLink || '/'}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
             </div>
           </div>
         </div>
@@ -404,7 +488,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
       {/* Sources */}
       {post.externalSources.length > 0 && (
         <div className="my-10 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-mono">
-          <h4 className="text-slate-500 font-bold uppercase mb-3 text-[11px]">References &amp; Specifications</h4>
+          <h4 className="text-slate-500 font-bold uppercase mb-3 text-[11px] notranslate" translate="no">
+            {tb('referencesSpecs')}
+          </h4>
           <ul className="space-y-2">
             {post.externalSources.map((source, idx) => (
               <li key={idx} className="flex items-center justify-between text-slate-700 dark:text-slate-300">
@@ -426,9 +512,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* FAQ */}
       <div className="my-12">
-        <div className="flex items-center gap-2 mb-5">
+        <div className="flex items-center gap-2 mb-5 notranslate" translate="no">
           <HelpCircle className="w-5 h-5 text-blue-600 dark:text-sky-400" />
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white">Frequently Asked Questions</h3>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white">{tb('faqTitle')}</h3>
         </div>
 
         <div className="space-y-3">
@@ -452,15 +538,16 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
       {/* CTA */}
       <div className="my-12 p-8 rounded-2xl border border-blue-200 dark:border-slate-800 bg-blue-50/70 dark:bg-slate-900 text-center space-y-3">
         <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">{post.ctaText}</h3>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-          Free online file and image tools processed locally in your browser. No sign-up required.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto notranslate" translate="no">
+          {tb('ctaSub')}
         </p>
         <div className="pt-2">
           <button
             onClick={() => onNavigatePath(post.ctaLink || '/')}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer notranslate"
+            translate="no"
           >
-            <span>Open Tool Workspace</span>
+            <span>{tb('openToolWorkspace')}</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -468,7 +555,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
 
       {/* Related Articles */}
       <div className="pt-8 border-t border-slate-200 dark:border-slate-800">
-        <h4 className="text-base font-bold text-slate-900 dark:text-white mb-5">More Mimage Guides</h4>
+        <h4 className="text-base font-bold text-slate-900 dark:text-white mb-5 notranslate" translate="no">
+          {tb('moreGuides')}
+        </h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {relatedPosts.map((related) => (
             <button
@@ -477,8 +566,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               className="text-left rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 hover:border-blue-400 transition-colors cursor-pointer group flex flex-col justify-between"
             >
               <div>
-                <span className="text-[10px] font-mono text-blue-600 dark:text-sky-400 uppercase font-bold block mb-1">
-                  {related.category.replace('-', ' ')}
+                <span className="text-[10px] font-mono text-blue-600 dark:text-sky-400 uppercase font-bold block mb-1 notranslate" translate="no">
+                  {getLocalizedBlogCategory(related.category, currentLang)}
                 </span>
                 <h5 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 line-clamp-2">
                   {related.title}
@@ -502,11 +591,13 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
             </button>
 
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Shareable Summary Snippets</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white notranslate" translate="no">
+                {tb('shareableSnippets')}
+              </h3>
 
               <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-blue-600 dark:text-sky-400">Pinterest Summary</span>
+                <div className="flex items-center justify-between notranslate" translate="no">
+                  <span className="text-xs font-mono font-bold text-blue-600 dark:text-sky-400">{tb('pinterestSummary')}</span>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(`${distributionPack.pinterest.title}\n\n${distributionPack.pinterest.description}`);
@@ -516,7 +607,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                     className="text-xs font-mono text-blue-600 inline-flex items-center gap-1 cursor-pointer"
                   >
                     {copiedKey === 'pin' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedKey === 'pin' ? 'Copied' : 'Copy'}</span>
+                    <span>{copiedKey === 'pin' ? tb('copied') : tb('copy')}</span>
                   </button>
                 </div>
                 <p className="text-xs font-bold text-slate-900 dark:text-white">{distributionPack.pinterest.title}</p>
@@ -524,8 +615,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               </div>
 
               <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-blue-600 dark:text-sky-400">Newsletter Excerpt</span>
+                <div className="flex items-center justify-between notranslate" translate="no">
+                  <span className="text-xs font-mono font-bold text-blue-600 dark:text-sky-400">{tb('newsletterExcerpt')}</span>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(`${distributionPack.newsletter.subject}\n\n${distributionPack.newsletter.blurb}`);
@@ -535,7 +626,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
                     className="text-xs font-mono text-blue-600 inline-flex items-center gap-1 cursor-pointer"
                   >
                     {copiedKey === 'newsletter' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedKey === 'newsletter' ? 'Copied' : 'Copy'}</span>
+                    <span>{copiedKey === 'newsletter' ? tb('copied') : tb('copy')}</span>
                   </button>
                 </div>
                 <p className="text-xs font-bold text-slate-900 dark:text-white">{distributionPack.newsletter.subject}</p>
@@ -545,9 +636,10 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => setShowDistributionModal(false)}
-                  className="px-5 py-2 rounded-xl bg-blue-600 text-white font-mono text-xs font-semibold cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-blue-600 text-white font-mono text-xs font-semibold cursor-pointer notranslate"
+                  translate="no"
                 >
-                  Close
+                  {tb('close')}
                 </button>
               </div>
             </div>

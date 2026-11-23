@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   FileText,
   Image,
@@ -23,7 +23,14 @@ import {
 } from 'lucide-react';
 import { ToolDefinition } from '../types';
 import { TOOL_CATEGORIES } from '../data/toolsData';
-import { getTranslation, getLocalizedTool } from '../data/languages';
+import {
+  getTranslation,
+  getLocalizedTool,
+  TOOL_TRANSLATIONS,
+  normalizeUiLangCode
+} from '../data/languages';
+import { getLocalizedToolCategory } from '../data/blogI18n';
+import { rescanDomTranslation } from '../services/autoTranslation';
 import { searchTools } from '../utils/toolSearch';
 
 interface ToolsGridProps {
@@ -91,7 +98,14 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
   const effectiveQuery = onSearchChange ? searchQuery : localDirectoryQuery;
   const setEffectiveQuery = onSearchChange || setLocalDirectoryQuery;
 
+  const normLang = normalizeUiLangCode(currentLang);
   const t = (k: string) => getTranslation(currentLang, k);
+
+  useEffect(() => {
+    if (normLang !== 'en') {
+      rescanDomTranslation(currentLang, 280);
+    }
+  }, [activeCategory, sortBy, effectiveQuery, currentLang, normLang]);
 
   const displayedTools = useMemo(() => {
     let list = tools;
@@ -147,11 +161,15 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
   };
 
   const quickCollectionTabs = [
-    { id: 'all', name: 'All Tools', count: tools.length },
-    { id: 'popular', name: 'Popular', count: tools.filter((x) => x.isPopular).length },
-    { id: 'recent', name: 'Recently Added', count: tools.filter((x) => x.isRecentlyAdded).length },
-    { id: 'recommended', name: 'Recommended', count: tools.filter((x) => x.isRecommended).length },
-    ...TOOL_CATEGORIES.filter((c) => c.id !== 'all')
+    { id: 'all', name: getLocalizedToolCategory('all', currentLang, 'All Tools'), count: tools.length, isLocalizedDict: true },
+    { id: 'popular', name: 'Popular', count: tools.filter((x) => x.isPopular).length, isLocalizedDict: false },
+    { id: 'recent', name: 'Recently Added', count: tools.filter((x) => x.isRecentlyAdded).length, isLocalizedDict: false },
+    { id: 'recommended', name: 'Recommended', count: tools.filter((x) => x.isRecommended).length, isLocalizedDict: false },
+    ...TOOL_CATEGORIES.filter((c) => c.id !== 'all').map((c) => ({
+      ...c,
+      name: getLocalizedToolCategory(c.id, currentLang, c.name),
+      isLocalizedDict: true
+    }))
   ];
 
   return (
@@ -268,10 +286,13 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer tabular-nums ${
+                  cat.isLocalizedDict ? 'notranslate ' : ''
+                }${
                   isActive
                     ? 'bg-blue-600 text-white font-semibold shadow-sm'
                     : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-blue-400'
                 }`}
+                translate={cat.isLocalizedDict ? 'no' : 'yes'}
               >
                 {cat.name} ({cat.count})
               </button>
@@ -284,6 +305,7 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {displayedTools.map((tool) => {
               const localized = getLocalizedTool(tool, currentLang);
+              const hasNativeToolTranslation = Boolean(TOOL_TRANSLATIONS[normLang]?.[tool.id]);
 
               return (
                 <div
@@ -298,7 +320,7 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
                       </div>
 
                       <div className="text-right">
-                        <span className="font-mono text-xs font-bold text-blue-700 dark:text-sky-400">
+                        <span className="font-mono text-xs font-bold text-blue-700 dark:text-sky-400 notranslate" translate="no">
                           {tool.fromFormat} → {tool.toFormat}
                         </span>
                         <div className="text-[11px] font-mono text-slate-400 mt-0.5">
@@ -311,21 +333,36 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({
                       </div>
                     </div>
 
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors mb-1.5">
+                    <h3
+                      className={`text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-400 transition-colors mb-1.5 ${
+                        hasNativeToolTranslation ? 'notranslate' : ''
+                      }`}
+                      translate={hasNativeToolTranslation ? 'no' : 'yes'}
+                    >
                       {localized.name}
                     </h3>
 
-                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+                    <p
+                      className={`text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4 ${
+                        hasNativeToolTranslation ? 'notranslate' : ''
+                      }`}
+                      translate={hasNativeToolTranslation ? 'no' : 'yes'}
+                    >
                       {localized.shortDescription}
                     </p>
                   </div>
 
                   <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
                     <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      {tool.categoryName}
+                      <span className="notranslate" translate="no">
+                        {getLocalizedToolCategory(tool.category, currentLang, tool.categoryName)}
+                      </span>
                       {tool.badge ? ` · ${tool.badge}` : ''}
                     </span>
-                    <span className="text-blue-600 dark:text-sky-400 font-semibold group-hover:translate-x-0.5 transition-transform">
+                    <span
+                      className="text-blue-600 dark:text-sky-400 font-semibold group-hover:translate-x-0.5 transition-transform notranslate"
+                      translate="no"
+                    >
                       {t('openTool')}
                     </span>
                   </div>
