@@ -99,6 +99,15 @@ import { OcrExtractTool } from './tools/OcrExtractTool';
 import { PdfCompressTool } from './tools/PdfCompressTool';
 import { PdfOrganizerTool } from './tools/PdfOrganizerTool';
 
+import { BatchQueuePanel } from './BatchQueuePanel';
+import {
+  BatchQueueItem,
+  BatchWorkerPool,
+  createBatchQueueItem,
+  getRecommendedConcurrency,
+  revokeConvertedUrls
+} from '../services/batchWorkerPool';
+
 interface DedicatedToolPageProps {
   tool: ToolDefinition;
   allTools: ToolDefinition[];
@@ -107,6 +116,8 @@ interface DedicatedToolPageProps {
   onSelectTool: (tool: ToolDefinition) => void;
   onSelectToolSlug: (slug: string) => void;
   onSelectBlogPost?: (slug: string) => void;
+  initialFiles?: File[];
+  onConsumeInitialFiles?: () => void;
 }
 
 const SPECIALIZED_TOOL_IDS = new Set([
@@ -133,6 +144,13 @@ const SPECIALIZED_TOOL_IDS = new Set([
   'pdf-organizer'
 ]);
 
+const MULTI_INPUT_MERGE_TOOL_IDS = new Set([
+  'image-to-pdf',
+  'webp-to-pdf',
+  'svg-to-pdf',
+  'image-collage-grid'
+]);
+
 export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   tool,
   allTools,
@@ -140,18 +158,32 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   onBack,
   onSelectTool,
   onSelectToolSlug,
-  onSelectBlogPost
+  onSelectBlogPost,
+  initialFiles,
+  onConsumeInitialFiles
 }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [queueItems, setQueueItems] = useState<BatchQueueItem[]>([]);
+  const [mergeResults, setMergeResults] = useState<ConvertedFile[]>([]);
+  const [concurrency, setConcurrency] = useState<number>(() => getRecommendedConcurrency());
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressMsg, setProgressMsg] = useState('');
-  const [convertedResults, setConvertedResults] = useState<ConvertedFile[]>([]);
   const [isZipping, setIsZipping] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [matrixTextArt, setMatrixTextArt] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copiedAscii, setCopiedAscii] = useState(false);
+
+  const poolRef = useRef<BatchWorkerPool | null>(null);
+  const queueRef = useRef<BatchQueueItem[]>([]);
+  queueRef.current = queueItems;
+
+  const isMultiMergeTool = MULTI_INPUT_MERGE_TOOL_IDS.has(tool.id);
+  const files = queueItems.map((q) => q.file);
+  const convertedResults: ConvertedFile[] = isMultiMergeTool
+    ? mergeResults
+    : queueItems.flatMap((q) => q.results);
 
   const deepGuide = TOOL_DEEP_GUIDES[tool.id];
   const explicitBlogPosts = deepGuide
@@ -174,12 +206,26 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
   ].slice(0, 3);
 
   useEffect(() => {
-    setFiles([]);
-    setConvertedResults([]);
+    poolRef.current?.terminateAll();
+    poolRef.current = new BatchWorkerPool();
+    queueRef.current.forEach((q) => revokeConvertedUrls(q.results));
+    revokeConvertedUrls(mergeResults);
+
+    const seeded =
+      initialFiles && initialFiles.length > 0 && !SPECIALIZED_TOOL_IDS.has(tool.id)
+        ? initialFiles.map((f, idx) => createBatchQueueItem(f, idx))
+        : [];
+    if (seeded.length > 0 && onConsumeInitialFiles) {
+      onConsumeInitialFiles();
+    }
+
+    setQueueItems(seeded);
+    setMergeResults([]);
     setMatrixTextArt('');
     setErrorMsg(null);
     setProgress(0);
     setProgressMsg('');
+    setIsConverting(false);
 
     const prevTitle = document.title;
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -202,7 +248,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       document.head.appendChild(scriptEl);
     }
 
-    const toolUrl = `https://mimage.netlify.app/tool/${tool.slug}`;
+    const toolUrl = `https://fixpdf.org/tool/${tool.slug}`;
     const graph: any[] = [
       {
         '@type': 'SoftwareApplication',
@@ -265,7 +311,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
         publisher: {
           '@type': 'Organization',
           name: 'Mimage',
-          url: 'https://mimage.netlify.app/'
+          url: 'https://fixpdf.org/'
         }
       });
     }
@@ -277,6 +323,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       if (metaDesc && prevDesc) metaDesc.setAttribute('content', prevDesc);
       const el = document.getElementById(scriptId);
       if (el) el.remove();
+      poolRef.current?.terminateAll();
     };
   }, [tool, deepGuide]);
 
@@ -305,353 +352,281 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
     }
   }, [tool.id, currentLang, normLang, convertedResults.length]);
 
+  const enqueueFiles = (incoming: File[]) => {
+    if (incoming.length === 0) return;
+    const added = incoming.map((f, idx) => createBatchQueueItem(f, idx));
+    setQueueItems((prev) => [...prev, ...added]);
+    if (isMultiMergeTool) {
+      revokeConvertedUrls(mergeResults);
+      setMergeResults([]);
+    }
+    setMatrixTextArt('');
+    setErrorMsg(null);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFiles(Array.from(e.target.files));
-      setConvertedResults([]);
-      setMatrixTextArt('');
-      setErrorMsg(null);
+      enqueueFiles(Array.from(e.target.files));
+      e.target.value = '';
     }
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    setIsDraggingOver(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setFiles(Array.from(e.dataTransfer.files));
-      setConvertedResults([]);
-      setMatrixTextArt('');
-      setErrorMsg(null);
+      enqueueFiles(Array.from(e.dataTransfer.files));
     }
   };
 
-  const handleConvert = async () => {
-    if (files.length === 0) return;
-    setIsConverting(true);
-    setProgress(15);
-    setProgressMsg(t('converting'));
-    setConvertedResults([]);
+  const patchQueueItem = (itemId: string, patch: Partial<BatchQueueItem>) => {
+    setQueueItems((prev) => prev.map((it) => (it.id === itemId ? { ...it, ...patch } : it)));
+  };
+
+  const handleRemoveQueueItem = (itemId: string) => {
+    setQueueItems((prev) => {
+      const target = prev.find((q) => q.id === itemId);
+      if (target) revokeConvertedUrls(target.results);
+      return prev.filter((q) => q.id !== itemId);
+    });
+  };
+
+  const handleClearQueue = () => {
+    poolRef.current?.terminateAll();
+    queueItems.forEach((q) => revokeConvertedUrls(q.results));
+    revokeConvertedUrls(mergeResults);
+    setQueueItems([]);
+    setMergeResults([]);
+    setMatrixTextArt('');
     setErrorMsg(null);
+    setProgress(0);
+    setProgressMsg('');
+  };
 
-    try {
-      const allResults: ConvertedFile[] = [];
+  const runMainThreadSingleFile = async (
+    item: BatchQueueItem,
+    onItemProgress: (pct: number, msg?: string) => void
+  ): Promise<{ results: ConvertedFile[] }> => {
+    const file = item.file;
 
-      if (tool.id === 'image-to-pdf') {
-        setProgress(50);
-        setProgressMsg('Compiling images into PDF document...');
-        const mergedPdf = await mergeImagesToPdf(files);
-        allResults.push(mergedPdf);
-      } else if (tool.id === 'webp-to-pdf' || tool.id === 'svg-to-pdf') {
-        setProgress(50);
-        setProgressMsg(`Compiling ${tool.fromFormat} artwork into PDF pages...`);
-        const builtPdf = await convertRasterOrSvgToPdf(files, tool.id === 'svg-to-pdf');
-        allResults.push(builtPdf);
-      } else if (tool.id === 'pdf-2-up-handout') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Creating 2-up landscape sheets for ${files[i].name}...`);
-          const res = await createTwoUpPdf(files[i]);
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-markdown') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await convertPdfToMarkdown(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-json') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await convertPdfToJson(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-html') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await convertPdfToHtml(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-word-rtf') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await convertPdfToWordRtf(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-csv') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await convertPdfToCsv(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-to-base64') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Encoding ${files[i].name} to Base64 Data URI...`);
-          allResults.push(await convertPdfToBase64(files[i]));
-        }
-      } else if (tool.id === 'markdown-to-pdf') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Rendering Markdown headings & blocks for ${files[i].name}...`);
-          allResults.push(await convertMarkdownToPdf(files[i]));
-        }
-      } else if (tool.id === 'html-to-pdf') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Sanitizing & paginating ${files[i].name}...`);
-          allResults.push(await convertHtmlToPdf(files[i]));
-        }
-      } else if (tool.id === 'txt-to-pdf') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Wrapping text pages for ${files[i].name}...`);
-          allResults.push(await convertTxtToPdf(files[i]));
-        }
-      } else if (tool.id === 'csv-to-pdf') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Formatting table grid for ${files[i].name}...`);
-          allResults.push(await convertCsvToPdf(files[i]));
-        }
-      } else if (tool.id === 'json-to-pdf') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Pretty-printing JSON to PDF for ${files[i].name}...`);
-          allResults.push(await convertJsonToPdf(files[i]));
-        }
-      } else if (tool.id === 'json-to-csv') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Flattening JSON schema to CSV for ${files[i].name}...`);
-          allResults.push(await convertJsonToCsv(files[i]));
-        }
-      } else if (tool.id === 'csv-to-json') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Parsing RFC 4180 CSV into JSON for ${files[i].name}...`);
-          allResults.push(await convertCsvToJson(files[i]));
-        }
-      } else if (tool.id === 'html-to-markdown') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Converting semantic HTML to Markdown for ${files[i].name}...`);
-          allResults.push(await convertHtmlToMarkdown(files[i]));
-        }
-      } else if (tool.id === 'pdf-metadata-editor') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Sanitizing metadata for ${files[i].name}...`);
-          const res = await editPdfMetadata(files[i], {
-            title: files[i].name.replace(/\.[^/.]+$/, ''),
+    if (tool.id === 'pdf-2-up-handout') {
+      onItemProgress(50, `Creating 2-up sheets for ${file.name}...`);
+      return { results: [await createTwoUpPdf(file)] };
+    }
+    if (tool.id === 'pdf-to-markdown') {
+      return { results: [await convertPdfToMarkdown(file, onItemProgress)] };
+    }
+    if (tool.id === 'pdf-to-json') {
+      return { results: [await convertPdfToJson(file, onItemProgress)] };
+    }
+    if (tool.id === 'pdf-to-html') {
+      return { results: [await convertPdfToHtml(file, onItemProgress)] };
+    }
+    if (tool.id === 'pdf-to-word-rtf') {
+      return { results: [await convertPdfToWordRtf(file, onItemProgress)] };
+    }
+    if (tool.id === 'pdf-to-csv') {
+      return { results: [await convertPdfToCsv(file, onItemProgress)] };
+    }
+    if (tool.id === 'pdf-to-base64') {
+      onItemProgress(55, `Encoding ${file.name}...`);
+      return { results: [await convertPdfToBase64(file)] };
+    }
+    if (tool.id === 'markdown-to-pdf') {
+      onItemProgress(55, `Rendering Markdown PDF...`);
+      return { results: [await convertMarkdownToPdf(file)] };
+    }
+    if (tool.id === 'html-to-pdf') {
+      onItemProgress(55, `Sanitizing & paginating HTML...`);
+      return { results: [await convertHtmlToPdf(file)] };
+    }
+    if (tool.id === 'txt-to-pdf') {
+      onItemProgress(55, `Wrapping text pages...`);
+      return { results: [await convertTxtToPdf(file)] };
+    }
+    if (tool.id === 'csv-to-pdf') {
+      onItemProgress(55, `Formatting CSV table grid...`);
+      return { results: [await convertCsvToPdf(file)] };
+    }
+    if (tool.id === 'json-to-pdf') {
+      onItemProgress(55, `Formatting JSON to PDF...`);
+      return { results: [await convertJsonToPdf(file)] };
+    }
+    if (tool.id === 'json-to-csv') {
+      onItemProgress(55, `Flattening JSON to CSV...`);
+      return { results: [await convertJsonToCsv(file)] };
+    }
+    if (tool.id === 'csv-to-json') {
+      onItemProgress(55, `Parsing CSV to JSON...`);
+      return { results: [await convertCsvToJson(file)] };
+    }
+    if (tool.id === 'html-to-markdown') {
+      onItemProgress(55, `Converting HTML to Markdown...`);
+      return { results: [await convertHtmlToMarkdown(file)] };
+    }
+    if (tool.id === 'pdf-metadata-editor') {
+      onItemProgress(55, `Sanitizing PDF metadata...`);
+      return {
+        results: [
+          await editPdfMetadata(file, {
+            title: file.name.replace(/\.[^/.]+$/, ''),
             author: 'Mimage Local Engine',
             subject: 'Cleaned Document',
             keywords: 'pdf, cleaned, local'
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-page-numberer') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Applying Bates page numbers to ${files[i].name}...`);
-          const res = await numberPdfPages(files[i], 'bottom-center');
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-flatten') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Flattening form fields & annotations for ${files[i].name}...`);
-          const res = await flattenPdf(files[i]);
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-page-reorder') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Reversing page order for ${files[i].name}...`);
-          const res = await reorderPdfPages(files[i], 'reverse');
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-grayscale') {
-        for (let i = 0; i < files.length; i++) {
-          setProgressMsg(`Converting ${files[i].name} to monochrome grayscale...`);
-          const res = await convertPdfMonochrome(files[i], 'grayscale', (pct) => setProgress(pct));
-          allResults.push(res);
-        }
-      } else if (tool.id === 'pdf-invert-colors') {
-        for (let i = 0; i < files.length; i++) {
-          setProgressMsg(`Generating inverted PDF for ${files[i].name}...`);
-          const res = await convertPdfMonochrome(files[i], 'invert', (pct) => setProgress(pct));
-          allResults.push(res);
-        }
-      } else if (tool.fromFormat === 'PDF') {
-        const toFmtLower = tool.toFormat.toLowerCase();
-        const targetFmt: 'png' | 'jpg' | 'svg' | 'webp' | 'bmp' =
-          toFmtLower === 'svg'
-            ? 'svg'
-            : toFmtLower === 'jpg' || toFmtLower === 'jpeg'
-            ? 'jpg'
-            : toFmtLower === 'webp'
-            ? 'webp'
-            : toFmtLower === 'bmp'
-            ? 'bmp'
-            : 'png';
+          })
+        ]
+      };
+    }
+    if (tool.id === 'pdf-page-numberer') {
+      onItemProgress(55, `Applying page numbers...`);
+      return { results: [await numberPdfPages(file, 'bottom-center')] };
+    }
+    if (tool.id === 'pdf-flatten') {
+      onItemProgress(55, `Flattening annotations & form fields...`);
+      return { results: [await flattenPdf(file)] };
+    }
+    if (tool.id === 'pdf-page-reorder') {
+      onItemProgress(55, `Reversing page order...`);
+      return { results: [await reorderPdfPages(file, 'reverse')] };
+    }
+    if (tool.id === 'pdf-grayscale') {
+      return {
+        results: [await convertPdfMonochrome(file, 'grayscale', (pct) => onItemProgress(pct, 'Converting to grayscale...'))]
+      };
+    }
+    if (tool.id === 'pdf-invert-colors') {
+      return {
+        results: [await convertPdfMonochrome(file, 'invert', (pct) => onItemProgress(pct, 'Generating dark-mode PDF...'))]
+      };
+    }
+    if (tool.fromFormat === 'PDF') {
+      const toFmtLower = tool.toFormat.toLowerCase();
+      const targetFmt: 'png' | 'jpg' | 'svg' | 'webp' | 'bmp' =
+        toFmtLower === 'svg'
+          ? 'svg'
+          : toFmtLower === 'jpg' || toFmtLower === 'jpeg'
+          ? 'jpg'
+          : toFmtLower === 'webp'
+          ? 'webp'
+          : toFmtLower === 'bmp'
+          ? 'bmp'
+          : 'png';
 
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const pdfPages = await convertPdf(file, targetFmt, settings, (pct, page, total) => {
-            setProgress(Math.round(20 + pct * 0.75));
-            setProgressMsg(`Rendering page ${page} of ${total}...`);
-          });
-          allResults.push(...pdfPages);
-        }
-      } else if (tool.id === 'image-matrix-art') {
-        for (const file of files) {
-          const art = await generateMatrixAsciiArt(file, settings.matrixDensity, settings.matrixCharSet);
-          setMatrixTextArt(art.textArt);
-          allResults.push(art.renderedImage);
-        }
-      } else if (tool.id === 'image-grayscale') {
-        for (const file of files) {
-          const filtered = await applyImageFilter(file, 'grayscale');
-          allResults.push(filtered);
-        }
-      } else if (tool.id === 'image-rotate') {
-        for (const file of files) {
-          const rotated = await applyImageFilter(file, 'rotate-90');
-          allResults.push(rotated);
-        }
-      } else if (tool.id === 'image-crop') {
-        for (const file of files) {
-          const cropped = await applyImageFilter(file, 'crop-center');
-          allResults.push(cropped);
-        }
-      } else if (
-        [
-          'image-aspect-ratio-padder',
-          'image-color-inverter',
-          'image-sepia-vintage',
-          'image-brightness-contrast',
-          'image-threshold-binary',
-          'image-blur-redact',
-          'image-sharpen-unsharp',
-          'image-dpi-density-changer',
-          'image-border-polaroid',
-          'image-watermark-overlay',
-          'image-flip-mirror',
-          'image-color-tint-duotone',
-          'image-transparent-png-maker'
-        ].includes(tool.id)
-      ) {
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          setProgress(Math.round(20 + (i / files.length) * 70));
-          setProgressMsg(`Processing ${file.name} with ${tool.name}...`);
-          const converted = await applyAdvancedImageFilter(file, tool.id, {
+      const pdfPages = await convertPdf(file, targetFmt, settings, (pct, page, total) => {
+        onItemProgress(Math.round(15 + pct * 0.8), `Rendering page ${page} of ${total}...`);
+      });
+      return { results: pdfPages };
+    }
+    if (tool.id === 'image-matrix-art') {
+      onItemProgress(55, `Generating Matrix code art...`);
+      const art = await generateMatrixAsciiArt(file, settings.matrixDensity, settings.matrixCharSet);
+      return {
+        results: [{ ...art.renderedImage, textContent: art.textArt }]
+      };
+    }
+    if (tool.id === 'image-grayscale') {
+      return { results: [await applyImageFilter(file, 'grayscale')] };
+    }
+    if (tool.id === 'image-rotate') {
+      return { results: [await applyImageFilter(file, 'rotate-90')] };
+    }
+    if (tool.id === 'image-crop') {
+      return { results: [await applyImageFilter(file, 'crop-center')] };
+    }
+    if (
+      [
+        'image-aspect-ratio-padder',
+        'image-color-inverter',
+        'image-sepia-vintage',
+        'image-brightness-contrast',
+        'image-threshold-binary',
+        'image-blur-redact',
+        'image-sharpen-unsharp',
+        'image-dpi-density-changer',
+        'image-border-polaroid',
+        'image-watermark-overlay',
+        'image-flip-mirror',
+        'image-color-tint-duotone',
+        'image-transparent-png-maker'
+      ].includes(tool.id)
+    ) {
+      onItemProgress(55, `Applying ${tool.name}...`);
+      return {
+        results: [
+          await applyAdvancedImageFilter(file, tool.id, {
             ratio: '1:1',
             threshold: settings.colorThreshold || 128
-          });
-          allResults.push(converted);
-        }
-      } else if (tool.id === 'png-to-jpg') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Converting ${files[i].name} to JPG...`);
-          allResults.push(await convertPngToJpg(files[i], settings));
-        }
-      } else if (tool.id === 'webp-to-avif') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Encoding ${files[i].name} to AVIF...`);
-          allResults.push(await convertWebpToAvif(files[i], settings));
-        }
-      } else if (tool.id === 'avif-to-webp') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Converting ${files[i].name} to WebP...`);
-          allResults.push(await convertAvifToWebp(files[i], settings));
-        }
-      } else if (tool.id === 'gif-to-png') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Extracting lossless PNG frame from ${files[i].name}...`);
-          allResults.push(await convertGifToPng(files[i], settings));
-        }
-      } else if (tool.id === 'jpg-to-svg') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Tracing quantized vector paths for ${files[i].name}...`);
-          allResults.push(await vectorizeJpgToSvg(files[i], settings));
-        }
-      } else if (tool.id === 'image-round-corners') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(25 + (i / files.length) * 70));
-          setProgressMsg(`Applying rounded corners alpha mask to ${files[i].name}...`);
-          allResults.push(await applyRoundedCornersPng(files[i], 'rounded'));
-        }
-      } else if (tool.id === 'image-collage-grid') {
-        setProgress(55);
-        setProgressMsg(`Composing ${files.length} image(s) into aligned contact sheet grid...`);
-        allResults.push(await buildImageCollageGrid(files, settings.backgroundColor));
-      } else if (tool.id === 'pdf-blank-page-remover') {
-        for (let i = 0; i < files.length; i++) {
-          const res = await removeBlankPdfPages(files[i], (pct, msg) => {
-            setProgress(pct);
-            setProgressMsg(msg);
-          });
-          allResults.push(res);
-        }
-      } else if (tool.id === 'markdown-to-html') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Compiling Markdown AST to semantic HTML for ${files[i].name}...`);
-          allResults.push(await convertMarkdownToHtml(files[i]));
-        }
-      } else if (tool.id === 'xml-to-json') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Parsing XML nodes to structured JSON for ${files[i].name}...`);
-          allResults.push(await convertXmlToJson(files[i]));
-        }
-      } else if (tool.id === 'json-to-xml') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Serializing JSON structure to XML for ${files[i].name}...`);
-          allResults.push(await convertJsonToXml(files[i]));
-        }
-      } else if (tool.id === 'svg-to-css-uri') {
-        for (let i = 0; i < files.length; i++) {
-          setProgress(Math.round(30 + (i / files.length) * 60));
-          setProgressMsg(`Encoding minified CSS Data URI for ${files[i].name}...`);
-          allResults.push(await convertSvgToCssUri(files[i]));
-        }
+          })
+        ]
+      };
+    }
+    if (tool.id === 'png-to-jpg') return { results: [await convertPngToJpg(file, settings)] };
+    if (tool.id === 'webp-to-avif') return { results: [await convertWebpToAvif(file, settings)] };
+    if (tool.id === 'avif-to-webp') return { results: [await convertAvifToWebp(file, settings)] };
+    if (tool.id === 'gif-to-png') return { results: [await convertGifToPng(file, settings)] };
+    if (tool.id === 'jpg-to-svg') return { results: [await vectorizeJpgToSvg(file, settings)] };
+    if (tool.id === 'image-round-corners') return { results: [await applyRoundedCornersPng(file, 'rounded')] };
+    if (tool.id === 'pdf-blank-page-remover') {
+      return { results: [await removeBlankPdfPages(file, onItemProgress)] };
+    }
+    if (tool.id === 'markdown-to-html') return { results: [await convertMarkdownToHtml(file)] };
+    if (tool.id === 'xml-to-json') return { results: [await convertXmlToJson(file)] };
+    if (tool.id === 'json-to-xml') return { results: [await convertJsonToXml(file)] };
+    if (tool.id === 'svg-to-css-uri') return { results: [await convertSvgToCssUri(file)] };
+
+    return { results: [await convertRasterImage(file, tool.toFormat, settings)] };
+  };
+
+  const executeBatchItems = async (targetIds: string[]) => {
+    if (targetIds.length === 0) return;
+    if (!poolRef.current) poolRef.current = new BatchWorkerPool();
+
+    setIsConverting(true);
+    setErrorMsg(null);
+    setProgress(10);
+    setProgressMsg(`Processing ${targetIds.length} file(s) across ${Math.min(concurrency, targetIds.length)} Worker(s)...`);
+
+    try {
+      const summary = await poolRef.current.runBatch({
+        itemIdsToProcess: targetIds,
+        getItemsSnapshot: () => queueRef.current,
+        concurrency,
+        buildRequest: (item) => ({
+          toolId: tool.id,
+          toFormat: tool.toFormat,
+          fileName: item.file.name,
+          fileSize: item.file.size,
+          mimeType: item.file.type || '',
+          settings
+        }),
+        mainThreadFallback: runMainThreadSingleFile,
+        onItemPatch: patchQueueItem
+      });
+
+      if (summary.cancelled) {
+        setProgressMsg('Batch stopped by user');
       } else {
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          setProgress(Math.round(20 + (i / files.length) * 70));
-          const converted = await convertRasterImage(file, tool.toFormat, settings);
-          allResults.push(converted);
-        }
+        setProgress(100);
+        setProgressMsg('Completed');
       }
 
-      const firstTextResult = allResults.find((r) => typeof r.textContent === 'string' && r.textContent.length > 0);
-      if (firstTextResult?.textContent && tool.id !== 'image-matrix-art') {
+      const latestResults = queueRef.current.flatMap((q) => q.results);
+      const firstTextResult = latestResults.find((r) => typeof r.textContent === 'string' && r.textContent.length > 0);
+      if (firstTextResult?.textContent) {
         const txt = firstTextResult.textContent;
-        setMatrixTextArt(txt.length > 120000 ? `${txt.slice(0, 120000)}\n\n... [Preview truncated at 120 KB — click Download to save complete file]` : txt);
+        setMatrixTextArt(
+          tool.id !== 'image-matrix-art' && txt.length > 120000
+            ? `${txt.slice(0, 120000)}\n\n... [Preview truncated at 120 KB — click Download to save complete file]`
+            : txt
+        );
       }
 
-      setProgress(100);
-      setProgressMsg('Completed');
-      setConvertedResults(allResults);
+      if (summary.failedCount > 0 && summary.completedCount === 0 && !summary.cancelled) {
+        const firstErr = queueRef.current.find((q) => q.status === 'failed')?.error;
+        if (firstErr) setErrorMsg(firstErr);
+      }
     } catch (err: any) {
-      console.error('Conversion failed:', err);
+      console.error('Batch conversion error:', err);
       setErrorMsg(
         err?.message ||
           'Conversion could not complete. Please verify that your file is valid and matches the accepted format.'
@@ -659,6 +634,99 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
     } finally {
       setIsConverting(false);
     }
+  };
+
+  const handleConvert = async () => {
+    if (queueItems.length === 0) return;
+
+    if (isMultiMergeTool) {
+      setIsConverting(true);
+      setProgress(25);
+      setProgressMsg(`Packaging ${files.length} file(s)...`);
+      setErrorMsg(null);
+      revokeConvertedUrls(mergeResults);
+      setMergeResults([]);
+
+      try {
+        const started = performance.now();
+        setQueueItems((prev) =>
+          prev.map((q) => ({ ...q, status: 'processing', progress: 50, progressMessage: 'Packaging...' }))
+        );
+
+        let packaged: ConvertedFile;
+        if (tool.id === 'image-to-pdf') {
+          packaged = await mergeImagesToPdf(files);
+        } else if (tool.id === 'webp-to-pdf' || tool.id === 'svg-to-pdf') {
+          packaged = await convertRasterOrSvgToPdf(files, tool.id === 'svg-to-pdf');
+        } else {
+          packaged = await buildImageCollageGrid(files, settings.backgroundColor);
+        }
+
+        const durationMs = Math.max(1, Math.round(performance.now() - started));
+        setMergeResults([packaged]);
+        setQueueItems((prev) =>
+          prev.map((q) => ({ ...q, status: 'completed', progress: 100, progressMessage: 'Included', durationMs }))
+        );
+        setProgress(100);
+        setProgressMsg('Completed');
+      } catch (err: any) {
+        setQueueItems((prev) =>
+          prev.map((q) => ({ ...q, status: 'failed', progress: 0, error: err?.message || 'Packaging failed' }))
+        );
+        setErrorMsg(err?.message || 'Could not combine selected files.');
+      } finally {
+        setIsConverting(false);
+      }
+      return;
+    }
+
+    const pendingIds = queueItems
+      .filter((q) => q.status === 'queued' || q.status === 'failed' || q.status === 'cancelled')
+      .map((q) => q.id);
+
+    if (pendingIds.length > 0) {
+      await executeBatchItems(pendingIds);
+    } else {
+      // Re-run entire queue cleanly (e.g., if user tweaked Quality or DPI settings)
+      const allIds = queueItems.map((q) => q.id);
+      setQueueItems((prev) =>
+        prev.map((q) => {
+          revokeConvertedUrls(q.results);
+          return { ...q, status: 'queued', progress: 0, results: [], error: undefined };
+        })
+      );
+      await executeBatchItems(allIds);
+    }
+  };
+
+  const handleRetrySingleItem = async (itemId: string) => {
+    patchQueueItem(itemId, { status: 'queued', progress: 0, error: undefined });
+    await executeBatchItems([itemId]);
+  };
+
+  const handleRetryAllFailed = async () => {
+    const failedIds = queueRef.current
+      .filter((q) => q.status === 'failed' || q.status === 'cancelled')
+      .map((q) => q.id);
+    if (failedIds.length === 0) return;
+    setQueueItems((prev) =>
+      prev.map((q) => (failedIds.includes(q.id) ? { ...q, status: 'queued', progress: 0, error: undefined } : q))
+    );
+    await executeBatchItems(failedIds);
+  };
+
+  const handleCancelBatch = () => {
+    poolRef.current?.terminateAll();
+    poolRef.current = new BatchWorkerPool();
+    setQueueItems((prev) =>
+      prev.map((q) =>
+        q.status === 'processing' || q.status === 'queued'
+          ? { ...q, status: 'cancelled', progress: 0, progressMessage: 'Stopped' }
+          : q
+      )
+    );
+    setIsConverting(false);
+    setProgressMsg('Batch stopped');
   };
 
   const handleDownloadSingle = (file: ConvertedFile) => {
@@ -699,9 +767,19 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
       case 'website-image-audit':
         return <WebsiteImageAuditTool onSelectToolSlug={onSelectToolSlug} />;
       case 'optimization-studio':
-        return <ImageOptimizationStudio />;
+        return (
+          <ImageOptimizationStudio
+            initialFiles={initialFiles}
+            onConsumeInitialFiles={onConsumeInitialFiles}
+          />
+        );
       case 'compress-image-to-100kb':
-        return <ImageCompressTargetTool />;
+        return (
+          <ImageCompressTargetTool
+            initialFiles={initialFiles}
+            onConsumeInitialFiles={onConsumeInitialFiles}
+          />
+        );
       case 'resize-image-for-instagram':
         return <SocialMediaResizerTool />;
       case 'remove-image-metadata':
@@ -834,10 +912,18 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
 
             {/* Dropzone */}
             <div
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDraggingOver(true);
+              }}
+              onDragLeave={() => setIsDraggingOver(false)}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-xl border-2 border-dashed border-blue-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950/60 p-8 text-center hover:border-blue-500 transition-all cursor-pointer group mb-6"
+              className={`rounded-xl border-2 border-dashed p-8 text-center transition-all cursor-pointer group mb-6 ${
+                isDraggingOver
+                  ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/20 scale-[1.01]'
+                  : 'border-blue-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950/60 hover:border-blue-500'
+              }`}
             >
               <input
                 ref={fileInputRef}
@@ -852,46 +938,33 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                   <UploadCloud className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  {files.length === 0 ? t('dropTitle') : `${files.length} file(s) selected`}
+                  {files.length === 0
+                    ? t('dropTitle')
+                    : `${files.length} file(s) staged — drop or click to add more`}
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                  Accepted: {tool.acceptedFileTypes.join(', ')}
+                  Accepted: {tool.acceptedFileTypes.join(', ')} · Parallel Web Worker Queue
                 </p>
               </div>
             </div>
 
-            {/* File Queue */}
-            {files.length > 0 && (
-              <div className="mb-6 space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 pb-1 border-b border-slate-100 dark:border-slate-800">
-                  <span>
-                    {t('inputQueue')} ({files.length})
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFiles([]);
-                      setConvertedResults([]);
-                    }}
-                    className="text-rose-600 hover:underline cursor-pointer"
-                  >
-                    {t('clearQueue')}
-                  </button>
-                </div>
-                {files.map((f, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono"
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      <FileText className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
-                      <span className="truncate font-semibold text-slate-800 dark:text-slate-200">{f.name}</span>
-                    </div>
-                    <span className="text-slate-500 shrink-0 ml-4 tabular-nums">{formatFileSize(f.size)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Parallel Batch Queue */}
+            <BatchQueuePanel
+              items={queueItems}
+              isRunning={isConverting}
+              concurrency={concurrency}
+              onChangeConcurrency={setConcurrency}
+              onAddMoreFiles={() => fileInputRef.current?.click()}
+              onRemoveItem={handleRemoveQueueItem}
+              onRetryItem={handleRetrySingleItem}
+              onRetryAllFailed={handleRetryAllFailed}
+              onCancelBatch={handleCancelBatch}
+              onClearQueue={handleClearQueue}
+              onDownloadSingle={handleDownloadSingle}
+              isMultiInputMergeTool={isMultiMergeTool}
+              clearLabel={t('clearQueue')}
+              queueTitle={t('inputQueue')}
+            />
 
             {/* Tool Options */}
             {(tool.options.supportsDpi || tool.options.supportsBackground || tool.options.supportsQuality) && (
@@ -986,7 +1059,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
             {/* Action Row */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
-                Processed locally inside browser memory
+                Processed locally on background Web Workers ({concurrency} concurrent threads)
               </span>
 
               <button
@@ -1006,13 +1079,19 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
                 ) : (
                   <>
                     <Zap className="w-4 h-4" />
-                    <span>{t('convertNow')}</span>
+                    <span>
+                      {queueItems.some((q) => q.status === 'queued')
+                        ? `${t('convertNow')} (${queueItems.filter((q) => q.status === 'queued').length})`
+                        : convertedResults.length > 0 && !isMultiMergeTool
+                        ? `Reprocess Batch (${files.length})`
+                        : t('convertNow')}
+                    </span>
                   </>
                 )}
               </button>
             </div>
 
-            {isConverting && (
+            {isConverting && isMultiMergeTool && (
               <div className="mt-4 space-y-1">
                 <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                   <div className="bg-blue-600 h-2 transition-all duration-300" style={{ width: `${progress}%` }} />

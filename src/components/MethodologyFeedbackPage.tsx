@@ -196,8 +196,8 @@ export const MethodologyFeedbackPage: React.FC<MethodologyFeedbackPageProps> = (
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">Submit Tool Feedback or Bug Report</h2>
         <p className="text-xs text-slate-600 dark:text-slate-400">
           Notice a browser quirk, unsupported file edge case, or missing conversion workflow? Prepare a diagnostic report to email directly to{' '}
-          <a href="mailto:support@mimage.netlify.app" className="text-blue-600 dark:text-sky-400 underline font-semibold">
-            support@mimage.netlify.app
+          <a href="mailto:support@fixpdf.org" className="text-blue-600 dark:text-sky-400 underline font-semibold">
+            support@fixpdf.org
           </a>
           .
         </p>
@@ -206,7 +206,7 @@ export const MethodologyFeedbackPage: React.FC<MethodologyFeedbackPageProps> = (
           onSubmit={(e) => {
             e.preventDefault();
             setSubmittedNote(true);
-            const mailtoUrl = `mailto:support@mimage.netlify.app?subject=${encodeURIComponent(
+            const mailtoUrl = `mailto:support@fixpdf.org?subject=${encodeURIComponent(
               `[Mimage Feedback] ${subject}`
             )}&body=${encodeURIComponent(buildDiagnosticReport())}`;
             window.location.href = mailtoUrl;
@@ -274,7 +274,7 @@ export const MethodologyFeedbackPage: React.FC<MethodologyFeedbackPageProps> = (
 
           {submittedNote && (
             <div className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">
-              Email composer triggered. If your system does not open a mail client automatically, click &quot;Copy Diagnostic Report&quot; and email Afzal460@gmail.com or support@mimage.netlify.app.
+              Email composer triggered. If your system does not open a mail client automatically, click &quot;Copy Diagnostic Report&quot; and email Afzal460@gmail.com or support@fixpdf.org.
             </div>
           )}
         </form>

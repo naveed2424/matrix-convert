@@ -48,8 +48,8 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
   useEffect(() => {
     const blogScriptId = 'blog-schema-jsonld';
     const faqScriptId = 'blog-faq-schema-jsonld';
-    const articleUrl = `https://mimage.netlify.app/blog/${post.slug}`;
-    const toolUrl = `https://mimage.netlify.app${post.ctaLink || '/'}`;
+    const articleUrl = `https://fixpdf.org/blog/${post.slug}`;
+    const toolUrl = `https://fixpdf.org${post.ctaLink || '/'}`;
 
     let blogScriptEl = document.getElementById(blogScriptId) as HTMLScriptElement | null;
     if (!blogScriptEl) {
@@ -65,9 +65,9 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
       '@id': `${articleUrl}#article`,
       isPartOf: {
         '@type': 'WebSite',
-        '@id': 'https://mimage.netlify.app/#website',
+        '@id': 'https://fixpdf.org/#website',
         name: 'Mimage',
-        url: 'https://mimage.netlify.app/'
+        url: 'https://fixpdf.org/'
       },
       headline: post.title,
       description: post.metaDescription,
@@ -79,12 +79,12 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
         '@type': 'Person',
         name: post.author.name,
         jobTitle: post.author.role,
-        url: 'https://mimage.netlify.app/portfolio'
+        url: 'https://fixpdf.org/portfolio'
       },
       publisher: {
         '@type': 'Organization',
         name: 'Mimage',
-        url: 'https://mimage.netlify.app/'
+        url: 'https://fixpdf.org/'
       },
       about: {
         '@type': 'SoftwareApplication',
@@ -425,7 +425,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">HTML Guide + Tool</span>
               <button
                 onClick={() => {
-                  const html = `<a href="https://mimage.netlify.app/blog/${post.slug}">${post.title}</a> — powered by <a href="https://mimage.netlify.app${post.ctaLink || '/'}">${post.ctaText}</a>`;
+                  const html = `<a href="https://fixpdf.org/blog/${post.slug}">${post.title}</a> — powered by <a href="https://fixpdf.org${post.ctaLink || '/'}">${post.ctaText}</a>`;
                   navigator.clipboard.writeText(html);
                   setCopiedKey('html-backlink');
                   setTimeout(() => setCopiedKey(null), 2000);
@@ -437,7 +437,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               </button>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
-              &lt;a href=&quot;https://mimage.netlify.app/blog/{post.slug}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
+              &lt;a href=&quot;https://fixpdf.org/blog/{post.slug}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
             </div>
           </div>
 
@@ -446,7 +446,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Markdown</span>
               <button
                 onClick={() => {
-                  const md = `[${post.title}](https://mimage.netlify.app/blog/${post.slug}) ([Launch Tool](https://mimage.netlify.app${post.ctaLink || '/'}))`;
+                  const md = `[${post.title}](https://fixpdf.org/blog/${post.slug}) ([Launch Tool](https://fixpdf.org${post.ctaLink || '/'}))`;
                   navigator.clipboard.writeText(md);
                   setCopiedKey('md-backlink');
                   setTimeout(() => setCopiedKey(null), 2000);
@@ -458,7 +458,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               </button>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
-              [{post.primaryKeyword}](https://mimage.netlify.app/blog/{post.slug})
+              [{post.primaryKeyword}](https://fixpdf.org/blog/{post.slug})
             </div>
           </div>
 
@@ -467,7 +467,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Tool Anchor</span>
               <button
                 onClick={() => {
-                  const toolAnchor = `<a href="https://mimage.netlify.app${post.ctaLink || '/'}">${post.primaryKeyword} — Free Browser Tool on Mimage</a>`;
+                  const toolAnchor = `<a href="https://fixpdf.org${post.ctaLink || '/'}">${post.primaryKeyword} — Free Browser Tool on Mimage</a>`;
                   navigator.clipboard.writeText(toolAnchor);
                   setCopiedKey('tool-backlink');
                   setTimeout(() => setCopiedKey(null), 2000);
@@ -479,7 +479,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({
               </button>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 break-all line-clamp-2">
-              &lt;a href=&quot;https://mimage.netlify.app{post.ctaLink || '/'}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
+              &lt;a href=&quot;https://fixpdf.org{post.ctaLink || '/'}&quot;&gt;{post.primaryKeyword}&lt;/a&gt;
             </div>
           </div>
         </div>

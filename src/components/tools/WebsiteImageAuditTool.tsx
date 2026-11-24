@@ -88,7 +88,7 @@ function detectImageFormatFromSrc(src: string): string {
 
 export const WebsiteImageAuditTool: React.FC<WebsiteImageAuditToolProps> = ({ onSelectToolSlug }) => {
   const [mode, setMode] = useState<'url' | 'html'>('url');
-  const [urlInput, setUrlInput] = useState('https://mimage.netlify.app');
+  const [urlInput, setUrlInput] = useState('https://fixpdf.org');
   const [htmlInput, setHtmlInput] = useState('');
   const [baseUrlInput, setBaseUrlInput] = useState('https://example.com');
   const [isAuditing, setIsAuditing] = useState(false);

@@ -23,7 +23,7 @@ interface SitemapGeneratorPanelProps {
 }
 
 const DOMAIN_PRESETS = [
-  { label: 'Default (mimage.netlify.app)', url: DEFAULT_SITE_URL },
+  { label: 'Default (fixpdf.org)', url: DEFAULT_SITE_URL },
   { label: 'Current Origin', url: typeof window !== 'undefined' ? window.location.origin : DEFAULT_SITE_URL }
 ];
 
@@ -186,7 +186,7 @@ export const SitemapGeneratorPanel: React.FC<SitemapGeneratorPanelProps> = ({ on
             type="url"
             value={baseUrlInput}
             onChange={(e) => setBaseUrlInput(e.target.value)}
-            placeholder="https://mimage.netlify.app"
+            placeholder="https://fixpdf.org"
             className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
           />
           <div className="flex flex-wrap items-center gap-2 pt-0.5">

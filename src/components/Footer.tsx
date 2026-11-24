@@ -49,12 +49,12 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
           <div className="pt-1">
             <a
-              href="https://mimage.netlify.app/"
+              href="https://fixpdf.org/"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 text-xs text-blue-600 dark:text-sky-400 font-semibold hover:underline"
             >
-              <span>mimage.netlify.app</span>
+              <span>fixpdf.org</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>
@@ -233,7 +233,7 @@ export const Footer: React.FC<FooterProps> = ({
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
         <div>
-          © {new Date().getFullYear()} Mimage (mimage.netlify.app). Free Online File &amp; Image Tools.
+          © {new Date().getFullYear()} Mimage (fixpdf.org). Free Online File &amp; Image Tools.
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button

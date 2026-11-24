@@ -117,8 +117,12 @@ import { DEDICATED_TOOL_BLOG_POSTS_3A } from './toolBlogPostsBatch3A';
 import { DEDICATED_TOOL_BLOG_POSTS_3B } from './toolBlogPostsBatch3B';
 import { DEDICATED_TOOL_BLOG_POSTS_4A } from './toolBlogPostsBatch4A';
 import { DEDICATED_TOOL_BLOG_POSTS_4B } from './toolBlogPostsBatch4B';
+import { DEDICATED_TOOL_BLOG_POSTS_5A } from './toolBlogPostsBatch5A';
+import { DEDICATED_TOOL_BLOG_POSTS_5B } from './toolBlogPostsBatch5B';
 
 export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
+  ...DEDICATED_TOOL_BLOG_POSTS_5A,
+  ...DEDICATED_TOOL_BLOG_POSTS_5B,
   ...DEDICATED_TOOL_BLOG_POSTS_4A,
   ...DEDICATED_TOOL_BLOG_POSTS_4B,
   ...DEDICATED_TOOL_BLOG_POSTS_3A,
@@ -216,7 +220,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
             <tr>
               <th class="p-3 border-b border-sky-400/30">Feature</th>
               <th class="p-3 border-b border-sky-400/30">Sejda.com</th>
-              <th class="p-3 border-b border-sky-400/30">Mimage (mimage.netlify.app)</th>
+              <th class="p-3 border-b border-sky-400/30">Mimage (fixpdf.org)</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-sky-900/30 text-slate-300">
@@ -580,7 +584,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
       <h2>2. What Is "Zero-Knowledge" In-Browser Processing?</h2>
       <p>In applied cryptography and software architecture, the term <strong>Zero-Knowledge</strong> describes a system where the service provider processes user inputs without having access to, or knowledge of, the underlying plain-text payload. In the context of Mimage:</p>
       <ul>
-        <li><strong>Zero Ingestion:</strong> Our web servers do not receive or store your uploaded files. When you visit <code>mimage.netlify.app</code>, the server merely delivers static HTML, CSS, JavaScript, and WebAssembly compilation binaries.</li>
+        <li><strong>Zero Ingestion:</strong> Our web servers do not receive or store your uploaded files. When you visit <code>fixpdf.org</code>, the server merely delivers static HTML, CSS, JavaScript, and WebAssembly compilation binaries.</li>
         <li><strong>Client Sandboxing:</strong> All document parsing, rasterization, color channel extraction, and ZIP compression occur exclusively inside your device's browser memory via the <code>WebAssembly</code> virtual machine and HTML5 <code>Canvas</code> API.</li>
         <li><strong>Volatile RAM Retention:</strong> When you close or refresh your browser tab, every residual byte of the processed files is instantly reclaimed by the operating system garbage collector. No logs, no cookies, and no disk cache remain.</li>
       </ul>
@@ -1936,7 +1940,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li><strong>Zero In-App Preview:</strong> Messaging apps like Slack, Discord, Microsoft Teams, and WhatsApp cannot inline-preview multi-page PDFs cleanly; they display dull generic file icons instead of captivating visual content.</li>
       </ul>
       <p>
-        The solution that leading web publishers, UX designers, and digital marketers rely on is straightforward: <strong>convert specific PDF pages into lightweight, high-fidelity PNG or next-gen WebP images</strong> using tools like <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
+        The solution that leading web publishers, UX designers, and digital marketers rely on is straightforward: <strong>convert specific PDF pages into lightweight, high-fidelity PNG or next-gen WebP images</strong> using tools like <a href="https://fixpdf.org/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
       </p>
 
       <h2>The Byte-Size Miracle: Empirical Compression Benchmarks</h2>
@@ -2022,7 +2026,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         Our browser-based engine requires no software installation, no account creation, and zero server uploads:
       </p>
       <ol>
-        <li><strong>Open the Converter:</strong> Head to the <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a> on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">Mimage</a>.</li>
+        <li><strong>Open the Converter:</strong> Head to the <a href="/tool/pdf-to-png" class="text-sky-400 font-bold hover:underline">PDF to PNG Converter</a> on <a href="https://fixpdf.org/" class="text-sky-300 font-bold hover:underline">Mimage</a>.</li>
         <li><strong>Select Your PDF File:</strong> Drag and drop your document into the cyber processing matrix.</li>
         <li><strong>Choose Your DPI Density:</strong>
           <ul>
@@ -2170,7 +2174,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         <li>Embed a full-size uncompressed PNG on an e-commerce landing page, and your mobile bounce rate spikes as the page takes six seconds to load.</li>
       </ul>
       <p>
-        In this comprehensive guide, we compare <strong>PNG vs. WebP vs. SVG</strong> across every technical dimension—compression ratios, transparency handling, rendering performance, and software compatibility—so you always know the exact format to choose on <a href="https://mimage.netlify.app/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
+        In this comprehensive guide, we compare <strong>PNG vs. WebP vs. SVG</strong> across every technical dimension—compression ratios, transparency handling, rendering performance, and software compatibility—so you always know the exact format to choose on <a href="https://fixpdf.org/" class="text-sky-400 font-bold hover:underline">Mimage</a>.
       </p>
 
       <h2>The Three Contenders: Technical Breakdown</h2>
@@ -2271,7 +2275,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
 
       <h2>Practical Workflow: How to Combine These Tools for Peak Efficiency</h2>
       <p>
-        Professional digital asset workflows often leverage multiple tools sequentially on <a href="https://mimage.netlify.app/" class="text-sky-300 font-bold hover:underline">Mimage</a>:
+        Professional digital asset workflows often leverage multiple tools sequentially on <a href="https://fixpdf.org/" class="text-sky-300 font-bold hover:underline">Mimage</a>:
       </p>
       <ol>
         <li>
@@ -2620,7 +2624,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'Never. Mimage utilizes client-side WebAssembly technology. Your files are converted entirely inside your browser sandbox and are never uploaded to any remote server or third-party cloud infrastructure.'
       }
     ],
-    ctaText: 'Launch Free Online Image Converter on mimage.netlify.app',
+    ctaText: 'Launch Free Online Image Converter on fixpdf.org',
     ctaLink: '/tool/png-to-webp'
   },
   {
@@ -3081,7 +3085,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'Aucune limite. Notre suite est 100% gratuite, sans filigrane, sans abonnement et sans restriction de volume.'
       }
     ],
-    ctaText: 'Compresser une Image de Mo en Ko Gratuitement sur mimage.netlify.app',
+    ctaText: 'Compresser une Image de Mo en Ko Gratuitement sur fixpdf.org',
     ctaLink: '/tool/image-compress'
   },
   {
@@ -3302,7 +3306,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'AI enhances rather than replaces human creativity. It handles mechanical execution (such as vector tracing and compression), allowing designers and creators to iterate faster and explore bolder visual concepts.'
       }
     ],
-    ctaText: 'Experience Fast, Privacy-First Smart Tools on mimage.netlify.app',
+    ctaText: 'Experience Fast, Privacy-First Smart Tools on fixpdf.org',
     ctaLink: '/tool/image-compress'
   },
 
@@ -3388,7 +3392,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
             <tr>
               <th class="p-3 border-b border-sky-400/30">Evaluation Dimension</th>
               <th class="p-3 border-b border-sky-400/30">Adobe Acrobat Web / Sejda</th>
-              <th class="p-3 border-b border-sky-400/30">Mimage (mimage.netlify.app)</th>
+              <th class="p-3 border-b border-sky-400/30">Mimage (fixpdf.org)</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-sky-900/30 text-slate-300">
@@ -3667,7 +3671,7 @@ export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
         answer: 'Yes! Select multiple photos to process them in sequence and download all results individually or as a single convenient ZIP archive.'
       }
     ],
-    ctaText: 'Enhance and Protect Your Photos Free with Mimage on mimage.netlify.app',
+    ctaText: 'Enhance and Protect Your Photos Free with Mimage on fixpdf.org',
     ctaLink: '/tool/image-exif-stripper'
   }
 ];

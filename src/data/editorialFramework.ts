@@ -29,7 +29,7 @@ export interface EditorialMasterFramework {
 
 export const MASTER_EDITORIAL_PROMPT_TEXT = `# MIMAGE EDITORIAL STANDARDS — PRACTICAL FILE & IMAGE GUIDES
 
-- WEBSITE NAME: Mimage (https://mimage.netlify.app/)
+- WEBSITE NAME: Mimage (https://fixpdf.org/)
 - TARGET AUDIENCE: Everyday internet users, bloggers, web designers, developers, students, ecommerce sellers, and small businesses.
 - PRINCIPLES: Practical workflows, honest disclosure of browser-local vs network processing, realistic limitations, valid structured schema markup, and clean internal links to real tools.`;
 
@@ -107,7 +107,7 @@ export const REGISTERED_EDITORIAL_FRAMEWORK: EditorialMasterFramework = {
   geoAeoRules: [
     'Direct answers at the start of technical sections',
     'Structured JSON-LD BlogPosting and FAQPage without hash fragments',
-    'Consistent canonical links under https://mimage.netlify.app'
+    'Consistent canonical links under https://fixpdf.org'
   ],
   distributionChannels: [
     'Organic Search',
@@ -123,7 +123,7 @@ export function generateSocialDistributionPack(post: {
   primaryKeyword: string;
   metaDescription: string;
 }) {
-  const url = `https://mimage.netlify.app/blog/${post.slug}`;
+  const url = `https://fixpdf.org/blog/${post.slug}`;
   return {
     pinterest: {
       title: `${post.primaryKeyword}: Step-by-Step Guide | Mimage`,

@@ -709,7 +709,7 @@ export async function compressPdfInBrowser(
   if (mode === 'lossless-structure') {
     const pdfDoc = await PDFDocument.load(arrayBuffer);
     pdfDoc.setProducer('Mimage Client PDF Optimizer');
-    pdfDoc.setCreator('Mimage (https://mimage.netlify.app/)');
+    pdfDoc.setCreator('Mimage (https://fixpdf.org/)');
     const saved = await pdfDoc.save({ useObjectStreams: true });
     const safeBuffer = saved.buffer.slice(saved.byteOffset, saved.byteOffset + saved.byteLength) as ArrayBuffer;
     const blob = new Blob([safeBuffer], { type: 'application/pdf' });

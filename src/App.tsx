@@ -431,6 +431,8 @@ export default function App() {
                   onSelectTool={handleSelectTool}
                   onSelectToolSlug={handleSelectToolBySlug}
                   onSelectBlogPost={(slug) => navigateTo(`/blog/${slug}`)}
+                  initialFiles={droppedFiles}
+                  onConsumeInitialFiles={() => setDroppedFiles([])}
                 />
               )}
             </>

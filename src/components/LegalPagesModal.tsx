@@ -123,7 +123,7 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                   </div>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Administrator, creator, and lead writer of Mimage (mimage.netlify.app). Built around client-side WebAssembly, transparent limitations, and fast access.
+                  Administrator, creator, and lead writer of Mimage (fixpdf.org). Built around client-side WebAssembly, transparent limitations, and fast access.
                 </p>
               </div>
             </>
@@ -141,8 +141,8 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                 </div>
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                   <div className="font-bold text-slate-900 dark:text-white">Support</div>
-                  <a href="mailto:support@mimage.netlify.app" className="text-xs text-blue-600 dark:text-sky-400 font-mono hover:underline block mt-2">
-                    support@mimage.netlify.app
+                  <a href="mailto:support@fixpdf.org" className="text-xs text-blue-600 dark:text-sky-400 font-mono hover:underline block mt-2">
+                    support@fixpdf.org
                   </a>
                 </div>
               </div>

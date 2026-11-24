@@ -35,6 +35,26 @@ import imgPdfCsvHero from '../assets/images/pdf_csv_hero_1795465201005.jpg';
 import imgPdfCsvWorkflow from '../assets/images/pdf_csv_workflow_1795465201006.jpg';
 import imgAppIconHero from '../assets/images/app_icon_hero_1795465201007.jpg';
 import imgAppIconWorkflow from '../assets/images/app_icon_workflow_1795465201008.jpg';
+import imgPngJpgHero from '../assets/images/png_jpg_hero_1795555283268.jpg';
+import imgPngJpgWorkflow from '../assets/images/png_jpg_workflow_1795555284073.jpg';
+import imgWebpAvifHero from '../assets/images/webp_avif_hero_1795555285247.jpg';
+import imgWebpAvifWorkflow from '../assets/images/webp_avif_workflow_1795555284850.jpg';
+import imgAvifWebpHero from '../assets/images/avif_webp_hero_1795555285832.jpg';
+import imgAvifWebpWorkflow from '../assets/images/avif_webp_workflow_1795555286378.jpg';
+import imgJpgSvgHero from '../assets/images/jpg_svg_hero_1795555286634.jpg';
+import imgJpgSvgWorkflow from '../assets/images/jpg_svg_workflow_1795555287180.jpg';
+import imgRoundCornersHero from '../assets/images/round_corners_hero_1795555287687.jpg';
+import imgRoundCornersWorkflow from '../assets/images/round_corners_workflow_1795555402648.jpg';
+import imgCollageGridHero from '../assets/images/collage_grid_hero_1795555403040.jpg';
+import imgCollageGridWorkflow from '../assets/images/collage_grid_workflow_1795555403932.jpg';
+import imgPdfBlankHero from '../assets/images/pdf_blank_hero_1795555403893.jpg';
+import imgPdfBlankWorkflow from '../assets/images/pdf_blank_workflow_1795555404721.jpg';
+import imgMarkdownHtmlHero from '../assets/images/markdown_html_hero_1795555290812.jpg';
+import imgMarkdownHtmlWorkflow from '../assets/images/markdown_html_workflow_1795555328418.jpg';
+import imgXmlJsonHero from '../assets/images/xml_json_hero_1795555404775.jpg';
+import imgXmlJsonWorkflow from '../assets/images/xml_json_workflow_1795555404980.jpg';
+import imgSvgCssHero from '../assets/images/svg_css_hero_1795555293070.jpg';
+import imgSvgCssWorkflow from '../assets/images/svg_css_workflow_1795555294190.jpg';
 
 export const EDITORIAL_IMAGES = {
   compression: imgCompression,
@@ -75,5 +95,25 @@ export const EDITORIAL_IMAGES = {
   pdfCsvHero: imgPdfCsvHero,
   pdfCsvWorkflow: imgPdfCsvWorkflow,
   appIconHero: imgAppIconHero,
-  appIconWorkflow: imgAppIconWorkflow
+  appIconWorkflow: imgAppIconWorkflow,
+  pngJpgHero: imgPngJpgHero,
+  pngJpgWorkflow: imgPngJpgWorkflow,
+  webpAvifHero: imgWebpAvifHero,
+  webpAvifWorkflow: imgWebpAvifWorkflow,
+  avifWebpHero: imgAvifWebpHero,
+  avifWebpWorkflow: imgAvifWebpWorkflow,
+  jpgSvgHero: imgJpgSvgHero,
+  jpgSvgWorkflow: imgJpgSvgWorkflow,
+  roundCornersHero: imgRoundCornersHero,
+  roundCornersWorkflow: imgRoundCornersWorkflow,
+  collageGridHero: imgCollageGridHero,
+  collageGridWorkflow: imgCollageGridWorkflow,
+  pdfBlankHero: imgPdfBlankHero,
+  pdfBlankWorkflow: imgPdfBlankWorkflow,
+  markdownHtmlHero: imgMarkdownHtmlHero,
+  markdownHtmlWorkflow: imgMarkdownHtmlWorkflow,
+  xmlJsonHero: imgXmlJsonHero,
+  xmlJsonWorkflow: imgXmlJsonWorkflow,
+  svgCssHero: imgSvgCssHero,
+  svgCssWorkflow: imgSvgCssWorkflow
 };

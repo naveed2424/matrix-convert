@@ -1,7 +1,7 @@
 import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS } from '../data/blogData';
 
-export const DEFAULT_SITE_URL = 'https://mimage.netlify.app';
+export const DEFAULT_SITE_URL = 'https://fixpdf.org';
 
 /**
  * Canonical top-level tool paths supported directly at `/<slug>` in App.tsx

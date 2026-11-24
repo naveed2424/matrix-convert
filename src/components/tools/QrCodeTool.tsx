@@ -6,7 +6,7 @@ type QrMode = 'url' | 'wifi' | 'vcard' | 'text';
 
 export const QrCodeTool: React.FC = () => {
   const [mode, setMode] = useState<QrMode>('url');
-  const [urlValue, setUrlValue] = useState('https://mimage.netlify.app');
+  const [urlValue, setUrlValue] = useState('https://fixpdf.org');
   const [textValue, setTextValue] = useState('');
   const [wifiSsid, setWifiSsid] = useState('');
   const [wifiPass, setWifiPass] = useState('');

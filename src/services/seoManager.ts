@@ -15,7 +15,7 @@ export interface PageSeoMetadata {
   };
 }
 
-const SITE_ORIGIN = 'https://mimage.netlify.app';
+const SITE_ORIGIN = 'https://fixpdf.org';
 
 function setMetaTag(selector: string, attrName: 'name' | 'property', key: string, content: string) {
   let el = document.querySelector(selector) as HTMLMetaElement | null;

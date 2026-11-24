@@ -73,7 +73,7 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
     }
     setFormError('');
     setFormSubmitted(true);
-    const mailtoUrl = `mailto:Afzal460@gmail.com,support@mimage.netlify.app?subject=${encodeURIComponent(
+    const mailtoUrl = `mailto:Afzal460@gmail.com,support@fixpdf.org?subject=${encodeURIComponent(
       `[Mimage Contact] ${formData.subject}`
     )}&body=${encodeURIComponent(`From: ${formData.name} <${formData.email}>\n\n${formData.message}`)}`;
     window.location.href = mailtoUrl;
@@ -92,12 +92,12 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
         </button>
 
         <a
-          href="https://mimage.netlify.app/"
+          href="https://fixpdf.org/"
           target="_blank"
           rel="noreferrer"
           className="text-xs font-mono text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-sky-400 flex items-center gap-1"
         >
-          <span>mimage.netlify.app</span>
+          <span>fixpdf.org</span>
           <ExternalLink className="w-3 h-3" />
         </a>
       </div>
@@ -180,7 +180,7 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
 
             <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               <p>
-                <strong>Mimage (<a href="https://mimage.netlify.app/" className="text-blue-600 dark:text-sky-400 underline">https://mimage.netlify.app/</a>)</strong> is a browser-first workspace built for everyday internet users, bloggers, web designers, ecommerce sellers, students, and developers.
+                <strong>Mimage (<a href="https://fixpdf.org/" className="text-blue-600 dark:text-sky-400 underline">https://fixpdf.org/</a>)</strong> is a browser-first workspace built for everyday internet users, bloggers, web designers, ecommerce sellers, students, and developers.
               </p>
               <p>
                 Our focus is practical utility without account walls, deceptive download buttons, fabricated testimonials, or needless server uploads. Image compression, EXIF metadata removal, social media presets, PDF organization, QR code creation, and smart file signature detection run cleanly inside your own device memory.
@@ -246,12 +246,12 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     Creator and maintainer of <strong>Mimage</strong> (
                     <a
-                      href="https://mimage.netlify.app/"
+                      href="https://fixpdf.org/"
                       target="_blank"
                       rel="noreferrer"
                       className="text-blue-600 dark:text-sky-400 underline underline-offset-2"
                     >
-                      mimage.netlify.app
+                      fixpdf.org
                     </a>
                     ), building client-side WebAssembly, HTML5 Canvas, PDF engineering, and web-standards utilities alongside reproducible technical documentation designed for clarity, zero account friction, and transparent privacy disclosures.
                   </p>
@@ -517,7 +517,7 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
               </div>
             </div>
             <p>
-              By accessing Mimage (<a href="https://mimage.netlify.app/" className="text-blue-600 dark:text-sky-400 underline">https://mimage.netlify.app/</a>), you agree to use our utilities lawfully and responsibly.
+              By accessing Mimage (<a href="https://fixpdf.org/" className="text-blue-600 dark:text-sky-400 underline">https://fixpdf.org/</a>), you agree to use our utilities lawfully and responsibly.
             </p>
             <h2 className="text-base font-bold text-slate-900 dark:text-white">1. Intellectual Property &amp; Ownership</h2>
             <p>
@@ -639,8 +639,8 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
 
                 <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-1.5">
                   <div className="text-slate-500 uppercase font-mono">General Support</div>
-                  <a href="mailto:support@mimage.netlify.app" className="text-blue-600 dark:text-sky-400 font-mono font-bold hover:underline block">
-                    support@mimage.netlify.app
+                  <a href="mailto:support@fixpdf.org" className="text-blue-600 dark:text-sky-400 font-mono font-bold hover:underline block">
+                    support@fixpdf.org
                   </a>
                   <p className="text-slate-500">Bug reports, format compatibility questions, and partnership inquiries.</p>
                 </div>
@@ -654,7 +654,7 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                     <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto" />
                     <h3 className="text-slate-900 dark:text-white font-bold text-sm">Email Client Triggered</h3>
                     <p className="text-xs text-slate-600 dark:text-slate-300">
-                      Your email draft has been opened addressed to support@mimage.netlify.app.
+                      Your email draft has been opened addressed to support@fixpdf.org.
                     </p>
                     <button
                       onClick={() => setFormSubmitted(false)}

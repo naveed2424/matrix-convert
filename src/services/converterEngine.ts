@@ -724,7 +724,7 @@ export async function editPdfMetadata(
     pdfDoc.setKeywords(meta.keywords.split(',').map((k) => k.trim()));
   }
   pdfDoc.setProducer('Mimage Client-Side Architecture');
-  pdfDoc.setCreator('Mimage (https://mimage.netlify.app/)');
+  pdfDoc.setCreator('Mimage (https://fixpdf.org/)');
   pdfDoc.setModificationDate(new Date());
 
   const savedBytes = await pdfDoc.save();
