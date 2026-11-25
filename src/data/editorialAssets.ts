@@ -55,6 +55,26 @@ import imgXmlJsonHero from '../assets/images/xml_json_hero_1795555404775.jpg';
 import imgXmlJsonWorkflow from '../assets/images/xml_json_workflow_1795555404980.jpg';
 import imgSvgCssHero from '../assets/images/svg_css_hero_1795555293070.jpg';
 import imgSvgCssWorkflow from '../assets/images/svg_css_workflow_1795555294190.jpg';
+import imgGifPngHero from '../assets/images/gif_png_hero_1795631004356.jpg';
+import imgGifPngWorkflow from '../assets/images/gif_png_workflow_1795631004394.jpg';
+import imgJsonXmlHero from '../assets/images/json_xml_hero_1795631004743.jpg';
+import imgJsonXmlWorkflow from '../assets/images/json_xml_workflow_1795631005894.jpg';
+import imgPdfTwoupHero from '../assets/images/pdf_twoup_hero_1795631006226.jpg';
+import imgPdfTwoupWorkflow from '../assets/images/pdf_twoup_workflow_1795631006578.jpg';
+import imgPdfJsonHero from '../assets/images/pdf_json_hero_1795631006733.jpg';
+import imgPdfJsonWorkflow from '../assets/images/pdf_json_workflow_1795631007220.jpg';
+import imgPdfHtmlHero from '../assets/images/pdf_html_hero_1795631007743.jpg';
+import imgPdfHtmlWorkflow from '../assets/images/pdf_html_workflow_1795631007847.jpg';
+import imgHtmlPdfHero from '../assets/images/html_pdf_hero_1795631083715.jpg';
+import imgHtmlPdfWorkflow from '../assets/images/html_pdf_workflow_1795631083707.jpg';
+import imgCsvPdfHero from '../assets/images/csv_pdf_hero_1795631083970.jpg';
+import imgCsvPdfWorkflow from '../assets/images/csv_pdf_workflow_1795631085201.jpg';
+import imgJsonPdfHero from '../assets/images/json_pdf_hero_1795631084730.jpg';
+import imgJsonPdfWorkflow from '../assets/images/json_pdf_workflow_1795631085603.jpg';
+import imgGifCompHero from '../assets/images/gif_comp_hero_1795631086272.jpg';
+import imgGifCompWorkflow from '../assets/images/gif_comp_workflow_1795631086612.jpg';
+import imgPdfGrayHero from '../assets/images/pdf_gray_hero_1795631086344.jpg';
+import imgPdfGrayWorkflow from '../assets/images/pdf_gray_workflow_1795631086632.jpg';
 
 export const EDITORIAL_IMAGES = {
   compression: imgCompression,
@@ -115,5 +135,25 @@ export const EDITORIAL_IMAGES = {
   xmlJsonHero: imgXmlJsonHero,
   xmlJsonWorkflow: imgXmlJsonWorkflow,
   svgCssHero: imgSvgCssHero,
-  svgCssWorkflow: imgSvgCssWorkflow
+  svgCssWorkflow: imgSvgCssWorkflow,
+  gifPngHero: imgGifPngHero,
+  gifPngWorkflow: imgGifPngWorkflow,
+  jsonXmlHero: imgJsonXmlHero,
+  jsonXmlWorkflow: imgJsonXmlWorkflow,
+  pdfTwoupHero: imgPdfTwoupHero,
+  pdfTwoupWorkflow: imgPdfTwoupWorkflow,
+  pdfJsonHero: imgPdfJsonHero,
+  pdfJsonWorkflow: imgPdfJsonWorkflow,
+  pdfHtmlHero: imgPdfHtmlHero,
+  pdfHtmlWorkflow: imgPdfHtmlWorkflow,
+  htmlPdfHero: imgHtmlPdfHero,
+  htmlPdfWorkflow: imgHtmlPdfWorkflow,
+  csvPdfHero: imgCsvPdfHero,
+  csvPdfWorkflow: imgCsvPdfWorkflow,
+  jsonPdfHero: imgJsonPdfHero,
+  jsonPdfWorkflow: imgJsonPdfWorkflow,
+  gifCompHero: imgGifCompHero,
+  gifCompWorkflow: imgGifCompWorkflow,
+  pdfGrayHero: imgPdfGrayHero,
+  pdfGrayWorkflow: imgPdfGrayWorkflow
 };
