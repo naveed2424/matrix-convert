@@ -15,6 +15,7 @@ interface FooterProps {
   onNavigateCompanyPage: (type: CompanyPageType) => void;
   onNavigateBlog: () => void;
   onNavigateMethodology: () => void;
+  onOpenCookieSettings: () => void;
   currentLang: string;
 }
 
@@ -24,6 +25,7 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateCompanyPage,
   onNavigateBlog,
   onNavigateMethodology,
+  onOpenCookieSettings,
   currentLang
 }) => {
   const normLang = normalizeUiLangCode(currentLang);
@@ -182,6 +184,14 @@ export const Footer: React.FC<FooterProps> = ({
             </li>
             <li>
               <button
+                onClick={() => onNavigateCompanyPage('disclaimer')}
+                className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer text-left"
+              >
+                Disclaimer
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => onNavigateCompanyPage('terms')}
                 className="hover:text-blue-600 dark:hover:text-sky-400 transition-colors cursor-pointer text-left"
               >
@@ -237,10 +247,17 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button
-            onClick={() => onNavigateCompanyPage('privacy-center')}
+            onClick={() => onNavigateCompanyPage('privacy')}
             className="hover:text-blue-600 dark:hover:text-sky-400 underline cursor-pointer"
           >
-            Privacy Center
+            Privacy Policy
+          </button>
+          <span>·</span>
+          <button
+            onClick={() => onNavigateCompanyPage('disclaimer')}
+            className="hover:text-blue-600 dark:hover:text-sky-400 underline cursor-pointer"
+          >
+            Disclaimer
           </button>
           <span>·</span>
           <button
@@ -248,6 +265,13 @@ export const Footer: React.FC<FooterProps> = ({
             className="hover:text-blue-600 dark:hover:text-sky-400 underline cursor-pointer"
           >
             Terms
+          </button>
+          <span>·</span>
+          <button
+            onClick={onOpenCookieSettings}
+            className="hover:text-blue-600 dark:hover:text-sky-400 underline cursor-pointer"
+          >
+            Cookie Settings
           </button>
           <span>·</span>
           <a href="/sitemap.xml" target="_blank" rel="noreferrer" className="hover:text-blue-600 dark:hover:text-sky-400 underline">

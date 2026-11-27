@@ -111,6 +111,7 @@ export const LegalPagesModal: React.FC<LegalPagesModalProps> = ({
                     <img
                       src={EDITORIAL_IMAGES.authorAvatar}
                       alt="Naveed Afzal - Administrator & Writer"
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-top"
                     />
                   </div>

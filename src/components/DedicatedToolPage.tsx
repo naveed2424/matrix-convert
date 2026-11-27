@@ -912,6 +912,7 @@ export const DedicatedToolPage: React.FC<DedicatedToolPageProps> = ({
 
             {/* Dropzone */}
             <div
+              data-adsense-exclude="true"
               onDragOver={(e) => {
                 e.preventDefault();
                 setIsDraggingOver(true);

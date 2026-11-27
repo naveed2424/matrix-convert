@@ -132,6 +132,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       />
 
       <div
+        data-adsense-exclude="true"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}

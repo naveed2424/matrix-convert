@@ -4,12 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="AI5M8f3ekFXNXe6T0f9eKCjkJJY9777CITc5Sn0MQwg" />
+    <meta name="google-adsense-account" content="ca-pub-8358033803354457" />
+
+    <!-- Google Consent Mode v2 Defaults (Restores saved consent if present) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      (function() {
+        var adsGranted = 'granted';
+        var analyticsGranted = 'granted';
+        try {
+          var raw = localStorage.getItem('mimage_consent_v1');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            adsGranted = parsed.ads ? 'granted' : 'denied';
+            analyticsGranted = parsed.analytics ? 'granted' : 'denied';
+          }
+        } catch (e) {}
+        gtag('consent', 'default', {
+          ad_storage: adsGranted,
+          ad_user_data: adsGranted,
+          ad_personalization: adsGranted,
+          analytics_storage: analyticsGranted,
+          wait_for_update: 500
+        });
+      })();
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZM8R2JF6WT"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-ZM8R2JF6WT');
     </script>

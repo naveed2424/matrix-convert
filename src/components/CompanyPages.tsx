@@ -45,6 +45,7 @@ interface CompanyPagesProps {
   onNavigateBlog?: () => void;
   onNavigateCompanyPage?: (type: CompanyPageType) => void;
   onNavigatePath?: (path: string) => void;
+  onOpenCookieSettings?: () => void;
 }
 
 export const CompanyPages: React.FC<CompanyPagesProps> = ({
@@ -54,7 +55,8 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
   onSelectPost,
   onNavigateBlog,
   onNavigateCompanyPage,
-  onNavigatePath
+  onNavigatePath,
+  onOpenCookieSettings
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -186,12 +188,23 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
                 Our focus is practical utility without account walls, deceptive download buttons, fabricated testimonials, or needless server uploads. Image compression, EXIF metadata removal, social media presets, PDF organization, QR code creation, and smart file signature detection run cleanly inside your own device memory.
               </p>
 
+              {/* Editorial Standards & Sustainability */}
+              <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-2.5">
+                <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                  Editorial Policy &amp; Site Sustainability
+                </h2>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Every technical guide published on <strong>fixpdf.org</strong> is authored and verified by <strong>Naveed Afzal</strong> against working client-side implementations in Mimage, ISO/W3C format specifications, and reproducible browser behavior. To keep all {TOOLS_DATA.length}+ utilities and {PRE_SEEDED_BLOG_POSTS.length}+ engineering guides completely free without paywalls, Mimage displays non-intrusive advertising via Google AdSense clearly separated from tool action controls.
+                </p>
+              </div>
+
               {/* Founder Card */}
               <div className="my-6 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col sm:flex-row items-start sm:items-center gap-5">
                 <div className="w-20 h-20 rounded-2xl overflow-hidden border border-slate-300 dark:border-slate-700 shrink-0">
                   <img
                     src={EDITORIAL_IMAGES.authorAvatar}
                     alt="Naveed Afzal - Mimage Administrator, Founder & Writer"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover object-top"
                   />
                 </div>
@@ -543,16 +556,24 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
               </span>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Disclaimer</h1>
-                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Advertising, Accuracy &amp; Third-Party Notices</p>
+                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Accuracy, Advertising &amp; Professional Advice Notices · Updated November 2026</p>
               </div>
             </div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Estimates vs Exact Measurements</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">1. General Information &amp; Technical Accuracy</h2>
             <p>
-              Website Image Audit distinguishes measured asset sizes (where response headers expose Content-Length) from format conversion estimates. Target KB image compression may adjust quality or optional resolution downscaling, and extremely detailed photos may not hit tiny KB targets without visible quality trade-offs.
+              All tools, compression benchmarks, format converters, and educational guides published on <strong>Mimage (https://fixpdf.org/)</strong> are provided in good faith for general informational and productivity purposes. While every article is technically reviewed prior to publication, browser codec behavior may vary across operating systems and device hardware.
             </p>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Google AdSense Disclosure</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">2. Estimates vs. Exact Measurements</h2>
             <p>
-              Mimage displays Google AdSense advertising (Publisher ID <code>ca-pub-8358033803354457</code>) to help keep utilities free. Advertising partners may use cookies subject to your browser preferences.
+              Website Image Audit distinguishes measured asset sizes (where response headers expose <code>Content-Length</code>) from format conversion estimates. Target KB image compression may adjust quality or optional resolution downscaling, and highly detailed photographs may not reach tiny KB targets without visible quality trade-offs.
+            </p>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">3. No Legal, Financial, or Compliance Advice</h2>
+            <p>
+              Guides covering legal Bates numbering, invoice templates, HIPAA/GDPR privacy workflows, or e-signature placement do not constitute formal legal or regulatory counsel. Visual signatures embedded in PDFs are graphical stamps rather than cryptographic PKI certificates.
+            </p>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">4. Google AdSense &amp; External Links Disclosure</h2>
+            <p>
+              Mimage displays Google AdSense advertisements (Publisher ID <code>ca-pub-8358033803354457</code>) to fund free access to all utilities. External standards references (ISO, W3C, IETF, MDN) are cited strictly for educational attribution; Mimage is not responsible for external third-party website content.
             </p>
           </div>
         )}
@@ -566,18 +587,57 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
               </span>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Privacy Policy</h1>
-                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Mimage GDPR &amp; CCPA Alignment</p>
+                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Effective: November 2026 · Mimage (fixpdf.org) GDPR, CCPA &amp; Google AdSense Compliance</p>
               </div>
             </div>
             <p>
-              Mimage does not require registration, passwords, or accounts. Your converted photos and PDFs are processed in local device memory and never uploaded to Mimage storage servers.
+              <strong>Mimage</strong> (accessible at <a href="https://fixpdf.org/" className="text-blue-600 dark:text-sky-400 underline">https://fixpdf.org/</a>, operated by Naveed Afzal) respects your privacy. This Privacy Policy documents what information is processed locally on your device versus what limited telemetry or advertising cookies are handled by third-party partners.
             </p>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Analytics, Advertising &amp; External Fetches</h2>
+
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">1. Zero-Upload File Processing &amp; Account-Free Architecture</h2>
+            <p>
+              Mimage requires no account registration, login, or passwords. Uploaded images, PDFs, CSVs, JSON/XML documents, and SVGs are processed directly inside your browser&apos;s RAM using HTML5 Canvas, Web Workers, and WebAssembly. Your source files and converted outputs are never stored on Mimage servers. Tools explicitly labeled <strong>Local + Dict</strong> (OCR dictionary downloads from jsDelivr CDN) or <strong>Network Fetch</strong> (Website Image Audit for user-entered public HTTPS URLs) only initiate network requests when triggered by your action.
+            </p>
+
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">2. Google AdSense, DoubleClick Cookie &amp; Personalized Advertising</h2>
             <ul className="list-disc pl-5 space-y-1.5">
-              <li>Google Analytics 4 (<code>G-ZM8R2JF6WT</code>) measures aggregate traffic patterns without access to file contents.</li>
-              <li>Google AdSense serves advertisements using cookies governed by Google&apos;s privacy controls.</li>
-              <li>Tools marked <strong>Network Fetch</strong> or <strong>Local + Dict</strong> only contact public third-party endpoints when you explicitly run OCR language downloads or public Website Image Audits.</li>
+              <li>Third-party vendors, including <strong>Google</strong>, use cookies (such as the DoubleClick / AdSense cookie) to serve ads based on your prior visits to <strong>fixpdf.org</strong> or other websites on the internet.</li>
+              <li>Google&apos;s use of advertising cookies enables it and its partners to serve ads tailored to your interests, or non-personalized contextual ads where consent is declined.</li>
+              <li>
+                You may opt out of personalized advertising anytime by visiting{' '}
+                <a href="https://adssettings.google.com/" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-sky-400 underline">
+                  Google Ads Settings
+                </a>{' '}
+                or the{' '}
+                <a href="https://www.aboutads.info/choices/" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-sky-400 underline">
+                  Digital Advertising Alliance opt-out page
+                </a>
+                , or by adjusting your preferences inside our{' '}
+                {onOpenCookieSettings ? (
+                  <button onClick={onOpenCookieSettings} className="text-emerald-600 dark:text-emerald-400 font-semibold underline cursor-pointer">
+                    Cookie &amp; Ad Preferences Panel
+                  </button>
+                ) : (
+                  'Cookie Preferences panel'
+                )}
+                .
+              </li>
             </ul>
+
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">3. Google Analytics 4 (Aggregate Traffic Measurement)</h2>
+            <p>
+              We use Google Analytics 4 (Measurement ID <code>G-ZM8R2JF6WT</code>) to measure anonymous page views, language usage, and tool popularity so we can improve performance. Google Analytics never inspects the contents of files processed inside Mimage tools.
+            </p>
+
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">4. GDPR (EEA / UK) &amp; CCPA / CPRA Rights</h2>
+            <p>
+              Under the EU/UK General Data Protection Regulation (GDPR), we process non-essential analytics and personalized advertising cookies strictly on the basis of your explicit consent via our Google Consent Mode v2 banner. Under the California Consumer Privacy Act (CCPA/CPRA), Mimage does not sell personal information or uploaded document data. Residents may exercise access, deletion, or consent-withdrawal rights anytime by clearing local browser preferences or contacting us directly.
+            </p>
+
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">5. Children&apos;s Information (COPPA)</h2>
+            <p>
+              Mimage does not knowingly collect personally identifiable information from children under the age of 13. If you believe a minor has submitted personal contact correspondence, contact <a href="mailto:support@fixpdf.org" className="text-blue-600 dark:text-sky-400 underline">support@fixpdf.org</a> or <a href="mailto:Afzal460@gmail.com" className="text-blue-600 dark:text-sky-400 underline">Afzal460@gmail.com</a> for immediate removal.
+            </p>
           </div>
         )}
 
@@ -590,18 +650,60 @@ export const CompanyPages: React.FC<CompanyPagesProps> = ({
               </span>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Cookie Policy</h1>
-                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Local Storage, Analytics &amp; Advertising Preferences</p>
+                <p className="text-xs font-mono text-blue-600 dark:text-sky-400">Local Storage, Analytics &amp; Google AdSense Cookie Controls · Updated November 2026</p>
               </div>
             </div>
             <p>
-              Mimage uses browser <code>localStorage</code> strictly to remember your selected language preference. Third-party services including Google Analytics and Google AdSense may set cookies when enabled in your region.
+              This Cookie Policy explains how <strong>Mimage (fixpdf.org)</strong> and our advertising/analytics partners use browser storage and cookies when you visit our web tools.
             </p>
-            <p>
-              You can clear site storage or disable non-essential third-party cookies anytime via your browser privacy settings or{' '}
-              <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-sky-400 underline">
-                Google Ads Settings
-              </a>.
-            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-mono border border-slate-200 dark:border-slate-700 rounded-xl">
+                <thead className="bg-slate-100 dark:bg-slate-950 text-emerald-700 dark:text-emerald-400">
+                  <tr>
+                    <th className="p-3 border-b border-slate-200 dark:border-slate-700">Category</th>
+                    <th className="p-3 border-b border-slate-200 dark:border-slate-700">Provider / Key</th>
+                    <th className="p-3 border-b border-slate-200 dark:border-slate-700">Purpose</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                  <tr>
+                    <td className="p-3 font-bold">Essential Storage</td>
+                    <td className="p-3"><code>mimage_consent_v1</code>, language key</td>
+                    <td className="p-3">Remembers your chosen interface language and cookie consent preferences.</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold">Analytics</td>
+                    <td className="p-3">Google Analytics 4 (<code>_ga</code>)</td>
+                    <td className="p-3">Measures aggregate page traffic and tool popularity without accessing local files.</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold">Advertising</td>
+                    <td className="p-3">Google AdSense (<code>ca-pub-8358033803354457</code>)</td>
+                    <td className="p-3">Delivers contextual or personalized ads and measures ad frequency capping.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              {onOpenCookieSettings && (
+                <button
+                  onClick={onOpenCookieSettings}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs cursor-pointer"
+                >
+                  Open Cookie &amp; Ad Preferences
+                </button>
+              )}
+              <a
+                href="https://adssettings.google.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs font-semibold text-blue-600 dark:text-sky-400 underline"
+              >
+                Manage Google Ads Personalization →
+              </a>
+            </div>
           </div>
         )}
 

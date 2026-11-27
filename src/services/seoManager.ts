@@ -7,6 +7,7 @@ export interface PageSeoMetadata {
   description: string;
   canonicalPath: string;
   type?: 'website' | 'article';
+  noindex?: boolean;
   breadcrumbs?: { name: string; url: string }[];
   softwareApp?: {
     name: string;
@@ -33,6 +34,12 @@ export function updatePageSeo(meta: PageSeoMetadata) {
   const canonicalUrl = `${SITE_ORIGIN}${cleanPath === '/' ? '/' : cleanPath}`;
 
   document.title = fullTitle;
+  setMetaTag(
+    'meta[name="robots"]',
+    'name',
+    'robots',
+    meta.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'
+  );
   setMetaTag('meta[name="description"]', 'name', 'description', meta.description);
   setMetaTag('meta[property="og:title"]', 'property', 'og:title', fullTitle);
   setMetaTag('meta[property="og:description"]', 'property', 'og:description', meta.description);

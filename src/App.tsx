@@ -18,6 +18,8 @@ import { CompanyPages, CompanyPageType } from './components/CompanyPages';
 import { BlogHub } from './components/BlogHub';
 import { BlogPostView } from './components/BlogPostView';
 import { MethodologyFeedbackPage } from './components/MethodologyFeedbackPage';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { AdSenseAutoAdsHelper } from './components/AdSenseAutoAdsHelper';
 import { Footer } from './components/Footer';
 import { TOOLS_DATA, TOOL_CATEGORIES } from './data/toolsData';
 import { PRE_SEEDED_BLOG_POSTS } from './data/blogData';
@@ -81,6 +83,7 @@ export default function App() {
   const [activeView, setActiveView] = useState<AppView>('home');
   const [activePostSlug, setActivePostSlug] = useState<string | null>(null);
   const [companyPageType, setCompanyPageType] = useState<CompanyPageType>('about');
+  const [forceOpenCookies, setForceOpenCookies] = useState<boolean>(false);
 
   // Lock dark Matrix class on document root without client-side theme switching
   useEffect(() => {
@@ -266,43 +269,57 @@ export default function App() {
       return;
     }
 
-    // Company & Legal routes
-    const singleSeg = segments[0] as CompanyPageType;
-    if (segments.length === 1 && COMPANY_PAGE_PATHS.has(singleSeg)) {
-      setCompanyPageType(singleSeg);
+    // Company & Legal routes (including standard AdSense reviewer URL aliases)
+    const COMPANY_ALIASES: Record<string, CompanyPageType> = {
+      'privacy-policy': 'privacy',
+      'terms-of-service': 'terms',
+      'cookie-policy': 'cookies',
+      'about-us': 'about',
+      'contact-us': 'contact'
+    };
+    const resolvedCompany =
+      segments.length === 1
+        ? COMPANY_PAGE_PATHS.has(segments[0] as CompanyPageType)
+          ? (segments[0] as CompanyPageType)
+          : COMPANY_ALIASES[segments[0]]
+        : undefined;
+
+    if (resolvedCompany) {
+      setCompanyPageType(resolvedCompany);
       setActiveView('company-page');
       setActiveTool(null);
       const titles: Record<CompanyPageType, string> = {
-        about: 'About Mimage | Free Online File & Image Tools',
+        about: 'About Mimage & Editorial Standards | Mimage',
         portfolio: 'Naveed Afzal — Founder & Developer Portfolio | Mimage',
         terms: 'Terms of Service | Mimage',
-        disclaimer: 'Disclaimer | Mimage',
-        privacy: 'Privacy Policy | Mimage',
+        disclaimer: 'Disclaimer & AdSense Disclosures | Mimage',
+        privacy: 'Privacy Policy — GDPR, CCPA & AdSense | Mimage',
         'privacy-center': 'Privacy Center — Local vs Network Processing | Mimage',
-        cookies: 'Cookie Policy | Mimage',
+        cookies: 'Cookie Policy & Advertising Controls | Mimage',
         contact: 'Contact & Support | Mimage',
         sitemap: 'HTML Sitemap Directory | Mimage'
       };
       updatePageSeo({
-        title: titles[singleSeg],
+        title: titles[resolvedCompany],
         description:
-          singleSeg === 'portfolio'
+          resolvedCompany === 'portfolio'
             ? 'Founder portfolio of Naveed Afzal, creator and lead writer at Mimage — browser-local WebAssembly PDF, Canvas image optimization, and web security tools.'
-            : 'Transparency, privacy architecture, terms, and support information for Mimage.',
-        canonicalPath: `/${singleSeg}`
+            : 'Transparency, privacy policy, cookie preferences, terms, and support information for Mimage (fixpdf.org).',
+        canonicalPath: `/${resolvedCompany}`
       });
       trackPageView(pathname);
       return;
     }
 
-    // Fallback 404
+    // Fallback 404 (noindex to prevent soft-404 AdSense policy issues)
     setActiveView('not-found');
     setActiveTool(null);
     setActivePostSlug(null);
     updatePageSeo({
       title: 'Page Not Found | Mimage',
       description: 'The requested page could not be found on Mimage.',
-      canonicalPath: '/'
+      canonicalPath: '/',
+      noindex: true
     });
   }, []);
 
@@ -471,6 +488,7 @@ export default function App() {
               onNavigateBlog={() => navigateTo('/blog')}
               onNavigateCompanyPage={(type) => navigateTo(`/${type}`)}
               onNavigatePath={navigateTo}
+              onOpenCookieSettings={() => setForceOpenCookies(true)}
             />
           )}
 
@@ -534,7 +552,28 @@ export default function App() {
           onNavigateCompanyPage={(type) => navigateTo(`/${type}`)}
           onNavigateBlog={() => navigateTo('/blog')}
           onNavigateMethodology={() => navigateTo('/methodology')}
+          onOpenCookieSettings={() => setForceOpenCookies(true)}
           currentLang={currentLang}
+        />
+
+        <CookieConsentBanner
+          forceOpen={forceOpenCookies}
+          onCloseForced={() => setForceOpenCookies(false)}
+          onNavigatePrivacy={() => navigateTo('/privacy')}
+          onNavigateCookies={() => navigateTo('/cookies')}
+        />
+
+        <AdSenseAutoAdsHelper
+          activeView={activeView}
+          routeKey={
+            activeView === 'tool' && activeTool
+              ? `/tool/${activeTool.slug}`
+              : activeView === 'blog-post' && activePostSlug
+                ? `/blog/${activePostSlug}`
+                : activeView === 'company-page'
+                  ? `/${companyPageType}`
+                  : `/${activeView}`
+          }
         />
 
         <MatrixArtStudio isOpen={showMatrixArtStudio} onClose={() => setShowMatrixArtStudio(false)} />

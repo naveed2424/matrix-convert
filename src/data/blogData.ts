@@ -121,8 +121,12 @@ import { DEDICATED_TOOL_BLOG_POSTS_5A } from './toolBlogPostsBatch5A';
 import { DEDICATED_TOOL_BLOG_POSTS_5B } from './toolBlogPostsBatch5B';
 import { DEDICATED_TOOL_BLOG_POSTS_6A } from './toolBlogPostsBatch6A';
 import { DEDICATED_TOOL_BLOG_POSTS_6B } from './toolBlogPostsBatch6B';
+import { DEDICATED_TOOL_BLOG_POSTS_7A } from './toolBlogPostsBatch7A';
+import { DEDICATED_TOOL_BLOG_POSTS_7B } from './toolBlogPostsBatch7B';
 
 export const PRE_SEEDED_BLOG_POSTS: BlogPost[] = [
+  ...DEDICATED_TOOL_BLOG_POSTS_7A,
+  ...DEDICATED_TOOL_BLOG_POSTS_7B,
   ...DEDICATED_TOOL_BLOG_POSTS_6A,
   ...DEDICATED_TOOL_BLOG_POSTS_6B,
   ...DEDICATED_TOOL_BLOG_POSTS_5A,

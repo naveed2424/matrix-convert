@@ -75,6 +75,13 @@ import imgGifCompHero from '../assets/images/gif_comp_hero_1795631086272.jpg';
 import imgGifCompWorkflow from '../assets/images/gif_comp_workflow_1795631086612.jpg';
 import imgPdfGrayHero from '../assets/images/pdf_gray_hero_1795631086344.jpg';
 import imgPdfGrayWorkflow from '../assets/images/pdf_gray_workflow_1795631086632.jpg';
+import imgWebpPngHero from '../assets/images/webp_png_hero_1795796131998.jpg';
+import imgJpgWebpHero from '../assets/images/jpg_webp_hero_1795796131786.jpg';
+import imgCropHeroNew from '../assets/images/img_crop_hero_1795796131792.jpg';
+import imgCropWorkflowNew from '../assets/images/img_crop_workflow_1795796131690.jpg';
+import imgPdfRotHero from '../assets/images/pdf_rot_hero_1795796131626.jpg';
+import imgPdfRotWorkflow from '../assets/images/pdf_rot_workflow_1795796131825.jpg';
+import imgPdfInvHero from '../assets/images/pdf_inv_hero_1795796132266.jpg';
 
 export const EDITORIAL_IMAGES = {
   compression: imgCompression,
@@ -155,5 +162,12 @@ export const EDITORIAL_IMAGES = {
   gifCompHero: imgGifCompHero,
   gifCompWorkflow: imgGifCompWorkflow,
   pdfGrayHero: imgPdfGrayHero,
-  pdfGrayWorkflow: imgPdfGrayWorkflow
+  pdfGrayWorkflow: imgPdfGrayWorkflow,
+  webpPngHero: imgWebpPngHero,
+  jpgWebpHero: imgJpgWebpHero,
+  imgCropHero: imgCropHeroNew,
+  imgCropWorkflow: imgCropWorkflowNew,
+  pdfRotHero: imgPdfRotHero,
+  pdfRotWorkflow: imgPdfRotWorkflow,
+  pdfInvHero: imgPdfInvHero
 };
